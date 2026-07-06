@@ -1,0 +1,66 @@
+{
+  "approved_move_count": 1021,
+  "blocked_move_count": 565,
+  "certified": true,
+  "engine_id": "RMS-011",
+  "engine_name": "Repository Baseline Report Engine",
+  "engine_version": "1.0.0",
+  "explanation": "Generated repository baseline report with status certified. Items=335, Python files scanned=1586, high-risk=106, approved moves=1021, blocked moves=565. No files were moved, deleted, or modified.",
+  "finding_count": 4,
+  "findings": [
+    {
+      "detail": "RMS-001 through RMS-010 are installed and integration-gated.",
+      "finding_id": "RMS011_CERTIFIED",
+      "recommendation": "Use RMS output as the source of truth before any repository migration.",
+      "severity": "positive",
+      "title": "Repository Management subsystem certified."
+    },
+    {
+      "detail": "106 high-risk dependency item(s) were detected.",
+      "finding_id": "RMS011_HIGH_RISK_PRESENT",
+      "recommendation": "Do not move high-risk modules until dependency review is complete.",
+      "severity": "warning",
+      "title": "High-risk modules are present."
+    },
+    {
+      "detail": "1021 item(s) were approved by the safe move validator.",
+      "finding_id": "RMS011_APPROVED_MOVES_PRESENT",
+      "recommendation": "Move only in small batches after a Git checkpoint.",
+      "severity": "info",
+      "title": "Approved move candidates exist."
+    },
+    {
+      "detail": "565 item(s) were blocked by the safe move validator.",
+      "finding_id": "RMS011_BLOCKED_MOVES_PRESENT",
+      "recommendation": "Resolve blockers before physical migration.",
+      "severity": "warning",
+      "title": "Blocked move candidates exist."
+    }
+  ],
+  "high_risk_count": 106,
+  "scanned_files": 1586,
+  "status": "certified",
+  "telemetry": {
+    "baseline_report_is_advisory": true,
+    "does_not_delete_files": true,
+    "does_not_modify_files": true,
+    "does_not_move_files": true,
+    "engine_id": "RMS-011",
+    "engine_name": "Repository Baseline Report Engine",
+    "engine_version": "1.0.0",
+    "repository_role": "architecture_support",
+    "validated_chain": [
+      "RMS-001",
+      "RMS-002",
+      "RMS-003",
+      "RMS-004",
+      "RMS-005",
+      "RMS-006",
+      "RMS-007",
+      "RMS-008",
+      "RMS-009",
+      "RMS-010"
+    ]
+  },
+  "total_items": 335
+}

@@ -1,0 +1,1 @@
+BASE_URL = "https://external-api.kalshi.com/trade-api/v2"

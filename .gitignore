@@ -1,0 +1,70 @@
+# Secrets
+.env
+*.env
+*.pem
+*.key
+*.secret
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Runtime/generated state
+runtime/
+oracle_*.json
+*_log.csv
+*_state.json
+*_cache.json
+positions.json
+trade_journal.json
+trade_settings.json
+market_memory.json
+oracle_*_state.json
+oracle_*_memory.json
+oracle_*_universe.json
+oracle_*_filtered.json
+*.log
+*.tmp
+*.cache
+
+# Backups
+*.bak*
+*_backup*
+*backup_before*
+BACKUP_BEFORE_*/
+oracle_state_backup_*/
+
+# Local data / exports
+*.csv
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Accidental junk
+0
+0.*
+10
+30
+45
+60
+70
+None
+float
+str
+py
+python
+notepad
+Dict[str*
+Optional[Dict[str*

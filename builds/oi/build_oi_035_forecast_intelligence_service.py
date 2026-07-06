@@ -1,0 +1,296 @@
+from pathlib import Path
+import textwrap
+
+ROOT = Path.cwd()
+OI_DIR = ROOT / "qseries_v2" / "oracle_intelligence"
+TEST_FILE = ROOT / "test_oi_035_forecast_intelligence_service.py"
+
+OI_DIR.mkdir(parents=True, exist_ok=True)
+
+SERVICE = OI_DIR / "forecast_intelligence_service.py"
+
+SERVICE.write_text(textwrap.dedent(r'''
+from __future__ import annotations
+
+from dataclasses import dataclass, asdict
+from datetime import datetime, timezone
+from typing import Any, Dict, Optional
+
+
+@dataclass
+class ForecastServicePacket:
+    module: str
+    status: str
+    generated_at: str
+    market: Dict[str, Any]
+    forecast: Dict[str, Any]
+    calibration: Dict[str, Any]
+    scenario: Dict[str, Any]
+    report: Dict[str, Any]
+    api_summary: Dict[str, Any]
+    read_only: bool
+    execution_allowed: bool
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+class ForecastIntelligenceService:
+    def __init__(self, forecast_engine=None, calibration_engine=None, scenario_engine=None, report_engine=None):
+        self.forecast_engine = forecast_engine
+        self.calibration_engine = calibration_engine
+        self.scenario_engine = scenario_engine
+        self.report_engine = report_engine
+        self.last_packet: Optional[Dict[str, Any]] = None
+
+        if self.forecast_engine is None:
+            try:
+                from .probabilistic_forecasting_engine import oracle_forecast_engine
+                self.forecast_engine = oracle_forecast_engine
+            except Exception:
+                pass
+
+        if self.calibration_engine is None:
+            try:
+                from .confidence_calibration_engine import oracle_calibration_engine
+                self.calibration_engine = oracle_calibration_engine
+            except Exception:
+                pass
+
+        if self.scenario_engine is None:
+            try:
+                from .scenario_simulation_engine import oracle_scenario_engine
+                self.scenario_engine = oracle_scenario_engine
+            except Exception:
+                pass
+
+        if self.report_engine is None:
+            try:
+                from .explainable_forecast_report_engine import oracle_forecast_report_engine
+                self.report_engine = oracle_forecast_report_engine
+            except Exception:
+                pass
+
+    def diagnostics(self) -> Dict[str, Any]:
+        return {
+            "module": "OI-035 Forecast Intelligence Service",
+            "status": "ok",
+            "forecast_engine_ready": self.forecast_engine is not None,
+            "calibration_engine_ready": self.calibration_engine is not None,
+            "scenario_engine_ready": self.scenario_engine is not None,
+            "report_engine_ready": self.report_engine is not None,
+            "last_packet_ready": self.last_packet is not None,
+            "read_only": True,
+            "execution_allowed": False,
+        }
+
+    def analyze(self, live_market: Dict[str, Any]) -> Dict[str, Any]:
+        forecast = self._forecast(live_market)
+        calibration = self._calibration(live_market)
+        scenario = self._scenario(live_market)
+        report = self._report(live_market)
+
+        packet = ForecastServicePacket(
+            module="OI-035 Forecast Intelligence Service",
+            status=self._status(forecast, calibration, scenario, report),
+            generated_at=self._now(),
+            market=self._market_identity(live_market, forecast, calibration, scenario, report),
+            forecast=forecast,
+            calibration=calibration,
+            scenario=scenario,
+            report=report,
+            api_summary=self._api_summary(forecast, calibration, scenario, report),
+            read_only=True,
+            execution_allowed=False,
+        ).to_dict()
+
+        self.last_packet = packet
+        return packet
+
+    def api_payload(self, live_market: Dict[str, Any]) -> Dict[str, Any]:
+        packet = self.analyze(live_market)
+        return {
+            "module": "oracle_forecast_intelligence_payload",
+            "status": packet.get("status"),
+            "market": packet.get("market"),
+            "summary": packet.get("api_summary"),
+            "headline": (packet.get("report") or {}).get("headline"),
+            "read_only": True,
+            "execution_allowed": False,
+        }
+
+    def latest(self) -> Dict[str, Any]:
+        if self.last_packet is None:
+            return {
+                "module": "OI-035 Forecast Intelligence Service",
+                "status": "no_analysis_yet",
+                "read_only": True,
+                "execution_allowed": False,
+            }
+        return self.last_packet
+
+    def _forecast(self, live_market: Dict[str, Any]) -> Dict[str, Any]:
+        if self.forecast_engine and hasattr(self.forecast_engine, "forecast_market"):
+            return self.forecast_engine.forecast_market(live_market)
+        return {"status": "missing_forecast_engine"}
+
+    def _calibration(self, live_market: Dict[str, Any]) -> Dict[str, Any]:
+        if self.calibration_engine and hasattr(self.calibration_engine, "calibrate_forecast"):
+            return self.calibration_engine.calibrate_forecast(live_market)
+        return {"status": "missing_calibration_engine"}
+
+    def _scenario(self, live_market: Dict[str, Any]) -> Dict[str, Any]:
+        if self.scenario_engine and hasattr(self.scenario_engine, "simulate_market"):
+            return self.scenario_engine.simulate_market(live_market)
+        return {"status": "missing_scenario_engine"}
+
+    def _report(self, live_market: Dict[str, Any]) -> Dict[str, Any]:
+        if self.report_engine and hasattr(self.report_engine, "build_report"):
+            return self.report_engine.build_report(live_market)
+        return {"status": "missing_report_engine"}
+
+    def _api_summary(self, forecast: Dict[str, Any], calibration: Dict[str, Any], scenario: Dict[str, Any], report: Dict[str, Any]) -> Dict[str, Any]:
+        return {
+            "forecast_direction": (forecast.get("overall_forecast") or {}).get("direction"),
+            "forecast_score": (forecast.get("overall_forecast") or {}).get("score"),
+            "overall_grade": (calibration.get("reliability_report") or {}).get("overall_grade"),
+            "dominant_scenario": (scenario.get("dominant_scenario") or {}).get("name"),
+            "headline": report.get("headline"),
+            "read_only": True,
+            "execution_allowed": False,
+        }
+
+    def _market_identity(self, live_market: Dict[str, Any], *sources: Dict[str, Any]) -> Dict[str, Any]:
+        for source in sources:
+            market = source.get("market") if isinstance(source, dict) else None
+            if market:
+                return market
+
+        return {
+            "ticker": live_market.get("ticker") or live_market.get("market_ticker") or live_market.get("symbol"),
+            "category": live_market.get("category") or live_market.get("market_category") or "unknown",
+            "timestamp": live_market.get("timestamp"),
+        }
+
+    def _status(self, *sources: Dict[str, Any]) -> str:
+        statuses = [s.get("status") for s in sources if isinstance(s, dict)]
+        return "ok" if "ok" in statuses else "degraded"
+
+    def _now(self) -> str:
+        return datetime.now(timezone.utc).isoformat()
+
+
+oracle_forecast_intelligence_service = ForecastIntelligenceService()
+''').strip() + "\n", encoding="utf-8")
+
+TEST_FILE.write_text(textwrap.dedent(r'''
+from qseries_v2.oracle_intelligence.forecast_intelligence_service import ForecastIntelligenceService
+
+
+class FakeForecast:
+    def forecast_market(self, live_market):
+        return {
+            "status": "ok",
+            "market": live_market,
+            "overall_forecast": {"direction": "yes_up_bias", "score": 68.2},
+            "forecast_curve": [{"horizon_minutes": 15, "yes_up_probability": 70.6}],
+        }
+
+
+class FakeCalibration:
+    def calibrate_forecast(self, live_market):
+        return {
+            "status": "ok",
+            "market": live_market,
+            "reliability_report": {"overall_grade": "A", "average_reliability": 90.0},
+        }
+
+
+class FakeScenario:
+    def simulate_market(self, live_market):
+        return {
+            "status": "ok",
+            "market": live_market,
+            "dominant_scenario": {"name": "compression", "score": 66.7},
+        }
+
+
+class FakeReport:
+    def build_report(self, live_market):
+        return {
+            "status": "ok",
+            "market": live_market,
+            "headline": "BTC-TEST: yes_up_bias | Grade A | Scenario compression",
+            "oracle_report_text": "Forecast report text.",
+        }
+
+
+def test_oi_035_forecast_intelligence_service():
+    service = ForecastIntelligenceService(
+        forecast_engine=FakeForecast(),
+        calibration_engine=FakeCalibration(),
+        scenario_engine=FakeScenario(),
+        report_engine=FakeReport(),
+    )
+
+    diagnostics = service.diagnostics()
+    assert diagnostics["status"] == "ok"
+    assert diagnostics["forecast_engine_ready"] is True
+    assert diagnostics["calibration_engine_ready"] is True
+    assert diagnostics["scenario_engine_ready"] is True
+    assert diagnostics["report_engine_ready"] is True
+    assert diagnostics["read_only"] is True
+    assert diagnostics["execution_allowed"] is False
+
+    live_market = {
+        "ticker": "BTC-TEST",
+        "category": "crypto",
+        "timestamp": "2026-06-29T14:30:00+00:00",
+    }
+
+    packet = service.analyze(live_market)
+    assert packet["status"] == "ok"
+    assert packet["api_summary"]["forecast_direction"] == "yes_up_bias"
+    assert packet["api_summary"]["overall_grade"] == "A"
+    assert packet["api_summary"]["dominant_scenario"] == "compression"
+    assert packet["read_only"] is True
+    assert packet["execution_allowed"] is False
+
+    payload = service.api_payload(live_market)
+    assert payload["summary"]["forecast_score"] == 68.2
+    assert payload["headline"]
+
+    latest = service.latest()
+    assert latest["status"] == "ok"
+
+    print("[PASS] OI-035 Forecast Intelligence Service")
+    print({
+        "headline": payload["headline"],
+        "summary": payload["summary"],
+    })
+
+
+if __name__ == "__main__":
+    test_oi_035_forecast_intelligence_service()
+''').strip() + "\n", encoding="utf-8")
+
+INIT = OI_DIR / "__init__.py"
+content = INIT.read_text(encoding="utf-8") if INIT.exists() else ""
+
+line = "from .forecast_intelligence_service import ForecastIntelligenceService, oracle_forecast_intelligence_service\n"
+if line not in content:
+    content += ("\n" if content and not content.endswith("\n") else "") + line
+    INIT.write_text(content, encoding="utf-8")
+
+print("========================================")
+print(" OI-035 INSTALLER")
+print(" Forecast Intelligence Service")
+print("========================================")
+print(f"[OK] Wrote {SERVICE}")
+print(f"[OK] Wrote {TEST_FILE}")
+print(f"[OK] Updated {INIT}")
+print("")
+print("[DONE] OI-035 installed")
+print("")
+print("Run:")
+print("python test_oi_035_forecast_intelligence_service.py")

@@ -1,0 +1,88 @@
+{
+  "can_close_early": true,
+  "close_time": "2026-06-30T02:15:00Z",
+  "created_time": "2026-06-26T21:20:18.334087Z",
+  "custom_strike": {
+    "Associated Events": "KXMLBGAME-26JUN261907TEXTOR,KXMLBGAME-26JUN261910SEACLE,KXMLBGAME-26JUN262138ATHLAA,KXMLBGAME-26JUN262215ATLSF,KXMLBSPREAD-26JUN261905WSHBAL,KXMLBSPREAD-26JUN262015MIASTL",
+    "Associated Market Sides": "yes,yes,yes,yes,no,no",
+    "Associated Markets": "KXMLBGAME-26JUN261907TEXTOR-TOR,KXMLBGAME-26JUN261910SEACLE-SEA,KXMLBGAME-26JUN262138ATHLAA-ATH,KXMLBGAME-26JUN262215ATLSF-ATL,KXMLBSPREAD-26JUN261905WSHBAL-WSH4,KXMLBSPREAD-26JUN262015MIASTL-STL4",
+    "Multivariate Event Ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S2026F7B30AD7FC8"
+  },
+  "event_ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S2026F7B30AD7FC8",
+  "expected_expiration_time": "2026-06-27T05:15:00Z",
+  "expiration_time": "2026-06-30T02:15:00Z",
+  "expiration_value": "",
+  "fractional_trading_enabled": true,
+  "is_provisional": true,
+  "last_price_dollars": "0.0000",
+  "latest_expiration_time": "2026-06-30T02:15:00Z",
+  "liquidity_dollars": "0.0000",
+  "market_type": "binary",
+  "mve_collection_ticker": "KXMVESPORTSMULTIGAMEEXTENDED-R",
+  "mve_selected_legs": [
+    {
+      "event_ticker": "KXMLBGAME-26JUN261907TEXTOR",
+      "market_ticker": "KXMLBGAME-26JUN261907TEXTOR-TOR",
+      "side": "yes"
+    },
+    {
+      "event_ticker": "KXMLBGAME-26JUN261910SEACLE",
+      "market_ticker": "KXMLBGAME-26JUN261910SEACLE-SEA",
+      "side": "yes"
+    },
+    {
+      "event_ticker": "KXMLBGAME-26JUN262138ATHLAA",
+      "market_ticker": "KXMLBGAME-26JUN262138ATHLAA-ATH",
+      "side": "yes"
+    },
+    {
+      "event_ticker": "KXMLBGAME-26JUN262215ATLSF",
+      "market_ticker": "KXMLBGAME-26JUN262215ATLSF-ATL",
+      "side": "yes"
+    },
+    {
+      "event_ticker": "KXMLBSPREAD-26JUN261905WSHBAL",
+      "market_ticker": "KXMLBSPREAD-26JUN261905WSHBAL-WSH4",
+      "side": "no"
+    },
+    {
+      "event_ticker": "KXMLBSPREAD-26JUN262015MIASTL",
+      "market_ticker": "KXMLBSPREAD-26JUN262015MIASTL-STL4",
+      "side": "no"
+    }
+  ],
+  "no_ask_dollars": "1.0000",
+  "no_bid_dollars": "1.0000",
+  "no_sub_title": "yes Toronto,yes Seattle,yes A's,yes Atlanta,no Washington wins by over 3.5 runs,no St. Louis wins by over 3.5 runs",
+  "notional_value_dollars": "1.0000",
+  "open_interest_fp": "0.00",
+  "open_time": "2026-06-26T21:20:18Z",
+  "previous_price_dollars": "0.0000",
+  "previous_yes_ask_dollars": "0.0000",
+  "previous_yes_bid_dollars": "0.0000",
+  "price_level_structure": "deci_cent",
+  "price_ranges": [
+    {
+      "end": "1.0000",
+      "start": "0.0000",
+      "step": "0.0010"
+    }
+  ],
+  "response_price_units": "usd_cent",
+  "result": "",
+  "rules_primary": "",
+  "rules_secondary": "",
+  "settlement_timer_seconds": 5,
+  "status": "active",
+  "strike_type": "custom",
+  "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S2026F7B30AD7FC8-DAD58416E2E",
+  "title": "yes Toronto,yes Seattle,yes A's,yes Atlanta,no Washington wins by over 3.5 runs,no St. Louis wins by over 3.5 runs",
+  "updated_time": "2026-06-26T21:20:18.334125Z",
+  "volume_24h_fp": "0.00",
+  "volume_fp": "0.00",
+  "yes_ask_dollars": "0.0000",
+  "yes_ask_size_fp": "0.00",
+  "yes_bid_dollars": "0.0000",
+  "yes_bid_size_fp": "0.00",
+  "yes_sub_title": "yes Toronto,yes Seattle,yes A's,yes Atlanta,no Washington wins by over 3.5 runs,no St. Louis wins by over 3.5 runs"
+}
