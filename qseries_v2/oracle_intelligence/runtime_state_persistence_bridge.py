@@ -2,28 +2,28 @@
 OI-070 Runtime State Persistence Bridge
 
 Purpose:
-- Connect OI-068 Command Center to OI-069 Runtime State Store.
-- Persist runtime status/dashboard snapshots.
-- Log runtime lifecycle/cycle events.
-- Provide restart restore summary.
+- Connect OI-068 Command Center to ORP-001 persistence proposals.
+- Produce immutable Oracle-to-Q-Series persistence proposals.
+- Leave authorization and persistence ownership to Q Series.
 
 Read-only:
-- No execution.
+- No execution ownership.
 - No order placement.
 - No trade mutation.
+- No filesystem, SQLite, or runtime-state writes.
 """
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Mapping, Optional
 
 from .oracle_intelligence_command_center import (
     oracle_intelligence_command_center,
     OracleIntelligenceCommandCenter,
 )
-from .oracle_runtime_state_store import (
-    oracle_runtime_state_store,
-    OracleRuntimeStateStore,
+from .persistence_proposal_contract import (
+    OracleEventPersistenceProposal,
+    OracleSnapshotPersistenceProposal,
 )
 
 
@@ -33,145 +33,194 @@ class RuntimeStatePersistenceBridge:
     def __init__(
         self,
         command_center: Optional[OracleIntelligenceCommandCenter] = None,
-        state_store: Optional[OracleRuntimeStateStore] = None,
     ) -> None:
         self.command_center = command_center or oracle_intelligence_command_center
-        self.state_store = state_store or oracle_runtime_state_store
 
     def status(self) -> Dict[str, Any]:
         return {
             "module": self.module_name,
             "status": "ok",
             "read_only": True,
+            "persisted": False,
             "command_center": self._safe_status(self.command_center),
-            "state_store": self._safe_status(self.state_store),
+            "boundary": "oracle_proposal_only",
         }
 
-    def persist_status(self) -> Dict[str, Any]:
-        status = self.command_center.status()
-
-        saved = self.state_store.save_snapshot(
+    def persist_status(self, proposed_at: str, source_runtime_id: Optional[str] = None) -> Dict[str, Any]:
+        runtime_status = self.command_center.status()
+        proposal = self._snapshot_proposal(
             snapshot_type="runtime_status",
-            source_module=self.module_name,
-            payload=status,
+            payload={"runtime_status": runtime_status},
+            proposed_at=proposed_at,
+            source_runtime_id=source_runtime_id,
+            operation="runtime_status_snapshot",
         )
+        return self._proposal_response(proposal, "Runtime status proposal generated for Q Series authorization.")
 
-        return {
-            "status": "ok",
-            "read_only": True,
-            "saved": saved,
-            "runtime_status": status,
-        }
-
-    def persist_dashboard(self) -> Dict[str, Any]:
+    def persist_dashboard(self, proposed_at: str, source_runtime_id: Optional[str] = None) -> Dict[str, Any]:
         dashboard = self.command_center.dashboard()
-
-        saved = self.state_store.save_snapshot(
+        proposal = self._snapshot_proposal(
             snapshot_type="command_center_dashboard",
-            source_module=self.module_name,
-            payload=dashboard,
+            payload={"dashboard": dashboard},
+            proposed_at=proposed_at,
+            source_runtime_id=source_runtime_id,
+            operation="dashboard_snapshot",
         )
+        return self._proposal_response(proposal, "Command center dashboard proposal generated for Q Series authorization.")
 
-        return {
-            "status": "ok",
-            "read_only": True,
-            "saved": saved,
-            "dashboard": dashboard,
-        }
-
-    def persist_full_state(self) -> Dict[str, Any]:
-        status_result = self.persist_status()
-        dashboard_result = self.persist_dashboard()
-
-        event = self.state_store.log_event(
-            event_type="runtime_state_persisted",
-            severity="info",
-            source_module=self.module_name,
+    def persist_full_state(self, proposed_at: str, source_runtime_id: Optional[str] = None) -> Dict[str, Any]:
+        runtime_status = self.command_center.status()
+        dashboard = self.command_center.dashboard()
+        proposal = self._snapshot_proposal(
+            snapshot_type="runtime_full_state",
             payload={
-                "runtime_snapshot_id": status_result["saved"]["snapshot_id"],
-                "dashboard_snapshot_id": dashboard_result["saved"]["snapshot_id"],
+                "runtime_status": runtime_status,
+                "dashboard": dashboard,
             },
+            proposed_at=proposed_at,
+            source_runtime_id=source_runtime_id,
+            operation="full_state_snapshot",
         )
+        return self._proposal_response(proposal, "Full runtime state proposal generated for Q Series authorization.")
 
-        return {
-            "status": "ok",
-            "read_only": True,
-            "runtime": status_result,
-            "dashboard": dashboard_result,
-            "event": event,
-        }
-
-    def run_once_and_persist(self, markets=None, **kwargs) -> Dict[str, Any]:
+    def run_once_and_persist(
+        self,
+        markets=None,
+        proposed_at: str = "",
+        source_runtime_id: Optional[str] = None,
+        **kwargs: Any,
+    ) -> Dict[str, Any]:
         run = self.command_center.run_once(markets=markets or [], **kwargs)
-
-        event = self.state_store.log_event(
-            event_type="runtime_cycle_completed",
-            severity="info" if run.get("status") == "ok" else "error",
-            source_module=self.module_name,
+        dashboard = self.command_center.dashboard()
+        proposal = self._snapshot_proposal(
+            snapshot_type="runtime_cycle_result",
             payload={
-                "status": run.get("status"),
-                "cycle": run.get("result", {}).get("cycle"),
+                "run": run,
+                "dashboard": dashboard,
             },
+            proposed_at=proposed_at,
+            source_runtime_id=source_runtime_id,
+            operation="runtime_cycle_snapshot",
         )
+        response = self._proposal_response(proposal, "Runtime cycle proposal generated for Q Series authorization.")
+        response["status"] = run.get("status", response["status"])
+        return response
 
-        persisted = self.persist_full_state()
-
-        return {
-            "status": run.get("status"),
-            "read_only": True,
-            "run": run,
-            "event": event,
-            "persisted": persisted,
-        }
-
-    def start_and_log(self) -> Dict[str, Any]:
+    def start_and_log(self, proposed_at: str, source_runtime_id: Optional[str] = None) -> Dict[str, Any]:
         started = self.command_center.start_runtime()
-
-        event = self.state_store.log_event(
+        proposal = self._event_proposal(
             event_type="runtime_started",
-            severity="info",
-            source_module=self.module_name,
-            payload=started,
+            severity="info" if started.get("status") == "ok" else "warning",
+            payload={"start_result": started},
+            proposed_at=proposed_at,
+            source_runtime_id=source_runtime_id,
+            operation="runtime_start_event",
         )
+        return self._proposal_response(proposal, "Runtime start event proposal generated for Q Series authorization.")
 
-        persisted = self.persist_status()
-
-        return {
-            "status": "ok",
-            "read_only": True,
-            "started": started,
-            "event": event,
-            "persisted": persisted,
-        }
-
-    def stop_and_log(self) -> Dict[str, Any]:
+    def stop_and_log(self, proposed_at: str, source_runtime_id: Optional[str] = None) -> Dict[str, Any]:
         stopped = self.command_center.stop_runtime()
-
-        event = self.state_store.log_event(
+        proposal = self._event_proposal(
             event_type="runtime_stopped",
-            severity="info",
-            source_module=self.module_name,
-            payload=stopped,
+            severity="info" if stopped.get("status") == "ok" else "warning",
+            payload={"stop_result": stopped},
+            proposed_at=proposed_at,
+            source_runtime_id=source_runtime_id,
+            operation="runtime_stop_event",
         )
+        return self._proposal_response(proposal, "Runtime stop event proposal generated for Q Series authorization.")
 
-        persisted = self.persist_full_state()
+    def restore_summary(self, restore_data: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
+        if restore_data is None:
+            return {
+                "status": "unavailable",
+                "read_only": True,
+                "persisted": False,
+                "restorable": False,
+                "restore": None,
+                "explanation": "No caller-supplied restore data was provided; Q Series owns restore state access.",
+            }
 
+        restore = dict(restore_data)
         return {
             "status": "ok",
             "read_only": True,
-            "stopped": stopped,
-            "event": event,
-            "persisted": persisted,
+            "persisted": False,
+            "restorable": bool(restore.get("restorable")),
+            "restore": restore,
+            "explanation": "Caller-supplied restore data summarized without accessing a store.",
         }
 
-    def restore_summary(self) -> Dict[str, Any]:
-        restore = self.state_store.restore_runtime_summary()
+    def _snapshot_proposal(
+        self,
+        *,
+        snapshot_type: str,
+        payload: Dict[str, Any],
+        proposed_at: str,
+        source_runtime_id: Optional[str],
+        operation: str,
+    ) -> OracleSnapshotPersistenceProposal:
+        proposal = OracleSnapshotPersistenceProposal(
+            oracle_module_id=self.module_name,
+            snapshot_type=snapshot_type,
+            payload=self._contract_payload(payload),
+            proposed_at=proposed_at,
+            source_runtime_id=source_runtime_id,
+            replay_metadata=self._replay_metadata(operation),
+        )
+        proposal.validate()
+        return proposal
 
+    def _event_proposal(
+        self,
+        *,
+        event_type: str,
+        severity: str,
+        payload: Dict[str, Any],
+        proposed_at: str,
+        source_runtime_id: Optional[str],
+        operation: str,
+    ) -> OracleEventPersistenceProposal:
+        proposal = OracleEventPersistenceProposal(
+            oracle_module_id=self.module_name,
+            event_type=event_type,
+            severity=severity,
+            payload=self._contract_payload(payload),
+            proposed_at=proposed_at,
+            source_runtime_id=source_runtime_id,
+            replay_metadata=self._replay_metadata(operation),
+        )
+        proposal.validate()
+        return proposal
+
+
+    def _contract_payload(self, value: Any) -> Any:
+        if isinstance(value, Mapping):
+            normalized: Dict[str, Any] = {}
+            for key, item in value.items():
+                clean_key = "oracle_runtime" if str(key) == "runtime" else str(key)
+                normalized[clean_key] = self._contract_payload(item)
+            return normalized
+        if isinstance(value, list):
+            return [self._contract_payload(item) for item in value]
+        if isinstance(value, tuple):
+            return tuple(self._contract_payload(item) for item in value)
+        return value
+    def _replay_metadata(self, operation: str) -> Dict[str, Any]:
+        return {
+            "schema_version": "ORP-001",
+            "operation": operation,
+            "qseries_authorization_required": True,
+            "boundary": "oracle_to_qseries_proposal",
+        }
+
+    def _proposal_response(self, proposal: Any, explanation: str) -> Dict[str, Any]:
         return {
             "status": "ok",
             "read_only": True,
-            "restore": restore,
-            "restorable": restore.get("restorable", False),
+            "persisted": False,
+            "proposal": proposal,
+            "explanation": explanation,
         }
 
     def _safe_status(self, obj: Any) -> str:
