@@ -14,6 +14,18 @@ from .historical_outcome_tracking_engine_adapter import HistoricalOutcomeTrackin
 from .oem_003_market_relationship_engine_adapter import MarketRelationshipEngineAdapter, build_engine as build_market_relationship_engine_adapter
 
 __all__ = [
+    "QSERIES_EXECUTION_INTAKE_SCHEMA_VERSION",
+    "QSERIES_EXECUTION_INTAKE_ENGINE_ID",
+    "QSERIES_EXECUTION_INTAKE_READ_ONLY",
+    "QSERIES_EXECUTION_INTAKE_EXECUTION_ALLOWED",
+    "EXECUTION_GATE_REQUIRED",
+    "ExecutionIntakeStatus",
+    "QSeriesExecutionIntakeRecord",
+    "QSeriesExecutionIntakeCheck",
+    "QSeriesExecutionIntakeResult",
+    "build_qseries_execution_intake_records",
+    "validate_qseries_execution_intake_result",
+
     "QSERIES_OPPORTUNITY_AUTHORIZATION_SCHEMA_VERSION",
     "QSERIES_OPPORTUNITY_AUTHORIZATION_ENGINE_ID",
     "QSERIES_OPPORTUNITY_AUTHORIZATION_READ_ONLY",
@@ -81,4 +93,16 @@ from .qseries_opportunity_authorization_gate import (
     validate_qseries_opportunity_authorization_result,
     assert_qseries_opportunity_authorization_read_only,
 )
-
+from .qseries_execution_intake_record import (
+    SCHEMA_VERSION as QSERIES_EXECUTION_INTAKE_SCHEMA_VERSION,
+    ENGINE_ID as QSERIES_EXECUTION_INTAKE_ENGINE_ID,
+    READ_ONLY as QSERIES_EXECUTION_INTAKE_READ_ONLY,
+    EXECUTION_ALLOWED as QSERIES_EXECUTION_INTAKE_EXECUTION_ALLOWED,
+    EXECUTION_GATE_REQUIRED,
+    ExecutionIntakeStatus,
+    QSeriesExecutionIntakeRecord,
+    QSeriesExecutionIntakeCheck,
+    QSeriesExecutionIntakeResult,
+    build_qseries_execution_intake_records,
+    validate_qseries_execution_intake_result,
+)
