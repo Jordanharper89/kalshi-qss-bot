@@ -1,327 +1,310 @@
+
 """
-OPS-002.3 — Runtime Watchdog Integration
+OPS-008 Q Series Runtime Runtime Path Migration
 
-Adds OPS-005.1 Watchdog into Q Series Runtime.
+Migrates Q Series runtime operations to the canonical OPS-004 RuntimePaths
+contract.
 
-Runtime now includes:
-- ADP-012 market ingestion
-- ADP-013 live market cache
-- OPS-001 supervisor
-- OPS-002 scheduler
-- OPS-003 historical store
-- OPS-004 historical recording pipeline
-- OPS-005 watchdog auto-recovery
+This module owns runtime lifecycle state, service registry state, scheduler
+state, watchdog state, and runtime file locations.
 
-Read-only trading.
-No execution.
+No hard-coded qseries_v2/data paths are allowed here.
 """
 
-import time
-from typing import Any, Dict, Optional
+from __future__ import annotations
+
+import json
+from dataclasses import dataclass, asdict
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+from qseries_v2.ops.runtime_paths import RuntimePaths, ensure_runtime_layout, validate_runtime_paths
 
 
-class QSeriesRuntimeError(Exception):
-    pass
+@dataclass(frozen=True)
+class RuntimeServiceStatus:
+    name: str
+    status: str
+    metadata: Dict[str, Any]
+    updated_at: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class RuntimeWatchdogStatus:
+    status: str
+    checks: int
+    last_check_at: str
+    notes: List[str]
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class RuntimeStatus:
+    status: str
+    runtime_root: str
+    services: Dict[str, Dict[str, Any]]
+    scheduler_jobs: int
+    watchdog: Dict[str, Any]
+    paths: Dict[str, str]
+    updated_at: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
 
 
 class QSeriesRuntime:
-    def __init__(
+    """
+    Canonical runtime manager for Q Series.
+
+    Runtime directories and database paths must resolve through RuntimePaths.
+    """
+
+    def __init__(self) -> None:
+        layout = ensure_runtime_layout()
+        if not layout.ok:
+            raise RuntimeError(f"Runtime layout validation failed: {layout.to_dict() if hasattr(layout, 'to_dict') else layout}")
+
+        self.runtime_root = RuntimePaths.runtime_root()
+        self.data_dir = RuntimePaths.data_dir()
+        self.logs_dir = RuntimePaths.logs_dir()
+        self.cache_dir = RuntimePaths.cache_dir()
+        self.state_dir = RuntimePaths.state_dir()
+        self.raw_dir = RuntimePaths.raw_dir()
+        self.test_data_dir = RuntimePaths.test_data_dir()
+
+        self._running = False
+        self._services: Dict[str, RuntimeServiceStatus] = {}
+        self._scheduler_jobs: Dict[str, Dict[str, Any]] = {}
+        self._watchdog_checks = 0
+        self._watchdog_notes: List[str] = []
+        self._started_at: Optional[str] = None
+        self._updated_at = self.now_iso()
+
+    @staticmethod
+    def now_iso() -> str:
+        return datetime.now(timezone.utc).isoformat()
+
+    def start(self) -> RuntimeStatus:
+        self._running = True
+        self._started_at = self.now_iso()
+        self._updated_at = self._started_at
+        self.write_state("runtime_status.json", {"status": "running", "started_at": self._started_at})
+        return self.status()
+
+    def stop(self) -> RuntimeStatus:
+        self._running = False
+        self._updated_at = self.now_iso()
+        self.write_state("runtime_status.json", {"status": "stopped", "updated_at": self._updated_at})
+        return self.status()
+
+    def register_service(
         self,
-        environment: str = "production",
-        cache_refresh_seconds: float = 30.0,
-        history_record_seconds: float = 30.0,
-        oracle_scan_seconds: float = 60.0,
-        watchdog_seconds: float = 60.0,
-        diagnostics_seconds: float = 300.0,
-        history_db_path: str = "qseries_v2/data/qseries_history.sqlite3",
-        event_bus: Any = None,
-    ):
-        self.environment = environment
-        self.cache_refresh_seconds = float(cache_refresh_seconds)
-        self.history_record_seconds = float(history_record_seconds)
-        self.oracle_scan_seconds = float(oracle_scan_seconds)
-        self.watchdog_seconds = float(watchdog_seconds)
-        self.diagnostics_seconds = float(diagnostics_seconds)
-        self.history_db_path = history_db_path
-        self.event_bus = event_bus
+        name: str,
+        status: str = "registered",
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> RuntimeServiceStatus:
+        if not name or not isinstance(name, str):
+            raise ValueError("service name must be a non-empty string")
+        if not status or not isinstance(status, str):
+            raise ValueError("service status must be a non-empty string")
 
-        self.started_at: Optional[float] = None
-        self.stopped_at: Optional[float] = None
-        self.boot_status = "created"
+        record = RuntimeServiceStatus(
+            name=name,
+            status=status,
+            metadata=metadata or {},
+            updated_at=self.now_iso(),
+        )
+        self._services[name] = record
+        self._updated_at = record.updated_at
+        return record
 
-        self.ingestion = None
-        self.market_cache = None
-        self.historical_store = None
-        self.historical_pipeline = None
-        self.watchdog = None
-        self.supervisor = None
-        self.scheduler = None
+    def update_service(
+        self,
+        name: str,
+        status: str,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> RuntimeServiceStatus:
+        existing = self._services.get(name)
+        merged = dict(existing.metadata) if existing else {}
+        if metadata:
+            merged.update(metadata)
+        return self.register_service(name=name, status=status, metadata=merged)
 
-    def boot(self) -> Dict[str, Any]:
-        self.started_at = time.time()
-        self.boot_status = "booting"
+    def service_status(self, name: str) -> Optional[RuntimeServiceStatus]:
+        return self._services.get(name)
 
-        try:
-            from qseries_v2.adapters.live_kalshi_market_ingestion import build_live_kalshi_market_ingestion
-            from qseries_v2.adapters.live_market_cache import build_live_market_cache
-            from qseries_v2.ops.service_supervisor import build_service_supervisor
-            from qseries_v2.ops.background_scheduler import build_background_scheduler
-            from qseries_v2.ops.historical_data_store import build_historical_data_store
-            from qseries_v2.ops.historical_recording_pipeline import build_historical_recording_pipeline
-            from qseries_v2.ops.watchdog import build_watchdog
+    def services(self) -> Dict[str, Dict[str, Any]]:
+        return {name: service.to_dict() for name, service in self._services.items()}
 
-            self.ingestion = build_live_kalshi_market_ingestion(
-                environment=self.environment,
-                event_bus=self.event_bus,
-            )
+    def add_scheduler_job(
+        self,
+        job_id: str,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        if not job_id or not isinstance(job_id, str):
+            raise ValueError("job_id must be a non-empty string")
 
-            self.market_cache = build_live_market_cache(
-                ingestion=self.ingestion,
-                event_bus=self.event_bus,
-                refresh_interval_seconds=self.cache_refresh_seconds,
-            )
+        job = {
+            "job_id": job_id,
+            "metadata": metadata or {},
+            "registered_at": self.now_iso(),
+        }
+        self._scheduler_jobs[job_id] = job
+        self._updated_at = job["registered_at"]
+        return job
 
-            self.historical_store = build_historical_data_store(
-                db_path=self.history_db_path,
-                event_bus=self.event_bus,
-            )
+    def remove_scheduler_job(self, job_id: str) -> bool:
+        existed = job_id in self._scheduler_jobs
+        if existed:
+            del self._scheduler_jobs[job_id]
+            self._updated_at = self.now_iso()
+        return existed
 
-            self.historical_pipeline = build_historical_recording_pipeline(
-                market_cache=self.market_cache,
-                historical_store=self.historical_store,
-                event_bus=self.event_bus,
-                skip_duplicates=True,
-                source="runtime.market_cache",
-            )
+    def scheduler_jobs(self) -> Dict[str, Dict[str, Any]]:
+        return dict(self._scheduler_jobs)
 
-            self.supervisor = build_service_supervisor(event_bus=self.event_bus)
-            self.scheduler = build_background_scheduler(event_bus=self.event_bus)
+    def watchdog_check(self, note: Optional[str] = None) -> RuntimeWatchdogStatus:
+        self._watchdog_checks += 1
+        if note:
+            self._watchdog_notes.append(note)
 
-            self.watchdog = build_watchdog(
-                supervisor=self.supervisor,
-                scheduler=self.scheduler,
-                market_cache=self.market_cache,
-                historical_pipeline=self.historical_pipeline,
-                event_bus=self.event_bus,
-            )
+        checked_at = self.now_iso()
+        self._updated_at = checked_at
 
-            self.supervisor.register_service(
-                name="ops.scheduler",
-                start_callable=self.scheduler.start,
-                stop_callable=self.scheduler.stop,
-                health_callable=self.scheduler.diagnostics,
-                restart_on_failure=True,
-                metadata={"layer": "OPS", "build": "OPS-002"},
-            )
+        status = RuntimeWatchdogStatus(
+            status="ok" if self._running else "stopped",
+            checks=self._watchdog_checks,
+            last_check_at=checked_at,
+            notes=list(self._watchdog_notes),
+        )
 
-            self.supervisor.register_service(
-                name="adp.market_cache",
-                start_callable=lambda: {"status": "managed_by_scheduler"},
-                stop_callable=lambda: {"status": "managed_by_scheduler"},
-                health_callable=self.market_cache.diagnostics,
-                restart_on_failure=True,
-                metadata={"layer": "ADP", "build": "ADP-013"},
-            )
+        self.write_state("watchdog_status.json", status.to_dict())
+        return status
 
-            self.supervisor.register_service(
-                name="ops.history_store",
-                start_callable=lambda: {"status": "ready", "db_path": self.history_db_path},
-                stop_callable=lambda: {"status": "closed"},
-                health_callable=self.historical_store.diagnostics,
-                restart_on_failure=False,
-                metadata={"layer": "OPS", "build": "OPS-003"},
-            )
+    def watchdog_status(self) -> RuntimeWatchdogStatus:
+        return RuntimeWatchdogStatus(
+            status="ok" if self._running else "stopped",
+            checks=self._watchdog_checks,
+            last_check_at=self._updated_at,
+            notes=list(self._watchdog_notes),
+        )
 
-            self.supervisor.register_service(
-                name="ops.history_pipeline",
-                start_callable=lambda: {"status": "managed_by_scheduler"},
-                stop_callable=lambda: {"status": "managed_by_scheduler"},
-                health_callable=self.historical_pipeline.diagnostics,
-                restart_on_failure=True,
-                metadata={"layer": "OPS", "build": "OPS-004"},
-            )
-
-            self.supervisor.register_service(
-                name="ops.watchdog",
-                start_callable=lambda: {"status": "managed_by_scheduler"},
-                stop_callable=lambda: {"status": "managed_by_scheduler"},
-                health_callable=self.watchdog.diagnostics,
-                restart_on_failure=True,
-                metadata={"layer": "OPS", "build": "OPS-005.1"},
-            )
-
-            self.scheduler.register_job(
-                name="adp.market_cache.refresh",
-                interval_seconds=self.cache_refresh_seconds,
-                job_callable=lambda: self.market_cache.refresh(limit=1000, max_pages=3),
-                run_immediately=True,
-                metadata={"layer": "ADP", "purpose": "live market cache refresh"},
-            )
-
-            self.scheduler.register_job(
-                name="ops.history.record_snapshot",
-                interval_seconds=self.history_record_seconds,
-                job_callable=lambda: self.historical_pipeline.record_current_snapshot(
-                    metadata={"runtime": "OPS-002.3"}
-                ),
-                run_immediately=False,
-                metadata={"layer": "OPS", "purpose": "record market cache to historical database"},
-            )
-
-            self.scheduler.register_job(
-                name="ops.watchdog.check",
-                interval_seconds=self.watchdog_seconds,
-                job_callable=self.watchdog.check_once,
-                run_immediately=True,
-                metadata={"layer": "OPS", "purpose": "watchdog auto-recovery"},
-            )
-
-            self.scheduler.register_job(
-                name="oracle.scan.placeholder",
-                interval_seconds=self.oracle_scan_seconds,
-                job_callable=self._oracle_scan_placeholder,
-                run_immediately=False,
-                metadata={"layer": "OI", "purpose": "future Oracle live scan"},
-            )
-
-            self.scheduler.register_job(
-                name="runtime.diagnostics.heartbeat",
-                interval_seconds=self.diagnostics_seconds,
-                job_callable=self._heartbeat,
-                run_immediately=False,
-                metadata={"layer": "OPS", "purpose": "runtime diagnostics"},
-            )
-
-            self.supervisor.start_service("ops.scheduler")
-            self.supervisor.start_service("adp.market_cache")
-            self.supervisor.start_service("ops.history_store")
-            self.supervisor.start_service("ops.history_pipeline")
-            self.supervisor.start_service("ops.watchdog")
-
-            self.boot_status = "running"
-            return self.diagnostics()
-
-        except Exception as exc:
-            self.boot_status = "error"
-            raise QSeriesRuntimeError(str(exc)) from exc
-
-    def shutdown(self) -> Dict[str, Any]:
-        self.stopped_at = time.time()
-
-        results = {}
-        if self.supervisor:
-            results = self.supervisor.stop_all()
-
-        self.boot_status = "stopped"
-
+    def runtime_paths_report(self) -> Dict[str, str]:
         return {
-            "module": "ops_002_3_runtime_watchdog_integration",
-            "status": "stopped",
-            "stopped_at": self.stopped_at,
-            "results": results,
+            "runtime_root": str(RuntimePaths.runtime_root()),
+            "data_dir": str(RuntimePaths.data_dir()),
+            "raw_dir": str(RuntimePaths.raw_dir()),
+            "logs_dir": str(RuntimePaths.logs_dir()),
+            "cache_dir": str(RuntimePaths.cache_dir()),
+            "state_dir": str(RuntimePaths.state_dir()),
+            "test_data_dir": str(RuntimePaths.test_data_dir()),
+            "oracle_data_db": str(RuntimePaths.oracle_data_db()),
+            "oracle_memory_db": str(RuntimePaths.oracle_memory_db()),
+            "oracle_runtime_state_db": str(RuntimePaths.oracle_runtime_state_db()),
+            "qseries_history_db": str(RuntimePaths.qseries_history_db()),
         }
 
-    def _oracle_scan_placeholder(self) -> Dict[str, Any]:
-        count = 0
-        if self.market_cache:
-            count = len(self.market_cache.get_all_markets())
+    def status(self) -> RuntimeStatus:
+        return RuntimeStatus(
+            status="running" if self._running else "stopped",
+            runtime_root=str(RuntimePaths.runtime_root()),
+            services=self.services(),
+            scheduler_jobs=len(self._scheduler_jobs),
+            watchdog=self.watchdog_status().to_dict(),
+            paths=self.runtime_paths_report(),
+            updated_at=self._updated_at,
+        )
 
+    def health(self) -> Dict[str, Any]:
+        validation = validate_runtime_paths()
         return {
-            "status": "placeholder",
-            "message": "Oracle live scan hook ready. Full Oracle scanner integration comes next.",
-            "cached_markets": count,
-            "timestamp": time.time(),
+            "status": "ok" if validation.ok else "error",
+            "runtime_status": "running" if self._running else "stopped",
+            "runtime_root": str(RuntimePaths.runtime_root()),
+            "scheduler_jobs": len(self._scheduler_jobs),
+            "services": len(self._services),
+            "watchdog_checks": self._watchdog_checks,
+            "uses_runtime_paths": True,
+            "validation": {
+                "status": validation.status,
+                "missing_directories": validation.missing_directories,
+                "errors": validation.errors,
+            },
         }
 
-    def _heartbeat(self) -> Dict[str, Any]:
-        return self.diagnostics()
+    def state_path(self, filename: str) -> Path:
+        return self._safe_child(RuntimePaths.state_dir(), filename)
 
-    def diagnostics(self) -> Dict[str, Any]:
-        return {
-            "module": "ops_002_3_runtime_watchdog_integration",
-            "status": self.boot_status,
-            "environment": self.environment,
-            "started_at": self.started_at,
-            "stopped_at": self.stopped_at,
-            "uptime_seconds": time.time() - self.started_at if self.started_at else None,
-            "cache_refresh_seconds": self.cache_refresh_seconds,
-            "history_record_seconds": self.history_record_seconds,
-            "oracle_scan_seconds": self.oracle_scan_seconds,
-            "watchdog_seconds": self.watchdog_seconds,
-            "diagnostics_seconds": self.diagnostics_seconds,
-            "history_db_path": self.history_db_path,
-            "supervisor": self.supervisor.diagnostics() if self.supervisor else None,
-            "scheduler": self.scheduler.diagnostics() if self.scheduler else None,
-            "market_cache": self.market_cache.diagnostics() if self.market_cache else None,
-            "historical_store": self.historical_store.diagnostics() if self.historical_store else None,
-            "historical_pipeline": self.historical_pipeline.diagnostics() if self.historical_pipeline else None,
-            "watchdog": self.watchdog.diagnostics() if self.watchdog else None,
-            "read_only": True,
-        }
+    def log_path(self, filename: str) -> Path:
+        return self._safe_child(RuntimePaths.logs_dir(), filename)
+
+    def cache_path(self, filename: str) -> Path:
+        return self._safe_child(RuntimePaths.cache_dir(), filename)
+
+    def raw_path(self, filename: str) -> Path:
+        return self._safe_child(RuntimePaths.raw_dir(), filename)
+
+    def data_path(self, filename: str) -> Path:
+        return self._safe_child(RuntimePaths.data_dir(), filename)
+
+    def test_data_path(self, filename: str) -> Path:
+        return self._safe_child(RuntimePaths.test_data_dir(), filename)
+
+    def _safe_child(self, base: Path, filename: str) -> Path:
+        if not filename or not isinstance(filename, str):
+            raise ValueError("filename must be a non-empty string")
+
+        candidate = (base / filename).resolve()
+        base_resolved = base.resolve()
+
+        if base_resolved not in candidate.parents and candidate != base_resolved:
+            raise ValueError("path escapes runtime directory")
+
+        candidate.parent.mkdir(parents=True, exist_ok=True)
+        return candidate
+
+    def write_state(self, filename: str, payload: Dict[str, Any]) -> Path:
+        if not isinstance(payload, dict):
+            raise ValueError("payload must be a dictionary")
+
+        path = self.state_path(filename)
+        path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+        return path
+
+    def read_state(self, filename: str) -> Optional[Dict[str, Any]]:
+        path = self.state_path(filename)
+        if not path.exists():
+            return None
+        return json.loads(path.read_text(encoding="utf-8"))
+
+    def write_log(self, filename: str, message: str) -> Path:
+        if not isinstance(message, str):
+            raise ValueError("message must be a string")
+
+        path = self.log_path(filename)
+        with path.open("a", encoding="utf-8") as handle:
+            handle.write(message.rstrip() + "\n")
+        return path
 
 
-def build_qseries_runtime(
-    environment: str = "production",
-    cache_refresh_seconds: float = 30.0,
-    history_record_seconds: float = 30.0,
-    oracle_scan_seconds: float = 60.0,
-    watchdog_seconds: float = 60.0,
-    diagnostics_seconds: float = 300.0,
-    history_db_path: str = "qseries_v2/data/qseries_history.sqlite3",
-    event_bus: Any = None,
-) -> QSeriesRuntime:
-    return QSeriesRuntime(
-        environment=environment,
-        cache_refresh_seconds=cache_refresh_seconds,
-        history_record_seconds=history_record_seconds,
-        oracle_scan_seconds=oracle_scan_seconds,
-        watchdog_seconds=watchdog_seconds,
-        diagnostics_seconds=diagnostics_seconds,
-        history_db_path=history_db_path,
-        event_bus=event_bus,
-    )
+def create_qseries_runtime() -> QSeriesRuntime:
+    return QSeriesRuntime()
 
 
-if __name__ == "__main__":
-    runtime = build_qseries_runtime(environment="production")
-    boot = runtime.boot()
+qseries_runtime = create_qseries_runtime
 
-    print("======================================")
-    print(" Q SERIES V2.3 RUNTIME + WATCHDOG")
-    print("======================================")
-    print("Status:", boot["status"])
-    print("Environment:", boot["environment"])
-    print("Read Only:", boot["read_only"])
-    print("History DB:", boot["history_db_path"])
-    print("Scheduler:", boot["scheduler"]["status"])
-    print("Market Cache:", boot["market_cache"]["status"])
-    print("Historical Store:", boot["historical_store"]["status"])
-    print("Historical Pipeline:", boot["historical_pipeline"]["status"])
-    print("Watchdog:", boot["watchdog"]["status"])
-    print("System Ready.")
-    print()
-    print("Press CTRL+C to stop.")
 
-    try:
-        while True:
-            time.sleep(5)
-            diag = runtime.diagnostics()
-            cache = diag.get("market_cache") or {}
-            store = diag.get("historical_store") or {}
-            pipeline = diag.get("historical_pipeline") or {}
-            watchdog = diag.get("watchdog") or {}
-            print(
-                "[heartbeat]",
-                "runtime=", diag.get("status"),
-                "markets=", cache.get("market_count"),
-                "cache_refreshes=", cache.get("refresh_count"),
-                "history_rows=", store.get("observation_count"),
-                "snapshots=", store.get("snapshot_count"),
-                "recorded=", pipeline.get("record_count"),
-                "skipped=", pipeline.get("skipped_duplicates"),
-                "watchdog_checks=", watchdog.get("check_count"),
-                "recoveries=", watchdog.get("recovery_count"),
-            )
-    except KeyboardInterrupt:
-        print()
-        print(runtime.shutdown())
+__all__ = [
+    "RuntimeServiceStatus",
+    "RuntimeWatchdogStatus",
+    "RuntimeStatus",
+    "QSeriesRuntime",
+    "create_qseries_runtime",
+    "qseries_runtime",
+]

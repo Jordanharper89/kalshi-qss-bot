@@ -1,211 +1,250 @@
+
 """
-OI-042 Oracle Persistent Memory Store
+OPS-005 Oracle Persistent Memory Store Runtime Path Migration
 
-SQLite-backed long-term Oracle memory persistence.
+Migrates Oracle persistent memory storage to the canonical OPS-004
+RuntimePaths contract.
 
-Read-only trading rule:
-- This module stores intelligence memory only.
-- It never places, modifies, cancels, or recommends execution.
+Oracle remains read-only intelligence. This store owns persistence access
+only and must never execute trades.
 """
 
 from __future__ import annotations
 
 import json
 import sqlite3
-from pathlib import Path
+from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from qseries_v2.ops.runtime_paths import RuntimePaths, ensure_runtime_layout
 
-DEFAULT_DB_PATH = Path("qseries_v2") / "data" / "oracle_memory.sqlite3"
 
+@dataclass(frozen=True)
+class OracleMemoryRecord:
+    key: str
+    namespace: str
+    value: Dict[str, Any]
+    created_at: str
+    updated_at: str
 
-def _utc_now() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
 
 
 class OraclePersistentMemoryStore:
-    module_name = "oi_042_oracle_persistent_memory_store"
+    """
+    Canonical Oracle memory persistence store.
+
+    Database location:
+        RuntimePaths.oracle_memory_db()
+
+    No hard-coded qseries_v2/data database paths are allowed here.
+    """
 
     def __init__(self, db_path: Optional[Path] = None) -> None:
-        self.db_path = Path(db_path or DEFAULT_DB_PATH)
+        ensure_runtime_layout()
+        self.db_path = Path(db_path) if db_path else RuntimePaths.oracle_memory_db()
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self._init_db()
 
-    def _connect(self):
-        return sqlite3.connect(str(self.db_path))
+    @staticmethod
+    def now_iso() -> str:
+        return datetime.now(timezone.utc).isoformat()
+
+    def _connect(self) -> sqlite3.Connection:
+        conn = sqlite3.connect(str(self.db_path))
+        conn.row_factory = sqlite3.Row
+        return conn
 
     def _init_db(self) -> None:
-        with self._connect() as conn:
-            conn.execute("""
+        conn = self._connect()
+        try:
+            conn.execute(
+                """
                 CREATE TABLE IF NOT EXISTS oracle_memory (
-                    memory_id TEXT PRIMARY KEY,
-                    memory_type TEXT NOT NULL,
-                    market_ticker TEXT,
-                    title TEXT NOT NULL,
-                    summary TEXT NOT NULL,
-                    confidence REAL NOT NULL,
-                    importance REAL NOT NULL,
+                    namespace TEXT NOT NULL,
+                    key TEXT NOT NULL,
+                    value_json TEXT NOT NULL,
                     created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL,
-                    tags_json TEXT NOT NULL,
-                    source_module TEXT NOT NULL,
-                    payload_json TEXT NOT NULL
+                    PRIMARY KEY (namespace, key)
                 )
-            """)
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_oracle_memory_type ON oracle_memory(memory_type)")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_oracle_memory_ticker ON oracle_memory(market_ticker)")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_oracle_memory_updated ON oracle_memory(updated_at)")
+                """
+            )
+            conn.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_oracle_memory_namespace
+                ON oracle_memory(namespace)
+                """
+            )
             conn.commit()
+        finally:
+            conn.close()
 
-    def status(self) -> Dict[str, Any]:
-        with self._connect() as conn:
-            count = conn.execute("SELECT COUNT(*) FROM oracle_memory").fetchone()[0]
+    def upsert(self, key: str, value: Dict[str, Any], namespace: str = "default") -> OracleMemoryRecord:
+        if not key or not isinstance(key, str):
+            raise ValueError("key must be a non-empty string")
+        if not namespace or not isinstance(namespace, str):
+            raise ValueError("namespace must be a non-empty string")
+        if not isinstance(value, dict):
+            raise ValueError("value must be a dictionary")
 
+        now = self.now_iso()
+        payload = json.dumps(value, sort_keys=True)
+        existing = self.get(key=key, namespace=namespace)
+
+        conn = self._connect()
+        try:
+            if existing:
+                created_at = existing.created_at
+                conn.execute(
+                    """
+                    UPDATE oracle_memory
+                    SET value_json = ?, updated_at = ?
+                    WHERE namespace = ? AND key = ?
+                    """,
+                    (payload, now, namespace, key),
+                )
+            else:
+                created_at = now
+                conn.execute(
+                    """
+                    INSERT INTO oracle_memory(namespace, key, value_json, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, ?)
+                    """,
+                    (namespace, key, payload, created_at, now),
+                )
+            conn.commit()
+        finally:
+            conn.close()
+
+        return OracleMemoryRecord(
+            key=key,
+            namespace=namespace,
+            value=value,
+            created_at=created_at,
+            updated_at=now,
+        )
+
+    def get(self, key: str, namespace: str = "default") -> Optional[OracleMemoryRecord]:
+        conn = self._connect()
+        try:
+            row = conn.execute(
+                """
+                SELECT namespace, key, value_json, created_at, updated_at
+                FROM oracle_memory
+                WHERE namespace = ? AND key = ?
+                """,
+                (namespace, key),
+            ).fetchone()
+
+            if not row:
+                return None
+
+            return OracleMemoryRecord(
+                key=row["key"],
+                namespace=row["namespace"],
+                value=json.loads(row["value_json"]),
+                created_at=row["created_at"],
+                updated_at=row["updated_at"],
+            )
+        finally:
+            conn.close()
+
+    def delete(self, key: str, namespace: str = "default") -> bool:
+        conn = self._connect()
+        try:
+            cur = conn.execute(
+                """
+                DELETE FROM oracle_memory
+                WHERE namespace = ? AND key = ?
+                """,
+                (namespace, key),
+            )
+            conn.commit()
+            return cur.rowcount > 0
+        finally:
+            conn.close()
+
+    def list_namespace(self, namespace: str = "default") -> List[OracleMemoryRecord]:
+        conn = self._connect()
+        try:
+            rows = conn.execute(
+                """
+                SELECT namespace, key, value_json, created_at, updated_at
+                FROM oracle_memory
+                WHERE namespace = ?
+                ORDER BY updated_at DESC, key ASC
+                """,
+                (namespace,),
+            ).fetchall()
+
+            return [
+                OracleMemoryRecord(
+                    key=row["key"],
+                    namespace=row["namespace"],
+                    value=json.loads(row["value_json"]),
+                    created_at=row["created_at"],
+                    updated_at=row["updated_at"],
+                )
+                for row in rows
+            ]
+        finally:
+            conn.close()
+
+    def namespaces(self) -> List[str]:
+        conn = self._connect()
+        try:
+            rows = conn.execute(
+                """
+                SELECT DISTINCT namespace
+                FROM oracle_memory
+                ORDER BY namespace ASC
+                """
+            ).fetchall()
+            return [row["namespace"] for row in rows]
+        finally:
+            conn.close()
+
+    def count(self, namespace: Optional[str] = None) -> int:
+        conn = self._connect()
+        try:
+            if namespace:
+                row = conn.execute(
+                    "SELECT COUNT(*) AS total FROM oracle_memory WHERE namespace = ?",
+                    (namespace,),
+                ).fetchone()
+            else:
+                row = conn.execute("SELECT COUNT(*) AS total FROM oracle_memory").fetchone()
+            return int(row["total"])
+        finally:
+            conn.close()
+
+    def health(self) -> Dict[str, Any]:
         return {
-            "module": self.module_name,
             "status": "ok",
-            "read_only": True,
+            "store": "oracle_persistent_memory_store",
             "db_path": str(self.db_path),
-            "memory_records": count,
-        }
-
-    def upsert(self, record: Dict[str, Any]) -> Dict[str, Any]:
-        now = _utc_now()
-
-        created_at = record.get("created_at") or now
-        updated_at = record.get("updated_at") or now
-
-        with self._connect() as conn:
-            conn.execute("""
-                INSERT INTO oracle_memory (
-                    memory_id,
-                    memory_type,
-                    market_ticker,
-                    title,
-                    summary,
-                    confidence,
-                    importance,
-                    created_at,
-                    updated_at,
-                    tags_json,
-                    source_module,
-                    payload_json
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ON CONFLICT(memory_id) DO UPDATE SET
-                    memory_type=excluded.memory_type,
-                    market_ticker=excluded.market_ticker,
-                    title=excluded.title,
-                    summary=excluded.summary,
-                    confidence=MAX(oracle_memory.confidence, excluded.confidence),
-                    importance=MAX(oracle_memory.importance, excluded.importance),
-                    updated_at=excluded.updated_at,
-                    tags_json=excluded.tags_json,
-                    source_module=excluded.source_module,
-                    payload_json=excluded.payload_json
-            """, (
-                record["memory_id"],
-                record["memory_type"],
-                record.get("market_ticker"),
-                record["title"],
-                record["summary"],
-                float(record.get("confidence", 50.0)),
-                float(record.get("importance", 50.0)),
-                created_at,
-                updated_at,
-                json.dumps(record.get("tags", []), sort_keys=True),
-                record.get("source_module", "oracle"),
-                json.dumps(record.get("payload", {}), sort_keys=True, default=str),
-            ))
-            conn.commit()
-
-        return self.get(record["memory_id"]) or record
-
-    def get(self, memory_id: str) -> Optional[Dict[str, Any]]:
-        with self._connect() as conn:
-            row = conn.execute("""
-                SELECT memory_id, memory_type, market_ticker, title, summary,
-                       confidence, importance, created_at, updated_at,
-                       tags_json, source_module, payload_json
-                FROM oracle_memory
-                WHERE memory_id=?
-            """, (memory_id,)).fetchone()
-
-        return self._row_to_dict(row) if row else None
-
-    def recall(
-        self,
-        memory_type: Optional[str] = None,
-        market_ticker: Optional[str] = None,
-        tag: Optional[str] = None,
-        limit: int = 50,
-    ) -> List[Dict[str, Any]]:
-        clauses = []
-        params = []
-
-        if memory_type:
-            clauses.append("memory_type=?")
-            params.append(memory_type)
-
-        if market_ticker:
-            clauses.append("market_ticker=?")
-            params.append(market_ticker)
-
-        where = ("WHERE " + " AND ".join(clauses)) if clauses else ""
-
-        with self._connect() as conn:
-            rows = conn.execute(f"""
-                SELECT memory_id, memory_type, market_ticker, title, summary,
-                       confidence, importance, created_at, updated_at,
-                       tags_json, source_module, payload_json
-                FROM oracle_memory
-                {where}
-                ORDER BY importance DESC, confidence DESC, updated_at DESC
-                LIMIT ?
-            """, (*params, int(limit))).fetchall()
-
-        records = [self._row_to_dict(row) for row in rows]
-
-        if tag:
-            records = [r for r in records if tag in r.get("tags", [])]
-
-        return records
-
-    def search_text(self, text: str, limit: int = 25) -> List[Dict[str, Any]]:
-        needle = f"%{text.lower()}%"
-
-        with self._connect() as conn:
-            rows = conn.execute("""
-                SELECT memory_id, memory_type, market_ticker, title, summary,
-                       confidence, importance, created_at, updated_at,
-                       tags_json, source_module, payload_json
-                FROM oracle_memory
-                WHERE lower(title) LIKE ?
-                   OR lower(summary) LIKE ?
-                   OR lower(tags_json) LIKE ?
-                   OR lower(payload_json) LIKE ?
-                ORDER BY importance DESC, confidence DESC, updated_at DESC
-                LIMIT ?
-            """, (needle, needle, needle, needle, int(limit))).fetchall()
-
-        return [self._row_to_dict(row) for row in rows]
-
-    def _row_to_dict(self, row) -> Dict[str, Any]:
-        return {
-            "memory_id": row[0],
-            "memory_type": row[1],
-            "market_ticker": row[2],
-            "title": row[3],
-            "summary": row[4],
-            "confidence": row[5],
-            "importance": row[6],
-            "created_at": row[7],
-            "updated_at": row[8],
-            "tags": json.loads(row[9] or "[]"),
-            "source_module": row[10],
-            "payload": json.loads(row[11] or "{}"),
+            "uses_runtime_paths": self.db_path == RuntimePaths.oracle_memory_db(),
+            "record_count": self.count(),
+            "namespaces": self.namespaces(),
         }
 
 
-oracle_persistent_memory_store = OraclePersistentMemoryStore()
+def create_oracle_persistent_memory_store(
+    db_path: Optional[Path] = None,
+) -> OraclePersistentMemoryStore:
+    return OraclePersistentMemoryStore(db_path=db_path)
+
+
+oracle_persistent_memory_store = create_oracle_persistent_memory_store
+
+
+__all__ = [
+    "OracleMemoryRecord",
+    "OraclePersistentMemoryStore",
+    "create_oracle_persistent_memory_store",
+    "oracle_persistent_memory_store",
+]

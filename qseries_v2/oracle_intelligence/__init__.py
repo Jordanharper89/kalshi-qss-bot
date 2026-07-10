@@ -264,3 +264,90 @@ from .universal_market_adapter_replay_certification_registry_filter_engine impor
 from .universal_market_adapter_replay_certification_registry_analytics_engine import UniversalMarketAdapterReplayCertificationRegistryAnalyticsEngine, analyze_replay_certification_registry
 from .universal_market_adapter_replay_certification_registry_intelligence_engine import UniversalMarketAdapterReplayCertificationRegistryIntelligenceEngine, evaluate_replay_certification_registry_intelligence
 from .universal_market_adapter_replay_certification_registry_recommendation_engine import UniversalMarketAdapterReplayCertificationRegistryRecommendationEngine, recommend_replay_certification_registry_actions
+from .oracle_persistent_memory_store import OracleMemoryRecord, OraclePersistentMemoryStore, create_oracle_persistent_memory_store
+from .oracle_runtime_state_store import OracleRuntimeStateRecord, OracleRuntimeStateStore, create_oracle_runtime_state_store, oracle_runtime_state_store
+from .historical_market_baseline_engine import HistoricalMarketBaseline, HistoricalMarketBaselineEngine, create_historical_market_baseline_engine, historical_market_baseline_engine
+from .historical_market_baseline_engine import HistoricalMarketBaseline, HistoricalMarketBaselineEngine, create_historical_market_baseline_engine, historical_market_baseline_engine, oracle_market_baseline_engine
+from .historical_outcome_tracking_engine import HistoricalOutcomeRecord, HistoricalOutcomeTrackingEngine, create_historical_outcome_tracking_engine, historical_outcome_tracking_engine, oracle_historical_outcome_tracking_engine
+from .historical_pattern_recognition_engine import HistoricalPattern, HistoricalPatternRecognitionEngine, create_historical_pattern_recognition_engine, historical_pattern_recognition_engine, oracle_pattern_recognition_engine, oracle_historical_pattern_recognition_engine
+from .historical_pattern_recognition_engine import HistoricalPattern, HistoricalPatternRecognitionEngine, create_historical_pattern_recognition_engine, historical_pattern_recognition_engine, oracle_pattern_recognition_engine, oracle_historical_pattern_recognition_engine, oracle_pattern_engine
+from .market_regime_detection_engine import MarketRegime, MarketRegimeDetectionEngine, create_market_regime_detection_engine, market_regime_detection_engine, oracle_regime_detection_engine, oracle_market_regime_detection_engine, oracle_regime_engine
+from .market_relationship_engine import MarketRelationship, MarketRelationshipEngine, create_market_relationship_engine, market_relationship_engine, oracle_market_relationship_engine, oracle_relationship_engine
+from .market_rhythm_analyzer import MarketRhythm, MarketRhythmAnalyzer, create_market_rhythm_analyzer, market_rhythm_analyzer, oracle_market_rhythm_analyzer, oracle_rhythm_analyzer, oracle_rhythm_engine
+from .universal_market_model import UniversalMarket, UniversalMarketFactory, MarketType, MarketStatus
+from .universal_opportunity_model import UniversalOpportunity, UniversalOpportunityFactory, OpportunityType, OpportunityDirection
+from .opportunity_operating_system import OpportunityOperatingSystem, build_oos
+from .oracle_discovery_model import OracleDiscoveryEngineContract, DiscoveryRequest, DiscoveryResult
+try:
+    from .oracle_discovery_model.prediction_market_discovery_engine import PredictionMarketDiscoveryEngine
+except Exception:
+    pass
+try:
+    from .crypto_discovery_model.crypto_discovery_contract import (
+        CryptoDiscoveryFamily,
+        CryptoDiscoveryRequest,
+        CryptoDiscoveryEngineContract,
+    )
+except Exception:
+    pass
+try:
+    from .arbitrage_discovery_model.arbitrage_discovery_contract import (
+        ArbitrageDiscoveryFamily,
+        ArbitrageDiscoveryRequest,
+        ArbitrageDiscoveryEngineContract,
+    )
+except Exception:
+    pass
+try:
+    from .wallet_intelligence_discovery_model.wallet_intelligence_discovery_contract import (
+        WalletIntelligenceFamily,
+        WalletIntelligenceDiscoveryRequest,
+        WalletIntelligenceDiscoveryEngineContract,
+    )
+except Exception:
+    pass
+try:
+    from .solana_launch_discovery_model.solana_launch_discovery_contract import (
+        SolanaLaunchDiscoveryFamily,
+        SolanaLaunchDiscoveryRequest,
+        SolanaLaunchDiscoveryEngineContract,
+    )
+except Exception:
+    pass
+try:
+    from .macro_event_discovery_model.macro_event_discovery_contract import (
+        MacroEventDiscoveryFamily,
+        MacroEventDiscoveryRequest,
+        MacroEventDiscoveryEngineContract,
+    )
+except Exception:
+    pass
+try:
+    from .news_intelligence_discovery_model.news_intelligence_discovery_contract import (
+        NewsIntelligenceFamily,
+        NewsIntelligenceDiscoveryRequest,
+        NewsIntelligenceDiscoveryEngineContract,
+    )
+except Exception:
+    pass
+try:
+    from .social_intelligence_discovery_model.social_intelligence_discovery_contract import (
+        SocialIntelligenceFamily,
+        SocialIntelligenceDiscoveryRequest,
+        SocialIntelligenceDiscoveryEngineContract,
+    )
+except Exception:
+    pass
+try:
+    from .order_flow_discovery_model.order_flow_discovery_contract import (
+        OrderFlowFamily,
+        OrderFlowDiscoveryRequest,
+        OrderFlowDiscoveryEngineContract,
+    )
+except Exception:
+    pass
+# Liquidity Discovery Model package registered for Phase 1 discovery.
+# Volatility Discovery Model package registered for Phase 1 discovery.
+# Correlation Discovery Model package registered for Phase 1 discovery.
+# Correlation Discovery Model package registered for Phase 1 discovery.
+# Market Regime Discovery Model package registered for Phase 1 discovery.

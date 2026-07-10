@@ -1,20 +1,7 @@
-"""
-OI-027 Market Regime Detection Engine
-
-Read-only Oracle Intelligence module.
-
-Purpose:
-- Detect broad market regimes from historical/current market behavior.
-- Classify environments such as high-liquidity/high-volatility,
-  thin-liquidity, event-driven, expiration-compression, overnight drift,
-  weekend behavior, and normal baseline.
-- Track regime transitions.
-- Provide context only.
-- No execution.
-"""
 
 from __future__ import annotations
 
+import json
 import sqlite3
 from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
@@ -22,459 +9,223 @@ from pathlib import Path
 from statistics import mean, pstdev
 from typing import Any, Dict, List, Optional
 
-
-DEFAULT_DB_CANDIDATES = [
-    Path("qseries_v2/ops/qseries_history.sqlite3"),
-    Path("qseries_v2/data/qseries_history.sqlite3"),
-    Path("qseries_history.sqlite3"),
-]
+from qseries_v2.ops.runtime_paths import RuntimePaths, ensure_runtime_layout
 
 
-def _safe_float(value: Any, default: float = 0.0) -> float:
-    try:
-        if value is None or value == "":
-            return default
-        return float(value)
-    except Exception:
-        return default
-
-
-def _parse_dt(value: Any) -> Optional[datetime]:
-    if not value:
-        return None
-    if isinstance(value, datetime):
-        return value
-    text = str(value).replace("Z", "+00:00")
-    try:
-        return datetime.fromisoformat(text)
-    except Exception:
-        return None
-
-
-def _avg(values: List[float]) -> float:
-    clean = [_safe_float(v) for v in values if v is not None]
-    return round(mean(clean), 6) if clean else 0.0
-
-
-def _std(values: List[float]) -> float:
-    clean = [_safe_float(v) for v in values if v is not None]
-    return round(pstdev(clean), 6) if len(clean) > 1 else 0.0
-
-
-@dataclass
-class RegimePacket:
-    module: str
-    status: str
-    generated_at: str
-    database: Optional[str]
-    rows_analyzed: int
-    current_regime: Dict[str, Any]
-    regime_scores: Dict[str, Any]
-    regime_features: Dict[str, Any]
-    transition_history: List[Dict[str, Any]]
-    oracle_context: Dict[str, Any]
-    notes: List[str]
-    read_only: bool
-    execution_allowed: bool
+@dataclass(frozen=True)
+class MarketRegime:
+    market_id: str
+    regime: str
+    confidence: float
+    sample_count: int
+    details: Dict[str, Any]
+    detected_at: str
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
 
 class MarketRegimeDetectionEngine:
-    """
-    Detects broad prediction-market regimes.
+    def __init__(self, db_path: Optional[Path] = None) -> None:
+        ensure_runtime_layout()
+        self.db_path = Path(db_path) if db_path else RuntimePaths.qseries_history_db()
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        self._init_db()
 
-    This module is context-only. It never executes trades.
-    """
+    @staticmethod
+    def now_iso() -> str:
+        return datetime.now(timezone.utc).isoformat()
 
-    def __init__(self, db_path: Optional[str] = None):
-        self.db_path = self._resolve_db(db_path)
-        self.last_packet: Optional[Dict[str, Any]] = None
-        self.transition_history: List[Dict[str, Any]] = []
-
-    def diagnostics(self) -> Dict[str, Any]:
-        exists = bool(self.db_path and self.db_path.exists())
-        return {
-            "module": "OI-027 Market Regime Detection Engine",
-            "status": "ok" if exists else "waiting_for_history_db",
-            "database": str(self.db_path) if self.db_path else None,
-            "database_exists": exists,
-            "last_packet_ready": self.last_packet is not None,
-            "transition_count": len(self.transition_history),
-            "read_only": True,
-            "execution_allowed": False,
-        }
-
-    def detect_regime(self, live_market: Optional[Dict[str, Any]] = None, limit: int = 100000) -> Dict[str, Any]:
-        notes: List[str] = []
-
-        if not self.db_path or not self.db_path.exists():
-            packet = self._empty_packet("waiting_for_history_db", "Historical database not found yet.")
-            self.last_packet = packet
-            return packet
-
-        rows = self._load_rows(limit=limit, notes=notes)
-
-        if not rows:
-            packet = self._empty_packet("waiting_for_history_rows", "Historical database exists but no usable rows were found.")
-            self.last_packet = packet
-            return packet
-
-        features = self._features(rows, live_market)
-        scores = self._score_regimes(features)
-        current = self._select_regime(scores, features)
-        self._record_transition(current)
-
-        packet = RegimePacket(
-            module="OI-027 Market Regime Detection Engine",
-            status="ok",
-            generated_at=self._now(),
-            database=str(self.db_path),
-            rows_analyzed=len(rows),
-            current_regime=current,
-            regime_scores=scores,
-            regime_features=features,
-            transition_history=self.transition_history[-25:],
-            oracle_context=self._oracle_context(current, features),
-            notes=notes or ["Market regime detection completed successfully."],
-            read_only=True,
-            execution_allowed=False,
-        ).to_dict()
-
-        self.last_packet = packet
-        return packet
-
-    def get_regime(self) -> Dict[str, Any]:
-        if self.last_packet is None:
-            return self.detect_regime()
-        return self.last_packet
-
-    def regime_context(self) -> Dict[str, Any]:
-        packet = self.get_regime()
-        return packet.get("oracle_context", {})
-
-    def transition_summary(self) -> Dict[str, Any]:
-        return {
-            "module": "OI-027 Market Regime Detection Engine",
-            "status": "ok",
-            "transitions": self.transition_history[-50:],
-            "transition_count": len(self.transition_history),
-            "read_only": True,
-            "execution_allowed": False,
-        }
-
-    def _resolve_db(self, db_path: Optional[str]) -> Optional[Path]:
-        if db_path:
-            return Path(db_path)
-
-        for candidate in DEFAULT_DB_CANDIDATES:
-            if candidate.exists():
-                return candidate
-
-        return DEFAULT_DB_CANDIDATES[0]
-
-    def _load_rows(self, limit: int, notes: List[str]) -> List[Dict[str, Any]]:
+    def _connect(self) -> sqlite3.Connection:
         conn = sqlite3.connect(str(self.db_path))
         conn.row_factory = sqlite3.Row
-        rows: List[Dict[str, Any]] = []
+        return conn
 
+    def _init_db(self) -> None:
+        conn = self._connect()
         try:
-            tables = [
-                r["name"]
-                for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
-            ]
-
-            candidate_tables = [
-                t for t in tables
-                if any(k in t.lower() for k in ["market", "history", "snapshot", "record"])
-            ] or tables
-
-            for table in candidate_tables:
-                try:
-                    columns = [c["name"] for c in conn.execute(f"PRAGMA table_info({table})").fetchall()]
-                    time_col = self._pick(columns, ["timestamp", "created_at", "recorded_at", "time", "updated_at"])
-                    if not time_col:
-                        continue
-
-                    query = f"SELECT * FROM {table} ORDER BY {time_col} DESC LIMIT ?"
-                    for row in conn.execute(query, (limit,)).fetchall():
-                        normalized = self._normalize_row(dict(row), table)
-                        if normalized:
-                            rows.append(normalized)
-
-                    if rows:
-                        notes.append(f"Loaded regime rows from table: {table}")
-                        break
-
-                except Exception as exc:
-                    notes.append(f"Skipped table {table}: {exc}")
-
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS historical_events (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    source TEXT NOT NULL,
+                    market_id TEXT NOT NULL,
+                    event_type TEXT NOT NULL,
+                    payload_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL
+                )
+                """
+            )
+            conn.commit()
         finally:
             conn.close()
 
-        return rows[:limit]
-
-    def _normalize_row(self, row: Dict[str, Any], table: str) -> Optional[Dict[str, Any]]:
-        keys = list(row.keys())
-
-        ts_key = self._pick(keys, ["timestamp", "created_at", "recorded_at", "time", "updated_at"])
-        dt = _parse_dt(row.get(ts_key))
-        if not dt:
-            return None
-
-        bid = _safe_float(row.get(self._pick(keys, ["bid", "best_bid", "yes_bid"])))
-        ask = _safe_float(row.get(self._pick(keys, ["ask", "best_ask", "yes_ask"])))
-
-        spread = _safe_float(row.get(self._pick(keys, ["spread", "bid_ask_spread"])))
-        if spread == 0.0 and bid and ask:
-            spread = abs(ask - bid)
-
-        yes_price = _safe_float(row.get(self._pick(keys, ["yes_price", "yes_bid", "yes_ask", "price", "last_price"])))
-        expiration = _parse_dt(row.get(self._pick(keys, ["expiration", "expiration_time", "close_time", "end_time"])))
-
-        return {
-            "source_table": table,
-            "timestamp": dt,
-            "ticker": str(row.get(self._pick(keys, ["ticker", "market_ticker", "symbol"])) or ""),
-            "category": str(row.get(self._pick(keys, ["category", "market_category", "event_category", "type"])) or "unknown"),
-            "hour": dt.hour,
-            "weekday": dt.strftime("%A"),
-            "is_weekend": dt.weekday() >= 5,
-            "is_overnight": dt.hour < 7 or dt.hour >= 22,
-            "expiration_hours": self._expiration_hours(dt, expiration),
-            "liquidity": _safe_float(row.get(self._pick(keys, ["liquidity", "open_interest", "oi", "depth"]))),
-            "spread": spread,
-            "volume": _safe_float(row.get(self._pick(keys, ["volume", "volume_24h", "total_volume"]))),
-            "price": yes_price,
+    def record_market_sample(
+        self,
+        market_id: str,
+        price: float,
+        liquidity: float = 0.0,
+        volume: float = 0.0,
+        source: str = "oracle",
+    ) -> None:
+        payload = {
+            "price": float(price),
+            "liquidity": float(liquidity),
+            "volume": float(volume),
         }
 
-    def _features(self, rows: List[Dict[str, Any]], live_market: Optional[Dict[str, Any]]) -> Dict[str, Any]:
-        recent = rows[:min(len(rows), 250)]
+        conn = self._connect()
+        try:
+            conn.execute(
+                """
+                INSERT INTO historical_events(source, market_id, event_type, payload_json, created_at)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    source,
+                    market_id,
+                    "regime_market_sample",
+                    json.dumps(payload, sort_keys=True),
+                    self.now_iso(),
+                ),
+            )
+            conn.commit()
+        finally:
+            conn.close()
 
-        liquidity_values = [r["liquidity"] for r in recent]
-        spread_values = [r["spread"] for r in recent]
-        volume_values = [r["volume"] for r in recent]
-        price_values = [r["price"] for r in recent]
+    def load_samples(self, market_id: str, limit: int = 250) -> List[Dict[str, float]]:
+        conn = self._connect()
+        try:
+            rows = conn.execute(
+                """
+                SELECT payload_json
+                FROM historical_events
+                WHERE market_id = ?
+                ORDER BY id ASC
+                LIMIT ?
+                """,
+                (market_id, int(limit)),
+            ).fetchall()
+        finally:
+            conn.close()
 
-        features = {
-            "avg_liquidity": _avg(liquidity_values),
-            "avg_spread": _avg(spread_values),
-            "avg_volume": _avg(volume_values),
-            "price_volatility": _std(price_values),
-            "spread_volatility": _std(spread_values),
-            "volume_volatility": _std(volume_values),
-            "liquidity_volatility": _std(liquidity_values),
-            "weekend_ratio": round(len([r for r in recent if r["is_weekend"]]) / max(len(recent), 1), 6),
-            "overnight_ratio": round(len([r for r in recent if r["is_overnight"]]) / max(len(recent), 1), 6),
-            "near_expiration_ratio": round(
-                len([r for r in recent if r["expiration_hours"] is not None and r["expiration_hours"] < 6]) / max(len(recent), 1),
-                6,
-            ),
-            "category_mix": self._category_mix(recent),
-            "sample_size": len(recent),
-        }
-
-        if live_market:
-            live = self._normalize_live(live_market)
-            features["live_market"] = live
-            features["live_liquidity_ratio"] = self._ratio(live["liquidity"], features["avg_liquidity"])
-            features["live_spread_ratio"] = self._ratio(live["spread"], features["avg_spread"])
-            features["live_volume_ratio"] = self._ratio(live["volume"], features["avg_volume"])
-            features["live_price_extreme"] = live["price"] <= 15 or live["price"] >= 85
-            features["live_near_expiration"] = live["expiration_hours"] is not None and live["expiration_hours"] < 6
-            features["live_is_weekend"] = live["is_weekend"]
-            features["live_is_overnight"] = live["is_overnight"]
-
-        return features
-
-    def _score_regimes(self, f: Dict[str, Any]) -> Dict[str, Any]:
-        liq = _safe_float(f.get("avg_liquidity"))
-        spread = _safe_float(f.get("avg_spread"))
-        vol = _safe_float(f.get("avg_volume"))
-        price_vol = _safe_float(f.get("price_volatility"))
-
-        live_liq_ratio = _safe_float(f.get("live_liquidity_ratio"), 1.0)
-        live_spread_ratio = _safe_float(f.get("live_spread_ratio"), 1.0)
-        live_volume_ratio = _safe_float(f.get("live_volume_ratio"), 1.0)
-
-        scores = {
-            "high_liquidity_low_volatility": self._clamp((min(liq / 2500, 1) * 55) + (max(0, 1 - price_vol / 20) * 45)),
-            "high_liquidity_high_volatility": self._clamp((min(liq / 2500, 1) * 45) + (min(price_vol / 20, 1) * 55)),
-            "thin_liquidity": self._clamp(max(0, 1 - liq / 1500) * 100),
-            "event_driven": self._clamp((min(live_volume_ratio / 2.5, 1) * 45) + (min(live_liq_ratio / 2.0, 1) * 35) + (min(price_vol / 25, 1) * 20)),
-            "news_shock": self._clamp((min(live_volume_ratio / 3.0, 1) * 40) + (min(live_spread_ratio / 2.5, 1) * 30) + (min(price_vol / 30, 1) * 30)),
-            "trend_expansion": self._clamp((min(vol / 2000, 1) * 35) + (min(price_vol / 18, 1) * 45) + (min(liq / 2500, 1) * 20)),
-            "mean_reversion": self._clamp((max(0, 1 - price_vol / 15) * 40) + (max(0, 1 - live_spread_ratio / 2) * 30) + (min(liq / 2000, 1) * 30)),
-            "expiration_compression": self._clamp((_safe_float(f.get("near_expiration_ratio")) * 70) + (35 if f.get("live_near_expiration") else 0)),
-            "overnight_drift": self._clamp((_safe_float(f.get("overnight_ratio")) * 80) + (25 if f.get("live_is_overnight") else 0)),
-            "weekend_behavior": self._clamp((_safe_float(f.get("weekend_ratio")) * 80) + (25 if f.get("live_is_weekend") else 0)),
-            "normal_baseline": 45.0,
-        }
-
-        return {
-            name: {
-                "score": round(score, 4),
-                "label": self._score_label(score),
-            }
-            for name, score in sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
-        }
-
-    def _select_regime(self, scores: Dict[str, Any], features: Dict[str, Any]) -> Dict[str, Any]:
-        name, data = next(iter(scores.items()))
-        score = data["score"]
-
-        return {
-            "name": name,
-            "score": score,
-            "label": data["label"],
-            "confidence": self._confidence(score, features),
-            "description": self._description(name),
-        }
-
-    def _record_transition(self, current: Dict[str, Any]) -> None:
-        previous = self.transition_history[-1]["regime"] if self.transition_history else None
-
-        if previous != current["name"]:
-            self.transition_history.append({
-                "timestamp": self._now(),
-                "from": previous,
-                "to": current["name"],
-                "regime": current["name"],
-                "score": current["score"],
-            })
-
-    def _oracle_context(self, current: Dict[str, Any], features: Dict[str, Any]) -> Dict[str, Any]:
-        return {
-            "context_type": "market_regime",
-            "module": "oracle_market_regime_context",
-            "status": "ok",
-            "current_regime": current,
-            "feature_summary": {
-                "avg_liquidity": features.get("avg_liquidity"),
-                "avg_spread": features.get("avg_spread"),
-                "avg_volume": features.get("avg_volume"),
-                "price_volatility": features.get("price_volatility"),
-                "sample_size": features.get("sample_size"),
-            },
-            "read_only": True,
-            "execution_allowed": False,
-        }
-
-    def _empty_packet(self, status: str, note: str) -> Dict[str, Any]:
-        return RegimePacket(
-            module="OI-027 Market Regime Detection Engine",
-            status=status,
-            generated_at=self._now(),
-            database=str(self.db_path) if self.db_path else None,
-            rows_analyzed=0,
-            current_regime={},
-            regime_scores={},
-            regime_features={},
-            transition_history=self.transition_history[-25:],
-            oracle_context={
-                "context_type": "market_regime",
-                "status": status,
-                "read_only": True,
-                "execution_allowed": False,
-            },
-            notes=[note],
-            read_only=True,
-            execution_allowed=False,
-        ).to_dict()
-
-    def _normalize_live(self, market: Dict[str, Any]) -> Dict[str, Any]:
-        ts = _parse_dt(market.get("timestamp")) or datetime.now(timezone.utc)
-        exp = _parse_dt(market.get("expiration") or market.get("expiration_time") or market.get("close_time") or market.get("end_time"))
-
-        bid = _safe_float(market.get("bid") or market.get("best_bid") or market.get("yes_bid"))
-        ask = _safe_float(market.get("ask") or market.get("best_ask") or market.get("yes_ask"))
-
-        spread = _safe_float(market.get("spread") or market.get("bid_ask_spread"))
-        if spread == 0.0 and bid and ask:
-            spread = abs(ask - bid)
-
-        price = _safe_float(market.get("yes_price") or market.get("price") or market.get("last_price") or market.get("yes_bid"))
-
-        return {
-            "timestamp": ts.isoformat(),
-            "hour": ts.hour,
-            "weekday": ts.strftime("%A"),
-            "is_weekend": ts.weekday() >= 5,
-            "is_overnight": ts.hour < 7 or ts.hour >= 22,
-            "expiration_hours": self._expiration_hours(ts, exp),
-            "liquidity": _safe_float(market.get("liquidity") or market.get("open_interest") or market.get("oi") or market.get("depth")),
-            "spread": spread,
-            "volume": _safe_float(market.get("volume") or market.get("volume_24h") or market.get("total_volume")),
-            "price": price,
-        }
-
-    def _expiration_hours(self, timestamp: datetime, expiration: Optional[datetime]) -> Optional[float]:
-        if not expiration:
-            return None
-        return round((expiration - timestamp).total_seconds() / 3600.0, 6)
-
-    def _category_mix(self, rows: List[Dict[str, Any]]) -> Dict[str, int]:
-        out: Dict[str, int] = {}
+        samples: List[Dict[str, float]] = []
         for row in rows:
-            out[row["category"]] = out.get(row["category"], 0) + 1
-        return dict(sorted(out.items(), key=lambda kv: kv[1], reverse=True))
+            payload = json.loads(row["payload_json"])
+            if "price" in payload:
+                samples.append(
+                    {
+                        "price": float(payload.get("price", 0.0)),
+                        "liquidity": float(payload.get("liquidity", 0.0)),
+                        "volume": float(payload.get("volume", 0.0)),
+                    }
+                )
 
-    def _ratio(self, value: float, base: float) -> float:
-        if base == 0:
-            return 1.0
-        return round(value / base, 6)
+        return samples
 
-    def _confidence(self, score: float, features: Dict[str, Any]) -> Dict[str, Any]:
-        sample_size = _safe_float(features.get("sample_size"))
-        sample_component = min(sample_size / 250.0, 1.0) * 100
-        confidence = round((score * 0.7) + (sample_component * 0.3), 4)
+    def detect_regime(self, market_id: str) -> MarketRegime:
+        samples = self.load_samples(market_id)
+        detected_at = self.now_iso()
 
+        if len(samples) < 3:
+            return MarketRegime(
+                market_id=market_id,
+                regime="insufficient_data",
+                confidence=0.0,
+                sample_count=len(samples),
+                details={"reason": "minimum 3 samples required"},
+                detected_at=detected_at,
+            )
+
+        prices = [sample["price"] for sample in samples]
+        liquidities = [sample["liquidity"] for sample in samples]
+        volumes = [sample["volume"] for sample in samples]
+
+        first = prices[0]
+        last = prices[-1]
+        avg_price = float(mean(prices))
+        volatility = float(pstdev(prices)) if len(prices) > 1 else 0.0
+        volatility_ratio = float(volatility / avg_price) if avg_price else 0.0
+
+        upward_steps = sum(1 for a, b in zip(prices, prices[1:]) if b > a)
+        downward_steps = sum(1 for a, b in zip(prices, prices[1:]) if b < a)
+        total_steps = max(len(prices) - 1, 1)
+
+        avg_liquidity = float(mean(liquidities)) if liquidities else 0.0
+        avg_volume = float(mean(volumes)) if volumes else 0.0
+
+        trend_strength = abs(last - first) / avg_price if avg_price else 0.0
+
+        if volatility_ratio >= 0.12:
+            regime = "volatile"
+            confidence = min(1.0, volatility_ratio * 4)
+        elif last > first and upward_steps / total_steps >= 0.6:
+            regime = "bullish_trend"
+            confidence = float(max(upward_steps / total_steps, trend_strength))
+        elif last < first and downward_steps / total_steps >= 0.6:
+            regime = "bearish_trend"
+            confidence = float(max(downward_steps / total_steps, trend_strength))
+        elif volatility_ratio <= 0.03:
+            regime = "stable_range"
+            confidence = float(max(0.0, 1.0 - volatility_ratio))
+        else:
+            regime = "mixed"
+            confidence = 0.5
+
+        return MarketRegime(
+            market_id=market_id,
+            regime=regime,
+            confidence=float(min(1.0, confidence)),
+            sample_count=len(samples),
+            details={
+                "first_price": first,
+                "last_price": last,
+                "avg_price": avg_price,
+                "volatility": volatility,
+                "volatility_ratio": volatility_ratio,
+                "upward_steps": upward_steps,
+                "downward_steps": downward_steps,
+                "avg_liquidity": avg_liquidity,
+                "avg_volume": avg_volume,
+            },
+            detected_at=detected_at,
+        )
+
+    def analyze_market(self, market_id: str) -> Dict[str, Any]:
+        regime = self.detect_regime(market_id)
         return {
-            "score": confidence,
-            "label": self._score_label(confidence),
-            "sample_size": int(sample_size),
+            "status": "ok",
+            "market_id": market_id,
+            "regime": regime.to_dict(),
         }
 
-    def _description(self, name: str) -> str:
-        descriptions = {
-            "high_liquidity_low_volatility": "Deep liquidity with controlled price movement.",
-            "high_liquidity_high_volatility": "Deep liquidity with elevated price movement.",
-            "thin_liquidity": "Low participation environment with weaker market depth.",
-            "event_driven": "Activity suggests event-driven market attention.",
-            "news_shock": "Volume, spreads, or volatility suggest shock-like behavior.",
-            "trend_expansion": "Volume and volatility suggest directional expansion.",
-            "mean_reversion": "Controlled volatility and tighter behavior suggest reversion conditions.",
-            "expiration_compression": "Market behavior is dominated by time-to-expiration pressure.",
-            "overnight_drift": "Behavior resembles overnight low-attention drift.",
-            "weekend_behavior": "Behavior reflects weekend market structure.",
-            "normal_baseline": "Market environment is near broad historical baseline.",
+    def health(self) -> Dict[str, Any]:
+        return {
+            "status": "ok",
+            "engine": "market_regime_detection_engine",
+            "db_path": str(self.db_path),
+            "uses_runtime_paths": self.db_path == RuntimePaths.qseries_history_db(),
         }
-        return descriptions.get(name, "Unknown market regime.")
-
-    def _score_label(self, score: float) -> str:
-        if score >= 85:
-            return "very_high"
-        if score >= 70:
-            return "high"
-        if score >= 50:
-            return "moderate"
-        if score >= 25:
-            return "low"
-        return "thin"
-
-    def _clamp(self, value: float) -> float:
-        return max(0.0, min(100.0, round(value, 6)))
-
-    def _pick(self, keys: List[str], candidates: List[str]) -> Optional[str]:
-        lower = {k.lower(): k for k in keys}
-        for candidate in candidates:
-            if candidate.lower() in lower:
-                return lower[candidate.lower()]
-        return None
-
-    def _now(self) -> str:
-        return datetime.now(timezone.utc).isoformat()
 
 
-oracle_regime_engine = MarketRegimeDetectionEngine()
+def create_market_regime_detection_engine(
+    db_path: Optional[Path] = None,
+) -> MarketRegimeDetectionEngine:
+    return MarketRegimeDetectionEngine(db_path=db_path)
+
+
+market_regime_detection_engine = create_market_regime_detection_engine
+oracle_regime_detection_engine = create_market_regime_detection_engine
+oracle_market_regime_detection_engine = create_market_regime_detection_engine
+oracle_regime_engine = create_market_regime_detection_engine
+
+
+__all__ = [
+    "MarketRegime",
+    "MarketRegimeDetectionEngine",
+    "create_market_regime_detection_engine",
+    "market_regime_detection_engine",
+    "oracle_regime_detection_engine",
+    "oracle_market_regime_detection_engine",
+    "oracle_regime_engine",
+]

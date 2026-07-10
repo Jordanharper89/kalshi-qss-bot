@@ -1,267 +1,284 @@
+
 """
-OI-069 Oracle Runtime State Store
+OPS-006 Oracle Runtime State Store Runtime Path Migration
 
-Purpose:
-- Persist Oracle runtime state snapshots.
-- Store command center dashboard/status snapshots.
-- Support restart recovery and runtime telemetry history.
+Migrates Oracle runtime state persistence to the canonical OPS-004
+RuntimePaths contract.
 
-Read-only:
-- No execution.
-- No order placement.
-- No trade mutation.
+Oracle remains read-only intelligence. This store persists runtime state only
+and must never execute trades.
 """
 
 from __future__ import annotations
 
 import json
 import sqlite3
-from pathlib import Path
+from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from qseries_v2.ops.runtime_paths import RuntimePaths, ensure_runtime_layout
 
-DEFAULT_DB_PATH = Path("qseries_v2") / "data" / "oracle_runtime_state.sqlite3"
+
+@dataclass(frozen=True)
+class OracleRuntimeStateRecord:
+    key: str
+    namespace: str
+    value: Dict[str, Any]
+    created_at: str
+    updated_at: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
 
 
 class OracleRuntimeStateStore:
-    module_name = "oi_069_oracle_runtime_state_store"
+    """
+    Canonical Oracle runtime state persistence store.
+
+    Database location:
+        RuntimePaths.oracle_runtime_state_db()
+
+    No hard-coded qseries_v2/data database paths are allowed here.
+    """
 
     def __init__(self, db_path: Optional[Path] = None) -> None:
-        self.db_path = Path(db_path or DEFAULT_DB_PATH)
+        ensure_runtime_layout()
+        self.db_path = Path(db_path) if db_path else RuntimePaths.oracle_runtime_state_db()
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self._init_db()
 
-    def status(self) -> Dict[str, Any]:
-        with self._connect() as conn:
-            snapshots = conn.execute("SELECT COUNT(*) FROM runtime_snapshots").fetchone()[0]
-            events = conn.execute("SELECT COUNT(*) FROM runtime_events").fetchone()[0]
-
-        return {
-            "module": self.module_name,
-            "status": "ok",
-            "read_only": True,
-            "db_path": str(self.db_path),
-            "snapshots": snapshots,
-            "events": events,
-        }
-
-    def save_snapshot(
-        self,
-        snapshot_type: str,
-        payload: Dict[str, Any],
-        source_module: str = "oracle",
-    ) -> Dict[str, Any]:
-        snapshot_id = f"snap_{self._now_compact()}_{snapshot_type}"
-        now = self._now()
-
-        with self._connect() as conn:
-            conn.execute("""
-                INSERT INTO runtime_snapshots (
-                    snapshot_id,
-                    snapshot_type,
-                    source_module,
-                    created_at,
-                    payload_json
-                )
-                VALUES (?, ?, ?, ?, ?)
-            """, (
-                snapshot_id,
-                snapshot_type,
-                source_module,
-                now,
-                json.dumps(payload or {}, sort_keys=True, default=str),
-            ))
-            conn.commit()
-
-        return {
-            "status": "ok",
-            "read_only": True,
-            "snapshot_id": snapshot_id,
-            "snapshot_type": snapshot_type,
-            "created_at": now,
-        }
-
-    def latest_snapshot(self, snapshot_type: Optional[str] = None) -> Optional[Dict[str, Any]]:
-        params = []
-        where = ""
-
-        if snapshot_type:
-            where = "WHERE snapshot_type=?"
-            params.append(snapshot_type)
-
-        with self._connect() as conn:
-            row = conn.execute(f"""
-                SELECT snapshot_id, snapshot_type, source_module, created_at, payload_json
-                FROM runtime_snapshots
-                {where}
-                ORDER BY created_at DESC
-                LIMIT 1
-            """, params).fetchone()
-
-        return self._snapshot_row(row) if row else None
-
-    def list_snapshots(
-        self,
-        snapshot_type: Optional[str] = None,
-        limit: int = 25,
-    ) -> List[Dict[str, Any]]:
-        params = []
-        where = ""
-
-        if snapshot_type:
-            where = "WHERE snapshot_type=?"
-            params.append(snapshot_type)
-
-        with self._connect() as conn:
-            rows = conn.execute(f"""
-                SELECT snapshot_id, snapshot_type, source_module, created_at, payload_json
-                FROM runtime_snapshots
-                {where}
-                ORDER BY created_at DESC
-                LIMIT ?
-            """, (*params, int(limit))).fetchall()
-
-        return [self._snapshot_row(row) for row in rows]
-
-    def log_event(
-        self,
-        event_type: str,
-        payload: Optional[Dict[str, Any]] = None,
-        severity: str = "info",
-        source_module: str = "oracle",
-    ) -> Dict[str, Any]:
-        event_id = f"evt_{self._now_compact()}_{event_type}"
-        now = self._now()
-
-        with self._connect() as conn:
-            conn.execute("""
-                INSERT INTO runtime_events (
-                    event_id,
-                    event_type,
-                    severity,
-                    source_module,
-                    created_at,
-                    payload_json
-                )
-                VALUES (?, ?, ?, ?, ?, ?)
-            """, (
-                event_id,
-                event_type,
-                severity,
-                source_module,
-                now,
-                json.dumps(payload or {}, sort_keys=True, default=str),
-            ))
-            conn.commit()
-
-        return {
-            "status": "ok",
-            "read_only": True,
-            "event_id": event_id,
-            "event_type": event_type,
-            "severity": severity,
-            "created_at": now,
-        }
-
-    def list_events(
-        self,
-        event_type: Optional[str] = None,
-        severity: Optional[str] = None,
-        limit: int = 50,
-    ) -> List[Dict[str, Any]]:
-        clauses = []
-        params = []
-
-        if event_type:
-            clauses.append("event_type=?")
-            params.append(event_type)
-
-        if severity:
-            clauses.append("severity=?")
-            params.append(severity)
-
-        where = ("WHERE " + " AND ".join(clauses)) if clauses else ""
-
-        with self._connect() as conn:
-            rows = conn.execute(f"""
-                SELECT event_id, event_type, severity, source_module, created_at, payload_json
-                FROM runtime_events
-                {where}
-                ORDER BY created_at DESC
-                LIMIT ?
-            """, (*params, int(limit))).fetchall()
-
-        return [self._event_row(row) for row in rows]
-
-    def restore_runtime_summary(self) -> Dict[str, Any]:
-        latest_dashboard = self.latest_snapshot("command_center_dashboard")
-        latest_runtime = self.latest_snapshot("runtime_status")
-        recent_events = self.list_events(limit=10)
-
-        return {
-            "status": "ok",
-            "read_only": True,
-            "latest_dashboard": latest_dashboard,
-            "latest_runtime": latest_runtime,
-            "recent_events": recent_events,
-            "restorable": bool(latest_dashboard or latest_runtime),
-        }
-
-    def _init_db(self) -> None:
-        with self._connect() as conn:
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS runtime_snapshots (
-                    snapshot_id TEXT PRIMARY KEY,
-                    snapshot_type TEXT NOT NULL,
-                    source_module TEXT NOT NULL,
-                    created_at TEXT NOT NULL,
-                    payload_json TEXT NOT NULL
-                )
-            """)
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS runtime_events (
-                    event_id TEXT PRIMARY KEY,
-                    event_type TEXT NOT NULL,
-                    severity TEXT NOT NULL,
-                    source_module TEXT NOT NULL,
-                    created_at TEXT NOT NULL,
-                    payload_json TEXT NOT NULL
-                )
-            """)
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_runtime_snapshots_type ON runtime_snapshots(snapshot_type)")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_runtime_snapshots_created ON runtime_snapshots(created_at)")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_runtime_events_type ON runtime_events(event_type)")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_runtime_events_created ON runtime_events(created_at)")
-            conn.commit()
-
-    def _connect(self):
-        return sqlite3.connect(str(self.db_path))
-
-    def _snapshot_row(self, row) -> Dict[str, Any]:
-        return {
-            "snapshot_id": row[0],
-            "snapshot_type": row[1],
-            "source_module": row[2],
-            "created_at": row[3],
-            "payload": json.loads(row[4] or "{}"),
-        }
-
-    def _event_row(self, row) -> Dict[str, Any]:
-        return {
-            "event_id": row[0],
-            "event_type": row[1],
-            "severity": row[2],
-            "source_module": row[3],
-            "created_at": row[4],
-            "payload": json.loads(row[5] or "{}"),
-        }
-
-    def _now(self) -> str:
+    @staticmethod
+    def now_iso() -> str:
         return datetime.now(timezone.utc).isoformat()
 
-    def _now_compact(self) -> str:
-        return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S%f")
+    def _connect(self) -> sqlite3.Connection:
+        conn = sqlite3.connect(str(self.db_path))
+        conn.row_factory = sqlite3.Row
+        return conn
+
+    def _init_db(self) -> None:
+        conn = self._connect()
+        try:
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS oracle_runtime_state (
+                    namespace TEXT NOT NULL,
+                    key TEXT NOT NULL,
+                    value_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    PRIMARY KEY (namespace, key)
+                )
+                """
+            )
+            conn.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_oracle_runtime_state_namespace
+                ON oracle_runtime_state(namespace)
+                """
+            )
+            conn.commit()
+        finally:
+            conn.close()
+
+    def set_state(
+        self,
+        key: str,
+        value: Dict[str, Any],
+        namespace: str = "default",
+    ) -> OracleRuntimeStateRecord:
+        if not key or not isinstance(key, str):
+            raise ValueError("key must be a non-empty string")
+        if not namespace or not isinstance(namespace, str):
+            raise ValueError("namespace must be a non-empty string")
+        if not isinstance(value, dict):
+            raise ValueError("value must be a dictionary")
+
+        now = self.now_iso()
+        payload = json.dumps(value, sort_keys=True)
+        existing = self.get_state(key=key, namespace=namespace)
+
+        conn = self._connect()
+        try:
+            if existing:
+                created_at = existing.created_at
+                conn.execute(
+                    """
+                    UPDATE oracle_runtime_state
+                    SET value_json = ?, updated_at = ?
+                    WHERE namespace = ? AND key = ?
+                    """,
+                    (payload, now, namespace, key),
+                )
+            else:
+                created_at = now
+                conn.execute(
+                    """
+                    INSERT INTO oracle_runtime_state(namespace, key, value_json, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, ?)
+                    """,
+                    (namespace, key, payload, created_at, now),
+                )
+            conn.commit()
+        finally:
+            conn.close()
+
+        return OracleRuntimeStateRecord(
+            key=key,
+            namespace=namespace,
+            value=value,
+            created_at=created_at,
+            updated_at=now,
+        )
+
+    def upsert(
+        self,
+        key: str,
+        value: Dict[str, Any],
+        namespace: str = "default",
+    ) -> OracleRuntimeStateRecord:
+        return self.set_state(key=key, value=value, namespace=namespace)
+
+    def get_state(self, key: str, namespace: str = "default") -> Optional[OracleRuntimeStateRecord]:
+        conn = self._connect()
+        try:
+            row = conn.execute(
+                """
+                SELECT namespace, key, value_json, created_at, updated_at
+                FROM oracle_runtime_state
+                WHERE namespace = ? AND key = ?
+                """,
+                (namespace, key),
+            ).fetchone()
+
+            if not row:
+                return None
+
+            return OracleRuntimeStateRecord(
+                key=row["key"],
+                namespace=row["namespace"],
+                value=json.loads(row["value_json"]),
+                created_at=row["created_at"],
+                updated_at=row["updated_at"],
+            )
+        finally:
+            conn.close()
+
+    def get(self, key: str, namespace: str = "default") -> Optional[OracleRuntimeStateRecord]:
+        return self.get_state(key=key, namespace=namespace)
+
+    def delete_state(self, key: str, namespace: str = "default") -> bool:
+        conn = self._connect()
+        try:
+            cur = conn.execute(
+                """
+                DELETE FROM oracle_runtime_state
+                WHERE namespace = ? AND key = ?
+                """,
+                (namespace, key),
+            )
+            conn.commit()
+            return cur.rowcount > 0
+        finally:
+            conn.close()
+
+    def delete(self, key: str, namespace: str = "default") -> bool:
+        return self.delete_state(key=key, namespace=namespace)
+
+    def list_namespace(self, namespace: str = "default") -> List[OracleRuntimeStateRecord]:
+        conn = self._connect()
+        try:
+            rows = conn.execute(
+                """
+                SELECT namespace, key, value_json, created_at, updated_at
+                FROM oracle_runtime_state
+                WHERE namespace = ?
+                ORDER BY updated_at DESC, key ASC
+                """,
+                (namespace,),
+            ).fetchall()
+
+            return [
+                OracleRuntimeStateRecord(
+                    key=row["key"],
+                    namespace=row["namespace"],
+                    value=json.loads(row["value_json"]),
+                    created_at=row["created_at"],
+                    updated_at=row["updated_at"],
+                )
+                for row in rows
+            ]
+        finally:
+            conn.close()
+
+    def namespaces(self) -> List[str]:
+        conn = self._connect()
+        try:
+            rows = conn.execute(
+                """
+                SELECT DISTINCT namespace
+                FROM oracle_runtime_state
+                ORDER BY namespace ASC
+                """
+            ).fetchall()
+            return [row["namespace"] for row in rows]
+        finally:
+            conn.close()
+
+    def count(self, namespace: Optional[str] = None) -> int:
+        conn = self._connect()
+        try:
+            if namespace:
+                row = conn.execute(
+                    "SELECT COUNT(*) AS total FROM oracle_runtime_state WHERE namespace = ?",
+                    (namespace,),
+                ).fetchone()
+            else:
+                row = conn.execute("SELECT COUNT(*) AS total FROM oracle_runtime_state").fetchone()
+            return int(row["total"])
+        finally:
+            conn.close()
+
+    def clear_namespace(self, namespace: str = "default") -> int:
+        conn = self._connect()
+        try:
+            cur = conn.execute(
+                """
+                DELETE FROM oracle_runtime_state
+                WHERE namespace = ?
+                """,
+                (namespace,),
+            )
+            conn.commit()
+            return int(cur.rowcount)
+        finally:
+            conn.close()
+
+    def health(self) -> Dict[str, Any]:
+        return {
+            "status": "ok",
+            "store": "oracle_runtime_state_store",
+            "db_path": str(self.db_path),
+            "uses_runtime_paths": self.db_path == RuntimePaths.oracle_runtime_state_db(),
+            "record_count": self.count(),
+            "namespaces": self.namespaces(),
+        }
 
 
-oracle_runtime_state_store = OracleRuntimeStateStore()
+def create_oracle_runtime_state_store(
+    db_path: Optional[Path] = None,
+) -> OracleRuntimeStateStore:
+    return OracleRuntimeStateStore(db_path=db_path)
+
+
+oracle_runtime_state_store = create_oracle_runtime_state_store
+
+
+__all__ = [
+    "OracleRuntimeStateRecord",
+    "OracleRuntimeStateStore",
+    "create_oracle_runtime_state_store",
+    "oracle_runtime_state_store",
+]

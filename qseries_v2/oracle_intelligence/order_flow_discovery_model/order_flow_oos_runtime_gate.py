@@ -1,0 +1,167 @@
+
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass, field
+from hashlib import sha256
+from typing import Any, Dict, Iterable, Mapping, Optional
+
+from .order_flow_pipeline_bridge import (
+    OrderFlowPipelineBridgeResult,
+    run_order_flow_pipeline,
+)
+
+
+READ_ONLY = True
+SCHEMA_VERSION = "OFD-007"
+ENGINE_ID = "oracle.discovery.order_flow.oos_runtime_gate"
+
+
+def _deep_sort(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        return {str(k): _deep_sort(value[k]) for k in sorted(value.keys(), key=str)}
+    if isinstance(value, list):
+        return [_deep_sort(v) for v in value]
+    if isinstance(value, tuple):
+        return tuple(_deep_sort(v) for v in value)
+    return value
+
+
+def _stable_hash(payload: Mapping[str, Any]) -> str:
+    return sha256(repr(_deep_sort(payload)).encode("utf-8")).hexdigest()
+
+
+@dataclass(frozen=True)
+class OrderFlowOOSRuntimeGateResult:
+    schema_version: str
+    engine_id: str
+    status: str
+    accepted: bool
+    reason: str
+    pipeline_hash: str
+    opportunity_count: int
+    checks: Dict[str, bool] = field(default_factory=dict)
+    runtime_context: Dict[str, Any] = field(default_factory=dict)
+    read_only: bool = True
+    oos_hash: str = ""
+
+    def canonical(self) -> Dict[str, Any]:
+        return _deep_sort(asdict(self))
+
+
+class OrderFlowOOSRuntimeGate:
+    schema_version = SCHEMA_VERSION
+    engine_id = ENGINE_ID
+    read_only = READ_ONLY
+
+    def __init__(
+        self,
+        require_accepted_pipeline: bool = True,
+        max_opportunities: int = 10000,
+    ) -> None:
+        self.require_accepted_pipeline = bool(require_accepted_pipeline)
+        self.max_opportunities = int(max_opportunities)
+
+    def validate(
+        self,
+        pipeline_result: OrderFlowPipelineBridgeResult,
+        runtime_context: Optional[Mapping[str, Any]] = None,
+    ) -> OrderFlowOOSRuntimeGateResult:
+        if not isinstance(pipeline_result, OrderFlowPipelineBridgeResult):
+            raise TypeError("pipeline_result must be an OrderFlowPipelineBridgeResult")
+
+        context = dict(runtime_context or {})
+        mode = str(context.get("mode", "oos"))
+
+        checks = {
+            "read_only": pipeline_result.read_only is True,
+            "schema_present": bool(pipeline_result.schema_version),
+            "engine_present": bool(pipeline_result.engine_id),
+            "pipeline_hash_present": bool(pipeline_result.pipeline_hash),
+            "pipeline_accepted": (pipeline_result.accepted is True) if self.require_accepted_pipeline else True,
+            "opportunity_count_matches": pipeline_result.opportunity_count == pipeline_result.discovery.opportunity_count,
+            "opportunity_count_within_limit": 0 <= pipeline_result.opportunity_count <= self.max_opportunities,
+            "gate_accepted": pipeline_result.gate.accepted is True,
+            "registry_accepted": pipeline_result.registry_entry.accepted is True,
+            "runtime_mode_valid": mode in {"oos", "replay", "paper", "shadow"},
+            "no_execution_context": not bool(context.get("execute") or context.get("trade") or context.get("submit_order")),
+        }
+
+        accepted = all(checks.values())
+        status = "accepted" if accepted else "rejected"
+        failed = [name for name, passed in checks.items() if not passed]
+        reason = "all OOS runtime checks passed" if accepted else "failed checks: " + ", ".join(failed)
+
+        clean_context = _deep_sort(context)
+
+        unsigned = OrderFlowOOSRuntimeGateResult(
+            schema_version=self.schema_version,
+            engine_id=self.engine_id,
+            status=status,
+            accepted=accepted,
+            reason=reason,
+            pipeline_hash=pipeline_result.pipeline_hash,
+            opportunity_count=pipeline_result.opportunity_count,
+            checks=checks,
+            runtime_context=clean_context,
+            read_only=True,
+            oos_hash="",
+        )
+
+        return OrderFlowOOSRuntimeGateResult(
+            schema_version=unsigned.schema_version,
+            engine_id=unsigned.engine_id,
+            status=unsigned.status,
+            accepted=unsigned.accepted,
+            reason=unsigned.reason,
+            pipeline_hash=unsigned.pipeline_hash,
+            opportunity_count=unsigned.opportunity_count,
+            checks=unsigned.checks,
+            runtime_context=unsigned.runtime_context,
+            read_only=True,
+            oos_hash=_stable_hash(unsigned.canonical()),
+        )
+
+    def assert_read_only(self) -> bool:
+        forbidden = ["buy", "sell", "trade", "execute", "order", "sign", "submit", "broadcast"]
+        offenders = sorted(word for word in forbidden if word in set(dir(self)))
+        if offenders:
+            raise AssertionError(f"mutation-like methods are forbidden: {offenders}")
+        return True
+
+
+def validate_order_flow_oos_runtime(
+    pipeline_result: OrderFlowPipelineBridgeResult,
+    runtime_context: Optional[Mapping[str, Any]] = None,
+) -> OrderFlowOOSRuntimeGateResult:
+    return OrderFlowOOSRuntimeGate().validate(
+        pipeline_result=pipeline_result,
+        runtime_context=runtime_context,
+    )
+
+
+def run_order_flow_oos_runtime_gate(
+    raw_records: Iterable[Mapping[str, Any]],
+    source_name: str = "order_flow.generic",
+    observed_at: Optional[str] = None,
+    runtime_context: Optional[Mapping[str, Any]] = None,
+) -> OrderFlowOOSRuntimeGateResult:
+    pipeline = run_order_flow_pipeline(
+        raw_records=raw_records,
+        source_name=source_name,
+        observed_at=observed_at,
+    )
+    return validate_order_flow_oos_runtime(
+        pipeline_result=pipeline,
+        runtime_context=runtime_context,
+    )
+
+
+__all__ = [
+    "READ_ONLY",
+    "SCHEMA_VERSION",
+    "ENGINE_ID",
+    "OrderFlowOOSRuntimeGate",
+    "OrderFlowOOSRuntimeGateResult",
+    "validate_order_flow_oos_runtime",
+    "run_order_flow_oos_runtime_gate",
+]
