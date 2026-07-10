@@ -127,8 +127,16 @@ class RepositoryTrackedArtifactAuditEngine:
         lower = path.lower().replace("\\", "/")
         name = lower.rsplit("/", 1)[-1]
 
+        if name == ".env" or name.endswith(".env"):
+            return "tracked_environment"
         if name.endswith((".db", ".sqlite", ".sqlite3")):
             return "tracked_database"
+        if lower.startswith("qseries_v2/data/"):
+            return "tracked_qseries_data_artifact"
+        if lower.startswith("oracle/data/"):
+            return "tracked_oracle_data_artifact"
+        if lower.startswith("runtime/"):
+            return "tracked_runtime_artifact"
         if "/raw/" in lower:
             return "tracked_raw_sample"
         if name.endswith(".log"):
@@ -142,15 +150,31 @@ class RepositoryTrackedArtifactAuditEngine:
         return ""
 
     def _severity(self, artifact_type: str) -> str:
-        if artifact_type in {"tracked_database", "tracked_raw_sample"}:
+        if artifact_type == "tracked_raw_sample":
             return "warning"
-        if artifact_type in {"tracked_log", "tracked_temp"}:
+        if artifact_type in {
+            "tracked_environment",
+            "tracked_database",
+            "tracked_qseries_data_artifact",
+            "tracked_oracle_data_artifact",
+            "tracked_runtime_artifact",
+            "tracked_log",
+            "tracked_temp",
+        }:
             return "critical"
         return "warning"
 
     def _recommendation(self, artifact_type: str) -> str:
+        if artifact_type == "tracked_environment":
+            return "Environment files must not be tracked; remove from Git tracking in a controlled cleanup commit."
         if artifact_type == "tracked_database":
             return "Move database files to runtime/data and remove from Git tracking in a controlled cleanup commit."
+        if artifact_type == "tracked_qseries_data_artifact":
+            return "Q Series data artifacts must not be tracked unless explicitly approved as fixtures."
+        if artifact_type == "tracked_oracle_data_artifact":
+            return "Oracle data artifacts must not be tracked unless explicitly approved as fixtures."
+        if artifact_type == "tracked_runtime_artifact":
+            return "Runtime artifacts must not be tracked; keep runtime output ignored."
         if artifact_type == "tracked_raw_sample":
             return "Review whether raw samples are fixtures; archive intentional fixtures and remove generated samples."
         if artifact_type == "tracked_runtime_json":
