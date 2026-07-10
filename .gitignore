@@ -68,3 +68,11 @@ python
 notepad
 Dict[str*
 Optional[Dict[str*
+
+# Runtime and local database artifacts
+*.db
+*.sqlite
+*.sqlite3
+qseries_v2/data/
+oracle/data/
+runtime/
