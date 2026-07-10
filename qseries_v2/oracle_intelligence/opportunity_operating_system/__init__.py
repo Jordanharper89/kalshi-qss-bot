@@ -10,6 +10,16 @@ from .opportunity_operating_system import (
 )
 
 __all__ = [
+    "OOS_SUBSYSTEM_INTEGRATION_SCHEMA_VERSION",
+    "ENGINE_ID",
+    "OOS_SUBSYSTEM_INTEGRATION_READ_ONLY",
+    "EXECUTION_ALLOWED",
+    "EXPECTED_MODULES",
+    "OpportunityIntegrationCheck",
+    "OpportunitySubsystemIntegrationResult",
+    "run_opportunity_subsystem_integration_gate",
+    "validate_opportunity_subsystem_integration_gate",
+    "assert_opportunity_subsystem_read_only",
     "build_validation_engine",
     "OpportunityValidationEngine",
     "OpportunityValidationReport",
@@ -64,4 +74,16 @@ from .opportunity_validation_engine import (
     OpportunityValidationReport,
     OpportunityValidationEngine,
     build_validation_engine,
+)
+from .opportunity_subsystem_integration_gate import (
+    SCHEMA_VERSION as OOS_SUBSYSTEM_INTEGRATION_SCHEMA_VERSION,
+    ENGINE_ID,
+    READ_ONLY as OOS_SUBSYSTEM_INTEGRATION_READ_ONLY,
+    EXECUTION_ALLOWED,
+    EXPECTED_MODULES,
+    OpportunityIntegrationCheck,
+    OpportunitySubsystemIntegrationResult,
+    run_opportunity_subsystem_integration_gate,
+    validate_opportunity_subsystem_integration_gate,
+    assert_opportunity_subsystem_read_only,
 )
