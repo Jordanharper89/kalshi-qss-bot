@@ -1,4 +1,4 @@
-
+﻿
 from .oracle_intelligence_interface_contract import OracleEngineMetadata, OracleEngineCapability, OraclePredictionRequest, OraclePredictionResult, OracleExplanation, OracleEngineHealth, OracleIntelligenceEngineContract, OracleIntelligenceContractValidator
 from .oracle_signal_bus import OracleSignal, OracleSignalBus, create_oracle_signal_bus, oracle_signal_bus
 from .canonical_prediction_contract import *
@@ -14,6 +14,20 @@ from .historical_outcome_tracking_engine_adapter import HistoricalOutcomeTrackin
 from .oem_003_market_relationship_engine_adapter import MarketRelationshipEngineAdapter, build_engine as build_market_relationship_engine_adapter
 
 __all__ = [
+    "QSERIES_OPPORTUNITY_AUTHORIZATION_SCHEMA_VERSION",
+    "QSERIES_OPPORTUNITY_AUTHORIZATION_ENGINE_ID",
+    "QSERIES_OPPORTUNITY_AUTHORIZATION_READ_ONLY",
+    "QSERIES_OPPORTUNITY_AUTHORIZATION_EXECUTION_ALLOWED",
+    "QSERIES_OWNED",
+    "OpportunityAuthorizationStatus",
+    "OpportunityAuthorizationLimits",
+    "OpportunityAuthorizationDecision",
+    "OpportunityAuthorizationCheck",
+    "QSeriesOpportunityAuthorizationResult",
+    "authorize_oos_opportunities",
+    "validate_qseries_opportunity_authorization_result",
+    "assert_qseries_opportunity_authorization_read_only",
+
     "run_runtime_bootstrap_integration_gate",
     "RuntimeBootstrapIntegrationGate",
     "bootstrap_oracle_runtime",
@@ -52,3 +66,19 @@ from .oem_012_migrated_engine_aggregator_gate import MigratedEngineAggregatorGat
 from .oem_013_oracle_runtime_auto_discovery_registration_manager import OracleRuntimeAutoDiscoveryRegistrationManager, auto_register_migrated_oracle_engines
 from .oem_014_oracle_runtime_bootstrap_manager import OracleRuntimeBootstrapManager, bootstrap_oracle_runtime
 from .oem_015_runtime_bootstrap_integration_gate import RuntimeBootstrapIntegrationGate, run_gate as run_runtime_bootstrap_integration_gate
+from .qseries_opportunity_authorization_gate import (
+    SCHEMA_VERSION as QSERIES_OPPORTUNITY_AUTHORIZATION_SCHEMA_VERSION,
+    ENGINE_ID as QSERIES_OPPORTUNITY_AUTHORIZATION_ENGINE_ID,
+    READ_ONLY as QSERIES_OPPORTUNITY_AUTHORIZATION_READ_ONLY,
+    EXECUTION_ALLOWED as QSERIES_OPPORTUNITY_AUTHORIZATION_EXECUTION_ALLOWED,
+    QSERIES_OWNED,
+    OpportunityAuthorizationStatus,
+    OpportunityAuthorizationLimits,
+    OpportunityAuthorizationDecision,
+    OpportunityAuthorizationCheck,
+    QSeriesOpportunityAuthorizationResult,
+    authorize_oos_opportunities,
+    validate_qseries_opportunity_authorization_result,
+    assert_qseries_opportunity_authorization_read_only,
+)
+
