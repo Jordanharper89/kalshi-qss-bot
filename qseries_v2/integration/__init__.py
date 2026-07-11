@@ -132,3 +132,19 @@ from .qseries_execution_readiness_gate import (
     review_execution_readiness,
     validate_qseries_execution_readiness_result,
 )
+
+# INT-015 Q Series Final Execution Authorization Gate
+from .qseries_final_execution_authorization_gate import (
+    ADAPTER_EXECUTION_REQUIRED as QSERIES_FINAL_EXECUTION_ADAPTER_REQUIRED,
+    ENGINE_ID as QSERIES_FINAL_EXECUTION_AUTHORIZATION_ENGINE_ID,
+    EXECUTION_ALLOWED as QSERIES_FINAL_EXECUTION_AUTHORIZATION_EXECUTION_ALLOWED,
+    QSERIES_OWNED as QSERIES_FINAL_EXECUTION_AUTHORIZATION_QSERIES_OWNED,
+    READ_ONLY as QSERIES_FINAL_EXECUTION_AUTHORIZATION_READ_ONLY,
+    SCHEMA_VERSION as QSERIES_FINAL_EXECUTION_AUTHORIZATION_SCHEMA_VERSION,
+    FinalExecutionAuthorizationCheck,
+    FinalExecutionAuthorizationDecision,
+    FinalExecutionAuthorizationStatus,
+    QSeriesFinalExecutionAuthorizationResult,
+    authorize_execution_readiness,
+    validate_qseries_final_execution_authorization_result,
+)
