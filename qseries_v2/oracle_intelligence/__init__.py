@@ -202,6 +202,7 @@ from .universal_market_adapter_directory_engine import oracle_universal_market_a
 from .universal_market_adapter_discovery_engine import UniversalMarketAdapterDiscoveryEngine, oracle_universal_market_adapter_discovery_engine, universal_market_adapter_discovery_engine
 
 __all__ = [
+    "OracleLiveReadOnlyAcquisitionRuntime",
     "universal_market_adapter_query_resolver_engine",
     "oracle_universal_market_adapter_query_resolver_engine",
     "UniversalMarketAdapterQueryResolverEngine",
@@ -351,3 +352,5 @@ except Exception:
 # Correlation Discovery Model package registered for Phase 1 discovery.
 # Correlation Discovery Model package registered for Phase 1 discovery.
 # Market Regime Discovery Model package registered for Phase 1 discovery.
+
+from .live_acquisition import OracleLiveReadOnlyAcquisitionRuntime
