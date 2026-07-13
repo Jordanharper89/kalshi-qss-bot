@@ -24,11 +24,14 @@ from qseries_v2.oracle_intelligence.live_acquisition.oracle_postgresql_shadow_ac
     OraclePostgreSQLShadowAcquisitionCycleOrchestrator,
 )
 
+import qseries_v2.oracle_intelligence.live_acquisition_model.oracle_first_real_shadow_corpus_launch_command as launch_module
+
 from qseries_v2.oracle_intelligence.live_acquisition_model.oracle_first_real_shadow_corpus_launch_command import (
     ENGINE_ID,
     FIRST_REAL_CORPUS_MAX_PAGES,
     FIRST_REAL_CORPUS_PAGE_LIMIT,
     SOURCE_ID,
+    _build_production_acquisition_runtime,
     _run_canonical_scheduler_cycle_bridge,
     _runtime_log_snapshot,
     _summarize_new_cycle_evidence,
@@ -115,6 +118,88 @@ def _write_runtime_log(
         ),
         encoding="utf-8",
     )
+
+
+
+def _production_batch_router_wiring_regression() -> None:
+    captured_kwargs = {}
+
+    class FakeRuntime:
+        def __init__(self, **kwargs):
+            captured_kwargs.update(kwargs)
+
+    class FakeRouter:
+        def __call__(self, observation, routed_at):
+            return None
+
+        def route_batch(self, observations, routed_at):
+            return tuple()
+
+    def fake_deduplication(*args, **kwargs):
+        return False
+
+    router = FakeRouter()
+    shadow_adapter = object()
+
+    original_runtime = (
+        launch_module.OracleLiveReadOnlyAcquisitionRuntime
+    )
+
+    launch_module.OracleLiveReadOnlyAcquisitionRuntime = (
+        FakeRuntime
+    )
+
+    try:
+        runtime = _build_production_acquisition_runtime(
+            shadow_adapter=shadow_adapter,
+            deduplication=fake_deduplication,
+            persistence_router=router,
+        )
+    finally:
+        launch_module.OracleLiveReadOnlyAcquisitionRuntime = (
+            original_runtime
+        )
+
+    assert isinstance(runtime, FakeRuntime)
+    assert captured_kwargs["approved_adapters"] == (
+        shadow_adapter,
+    )
+    assert (
+        captured_kwargs["deduplication_hook"]
+        is fake_deduplication
+    )
+    assert (
+        captured_kwargs["canonical_observation_router"]
+        is router
+    )
+    assert callable(
+        captured_kwargs[
+            "canonical_observation_batch_router"
+        ]
+    )
+    assert (
+        captured_kwargs[
+            "canonical_observation_batch_router"
+        ].__self__
+        is router
+    )
+
+    class MissingBatchRouter:
+        def __call__(self, observation, routed_at):
+            return None
+
+    try:
+        _build_production_acquisition_runtime(
+            shadow_adapter=shadow_adapter,
+            deduplication=fake_deduplication,
+            persistence_router=MissingBatchRouter(),
+        )
+    except Exception as exc:
+        assert "route_batch" in str(exc)
+    else:
+        raise AssertionError(
+            "missing OLA-015 route_batch must fail closed"
+        )
 
 
 def _bridge_regression() -> None:
@@ -232,6 +317,7 @@ def _bridge_regression() -> None:
 
 
 def main() -> None:
+    _production_batch_router_wiring_regression()
     _bridge_regression()
 
     with TemporaryDirectory() as temp_dir:
@@ -360,6 +446,9 @@ def main() -> None:
         "status": "passed",
         "production_launch_success_boundary_correction": True,
         "bounded_first_real_corpus_canary": True,
+        "ola_015_route_batch_wired_into_ola_001": True,
+        "production_batch_router_required": True,
+        "single_observation_router_preserved_as_fallback_contract": True,
         "first_real_corpus_page_limit": FIRST_REAL_CORPUS_PAGE_LIMIT,
         "first_real_corpus_max_pages": FIRST_REAL_CORPUS_MAX_PAGES,
         "unbounded_connection_amplification_removed_from_first_launch": True,

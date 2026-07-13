@@ -846,6 +846,11 @@ CanonicalObservationRouter = Callable[
     ObservationRoutingEvidence,
 ]
 
+CanonicalObservationBatchRouter = Callable[
+    [tuple[CanonicalObservation, ...], datetime],
+    tuple[ObservationRoutingEvidence, ...],
+]
+
 
 @dataclass(frozen=True, slots=True)
 class ApprovedSourceAdapterRegistration:
@@ -928,6 +933,9 @@ class OracleLiveReadOnlyAcquisitionRuntime:
         ],
         deduplication_hook: DeduplicationHook,
         canonical_observation_router: CanonicalObservationRouter,
+        canonical_observation_batch_router: (
+            CanonicalObservationBatchRouter | None
+        ) = None,
         healthy_statuses: Iterable[str] = ("ok", "healthy"),
     ) -> None:
         if not callable(deduplication_hook):
@@ -938,6 +946,14 @@ class OracleLiveReadOnlyAcquisitionRuntime:
         if not callable(canonical_observation_router):
             raise AcquisitionContractError(
                 "canonical_observation_router must be callable"
+            )
+
+        if (
+            canonical_observation_batch_router is not None
+            and not callable(canonical_observation_batch_router)
+        ):
+            raise AcquisitionContractError(
+                "canonical_observation_batch_router must be callable"
             )
 
         normalized_healthy_statuses = frozenset(
@@ -984,6 +1000,9 @@ class OracleLiveReadOnlyAcquisitionRuntime:
         self._deduplication_hook = deduplication_hook
         self._canonical_observation_router = (
             canonical_observation_router
+        )
+        self._canonical_observation_batch_router = (
+            canonical_observation_batch_router
         )
         self._healthy_statuses = normalized_healthy_statuses
 
@@ -1125,7 +1144,7 @@ class OracleLiveReadOnlyAcquisitionRuntime:
             raw_result
         )
 
-        observation_records: list[
+        provisional_observation_records: list[
             AcquisitionObservationRecord
         ] = []
 
@@ -1142,23 +1161,61 @@ class OracleLiveReadOnlyAcquisitionRuntime:
                 checked_at=normalized_acquired_at,
             )
 
-            routing: ObservationRoutingEvidence | None = None
-
-            if not deduplication.duplicate:
-                routing = self._route_observation(
-                    observation=canonical_observation,
-                    routed_at=normalized_acquired_at,
-                )
-
-            observation_records.append(
+            provisional_observation_records.append(
                 AcquisitionObservationRecord(
                     observation=canonical_observation,
                     deduplication=deduplication,
-                    routing=routing,
+                    routing=None,
                 )
             )
 
-        immutable_records = tuple(observation_records)
+        non_duplicate_observations = tuple(
+            record.observation
+            for record in provisional_observation_records
+            if not record.deduplication.duplicate
+        )
+
+        routing_by_observation_id: dict[
+            str,
+            ObservationRoutingEvidence,
+        ] = {}
+
+        if non_duplicate_observations:
+            if self._canonical_observation_batch_router is not None:
+                routing_evidences = self._route_observation_batch(
+                    observations=non_duplicate_observations,
+                    routed_at=normalized_acquired_at,
+                )
+            else:
+                routing_evidences = tuple(
+                    self._route_observation(
+                        observation=observation,
+                        routed_at=normalized_acquired_at,
+                    )
+                    for observation in non_duplicate_observations
+                )
+
+            routing_by_observation_id = {
+                evidence.observation_id: evidence
+                for evidence in routing_evidences
+            }
+
+        observation_records = tuple(
+            AcquisitionObservationRecord(
+                observation=record.observation,
+                deduplication=record.deduplication,
+                routing=(
+                    None
+                    if record.deduplication.duplicate
+                    else routing_by_observation_id.get(
+                        record.observation.observation_id
+                    )
+                ),
+            )
+            for record in provisional_observation_records
+        )
+
+        immutable_records = observation_records
 
         duplicate_count = sum(
             1
@@ -1436,6 +1493,94 @@ class OracleLiveReadOnlyAcquisitionRuntime:
 
         return evidence
 
+    def _route_observation_batch(
+        self,
+        *,
+        observations: tuple[CanonicalObservation, ...],
+        routed_at: datetime,
+    ) -> tuple[ObservationRoutingEvidence, ...]:
+        batch_router = self._canonical_observation_batch_router
+
+        if batch_router is None:
+            raise AcquisitionInvariantError(
+                "batch routing requested without a configured batch router"
+            )
+
+        try:
+            evidences = batch_router(
+                observations,
+                routed_at,
+            )
+        except Exception as exc:
+            raise CanonicalObservationRouterFailure(
+                "canonical observation batch routing failed closed"
+            ) from exc
+
+        if not isinstance(evidences, tuple):
+            raise AcquisitionContractError(
+                "canonical observation batch router must return a tuple"
+            )
+
+        if len(evidences) != len(observations):
+            raise AcquisitionContractError(
+                "batch routing evidence count mismatch"
+            )
+
+        expected_observation_ids = {
+            observation.observation_id
+            for observation in observations
+        }
+
+        evidence_by_observation_id: dict[
+            str,
+            ObservationRoutingEvidence,
+        ] = {}
+
+        for evidence in evidences:
+            if not isinstance(
+                evidence,
+                ObservationRoutingEvidence,
+            ):
+                raise AcquisitionContractError(
+                    "canonical observation batch router returned incompatible evidence"
+                )
+
+            if evidence.observation_id in evidence_by_observation_id:
+                raise AcquisitionContractError(
+                    "batch router returned duplicate observation_id evidence"
+                )
+
+            if evidence.observation_id not in expected_observation_ids:
+                raise AcquisitionContractError(
+                    "batch routing evidence observation_id mismatch"
+                )
+
+            if evidence.routed_at != routed_at:
+                raise AcquisitionContractError(
+                    "batch routing evidence routed_at mismatch"
+                )
+
+            if not evidence.accepted:
+                raise CanonicalObservationRouterFailure(
+                    "canonical observation batch routing was rejected"
+                )
+
+            evidence_by_observation_id[
+                evidence.observation_id
+            ] = evidence
+
+        if set(evidence_by_observation_id) != expected_observation_ids:
+            raise AcquisitionContractError(
+                "batch routing evidence identity set mismatch"
+            )
+
+        return tuple(
+            evidence_by_observation_id[
+                observation.observation_id
+            ]
+            for observation in observations
+        )
+
     def _route_observation(
         self,
         *,
@@ -1487,6 +1632,7 @@ __all__ = [
     "AcquisitionInvariantError",
     "SourceAdapterFailure",
     "CanonicalObservationRouterFailure",
+    "CanonicalObservationBatchRouter",
     "SourceHealthEvidence",
     "RateControlEvidence",
     "RawSourceObservation",

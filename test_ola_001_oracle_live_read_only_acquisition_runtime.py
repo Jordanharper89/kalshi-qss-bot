@@ -347,6 +347,122 @@ def run_primary_contract_test():
     return first_record
 
 
+
+def run_atomic_batch_routing_regression():
+    seen_content_hashes = {}
+    calls = {
+        "single_router": 0,
+        "batch_router": 0,
+        "batch_observation_count": 0,
+    }
+
+    def deduplication_hook(
+        observation: CanonicalObservation,
+        checked_at,
+    ):
+        existing_observation_id = seen_content_hashes.get(
+            observation.content_hash
+        )
+
+        duplicate = existing_observation_id is not None
+
+        canonical_observation_id = (
+            existing_observation_id
+            if duplicate
+            else observation.observation_id
+        )
+
+        if not duplicate:
+            seen_content_hashes[
+                observation.content_hash
+            ] = observation.observation_id
+
+        return DeduplicationEvidence.create(
+            observation=observation,
+            duplicate=duplicate,
+            canonical_observation_id=canonical_observation_id,
+            checked_at=checked_at,
+            deduplication_policy_id="dedup.content_hash.v1",
+        )
+
+    def single_router(
+        observation: CanonicalObservation,
+        routed_at,
+    ):
+        calls["single_router"] += 1
+
+        return ObservationRoutingEvidence.create(
+            observation_id=observation.observation_id,
+            route_id="oracle.single.router.should.not.run",
+            routed_at=routed_at,
+            accepted=True,
+            metadata={},
+        )
+
+    def batch_router(
+        observations: tuple[CanonicalObservation, ...],
+        routed_at,
+    ):
+        calls["batch_router"] += 1
+        calls["batch_observation_count"] = len(observations)
+
+        return tuple(
+            ObservationRoutingEvidence.create(
+                observation_id=observation.observation_id,
+                route_id="oracle.atomic.batch.router",
+                routed_at=routed_at,
+                accepted=True,
+                metadata={
+                    "routing_mode": "atomic_batch",
+                    "batch_size": len(observations),
+                },
+            )
+            for observation in observations
+        )
+
+    runtime = OracleLiveReadOnlyAcquisitionRuntime(
+        approved_adapters=(TestReadOnlyAdapter(),),
+        deduplication_hook=deduplication_hook,
+        canonical_observation_router=single_router,
+        canonical_observation_batch_router=batch_router,
+    )
+
+    record = runtime.acquire(
+        adapter_id="adapter.oracle.test.market",
+        acquired_at=ACQUIRED_AT,
+        health_evidence=build_health_evidence(),
+        rate_control_evidence=build_rate_evidence(),
+        replay_metadata={
+            "replay_source": "atomic_batch_regression",
+        },
+        audit_metadata={
+            "request_id": "audit-ola-001-batch",
+        },
+    )
+
+    assert calls["single_router"] == 0
+    assert calls["batch_router"] == 1
+    assert calls["batch_observation_count"] == 2
+    assert record.observation_count == 3
+    assert record.canonical_count == 2
+    assert record.duplicate_count == 1
+    assert record.routed_count == 2
+
+    non_duplicate_records = tuple(
+        item
+        for item in record.observations
+        if not item.deduplication.duplicate
+    )
+
+    assert len(non_duplicate_records) == 2
+
+    for item in non_duplicate_records:
+        assert item.routing is not None
+        assert item.routing.accepted is True
+
+    return record, calls
+
+
 def run_fail_closed_tests():
     runtime = build_runtime()
 
@@ -438,6 +554,9 @@ def run_fail_closed_tests():
 
 def main():
     record = run_primary_contract_test()
+    batch_record, batch_calls = (
+        run_atomic_batch_routing_regression()
+    )
     run_fail_closed_tests()
 
     result = {
@@ -450,6 +569,22 @@ def main():
         "canonical_count": record.canonical_count,
         "duplicate_count": record.duplicate_count,
         "routed_count": record.routed_count,
+        "atomic_batch_routing_supported": True,
+        "non_duplicate_observations_batched_once": (
+            batch_calls["batch_router"] == 1
+        ),
+        "single_router_bypassed_when_batch_router_present": (
+            batch_calls["single_router"] == 0
+        ),
+        "batch_observation_count": (
+            batch_calls["batch_observation_count"]
+        ),
+        "batch_duplicate_count_preserved": (
+            batch_record.duplicate_count
+        ),
+        "batch_routed_count_preserved": (
+            batch_record.routed_count
+        ),
         "read_only": record.read_only,
         "execution_allowed": record.execution_allowed,
         "trade_authorization_allowed": (

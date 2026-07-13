@@ -549,6 +549,40 @@ def _active_rate_window_start(
 
 
 
+
+def _build_production_acquisition_runtime(
+    *,
+    shadow_adapter: Any,
+    deduplication: Any,
+    persistence_router: Any,
+) -> OracleLiveReadOnlyAcquisitionRuntime:
+    batch_router = getattr(
+        persistence_router,
+        "route_batch",
+        None,
+    )
+
+    if not callable(batch_router):
+        raise OracleFirstRealShadowCorpusLaunchError(
+            "OLA-015 production persistence router must expose callable route_batch"
+        )
+
+    return OracleLiveReadOnlyAcquisitionRuntime(
+        approved_adapters=(
+            shadow_adapter,
+        ),
+        deduplication_hook=(
+            deduplication
+        ),
+        canonical_observation_router=(
+            persistence_router
+        ),
+        canonical_observation_batch_router=(
+            batch_router
+        ),
+    )
+
+
 def _run_canonical_scheduler_cycle_bridge(
     *,
     source_control_engine: OracleAcquisitionSourceControlEngine,
@@ -707,7 +741,7 @@ def _run_canonical_scheduler_cycle_bridge(
     ):
         cycle_payload = dict(cycle_record)
     else:
-        raise FirstRealShadowCorpusLaunchContractError(
+        raise OracleFirstRealShadowCorpusLaunchError(
             "OLA-017 cycle result must expose canonical mapping evidence"
         )
 
@@ -717,7 +751,7 @@ def _run_canonical_scheduler_cycle_bridge(
         or cycle_payload.get("engine_id")
         != "OLA-017"
     ):
-        raise FirstRealShadowCorpusLaunchContractError(
+        raise OracleFirstRealShadowCorpusLaunchError(
             "cycle result must preserve OLA-017 identity"
         )
 
@@ -729,7 +763,7 @@ def _run_canonical_scheduler_cycle_bridge(
         cycle_status,
         str,
     ) or not cycle_status.strip():
-        raise FirstRealShadowCorpusLaunchContractError(
+        raise OracleFirstRealShadowCorpusLaunchError(
             "OLA-017 cycle_status must be a non-empty string"
         )
 
@@ -742,7 +776,7 @@ def _run_canonical_scheduler_cycle_bridge(
         or not isinstance(persistence_count, int)
         or persistence_count < 0
     ):
-        raise FirstRealShadowCorpusLaunchContractError(
+        raise OracleFirstRealShadowCorpusLaunchError(
             "OLA-017 postgresql_routing_record_delta must be a non-negative integer"
         )
 
@@ -1328,16 +1362,10 @@ def build_real_oracle_shadow_graph(
     )
 
     acquisition_runtime = (
-        OracleLiveReadOnlyAcquisitionRuntime(
-            approved_adapters=(
-                shadow_adapter,
-            ),
-            deduplication_hook=(
-                deduplication
-            ),
-            canonical_observation_router=(
-                persistence_router
-            ),
+        _build_production_acquisition_runtime(
+            shadow_adapter=shadow_adapter,
+            deduplication=deduplication,
+            persistence_router=persistence_router,
         )
     )
 
