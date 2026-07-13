@@ -55,9 +55,13 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from hashlib import sha256
 import importlib
+import ipaddress
 import json
 import math
 import os
+import queue
+import socket
+import threading
 from typing import Any, Callable, Mapping
 
 
@@ -103,6 +107,12 @@ class PostgreSQLDriverLoadError(RuntimeError):
 
 class PostgreSQLConnectionFactoryError(RuntimeError):
     """Raised when a physical PostgreSQL connection cannot be created."""
+
+
+class PostgreSQLConnectionReachabilityError(
+    PostgreSQLConnectionFactoryError
+):
+    """Raised when the physical PostgreSQL endpoint is not reachable."""
 
 
 class PostgreSQLConfigurationInvariantError(RuntimeError):
@@ -160,6 +170,53 @@ def _require_port(
 
     return value
 
+
+
+def _bounded_endpoint_reachability_probe(
+    *,
+    host: str,
+    port: int,
+    timeout_seconds: int,
+) -> str:
+    result_queue: queue.Queue[str | BaseException] = queue.Queue(maxsize=1)
+
+    def worker() -> None:
+        try:
+            connection = socket.create_connection(
+                (host, port),
+                timeout=timeout_seconds,
+            )
+            try:
+                peer_address = connection.getpeername()[0]
+            finally:
+                connection.close()
+            result_queue.put_nowait(str(ipaddress.ip_address(peer_address)))
+        except BaseException as exc:
+            try:
+                result_queue.put_nowait(exc)
+            except queue.Full:
+                pass
+
+    thread = threading.Thread(
+        target=worker,
+        name="ola013-postgresql-reachability-probe",
+        daemon=True,
+    )
+    thread.start()
+
+    try:
+        result = result_queue.get(timeout=timeout_seconds)
+    except queue.Empty as exc:
+        raise PostgreSQLConnectionReachabilityError(
+            "PostgreSQL physical endpoint reachability probe timed out"
+        ) from exc
+
+    if isinstance(result, BaseException):
+        raise PostgreSQLConnectionReachabilityError(
+            "PostgreSQL physical endpoint reachability probe failed closed"
+        ) from result
+
+    return result
 
 def _canonicalize(
     value: Any,
@@ -837,6 +894,7 @@ class OraclePostgreSQLSecureConfigurationConnectionFactory:
         created_at: datetime,
         environment: Mapping[str, str] | None = None,
         module_loader: Callable[[str], Any] | None = None,
+        reachability_probe: Callable[..., None] | None = None,
     ) -> tuple[
         Callable[[], Any],
         PostgreSQLConnectionFactoryEvidence,
@@ -906,6 +964,24 @@ class OraclePostgreSQLSecureConfigurationConnectionFactory:
                 "approved PostgreSQL driver module could not be loaded"
             ) from exc
 
+        if reachability_probe is not None:
+            endpoint_probe = reachability_probe
+        elif module_loader is None:
+            endpoint_probe = _bounded_endpoint_reachability_probe
+        else:
+            def endpoint_probe(
+                *,
+                host: str,
+                port: int,
+                timeout_seconds: int,
+            ) -> None:
+                return None
+
+        if not callable(endpoint_probe):
+            raise PostgreSQLConfigurationContractError(
+                "reachability_probe must be callable"
+            )
+
         connect_callable = getattr(
             driver_module,
             configuration.driver_connect_attribute,
@@ -919,21 +995,40 @@ class OraclePostgreSQLSecureConfigurationConnectionFactory:
             )
 
         def connection_factory():
+            reachable_host_address = endpoint_probe(
+                host=configuration.host,
+                port=configuration.port,
+                timeout_seconds=configuration.connect_timeout_seconds,
+            )
+
+            connection_kwargs = {
+                "host": configuration.host,
+                "port": configuration.port,
+                "dbname": configuration.database,
+                "user": configuration.username,
+                "password": secret_value,
+                "sslmode": configuration.sslmode,
+                "connect_timeout": configuration.connect_timeout_seconds,
+                "application_name": configuration.application_name,
+            }
+
+            if reachable_host_address is not None:
+                if not isinstance(reachable_host_address, str):
+                    raise PostgreSQLConnectionReachabilityError(
+                        "PostgreSQL reachability probe must return a numeric host address"
+                    )
+                try:
+                    canonical_host_address = str(
+                        ipaddress.ip_address(reachable_host_address.strip())
+                    )
+                except ValueError as exc:
+                    raise PostgreSQLConnectionReachabilityError(
+                        "PostgreSQL reachability probe returned an invalid host address"
+                    ) from exc
+                connection_kwargs["hostaddr"] = canonical_host_address
+
             try:
-                return connect_callable(
-                    host=configuration.host,
-                    port=configuration.port,
-                    dbname=configuration.database,
-                    user=configuration.username,
-                    password=secret_value,
-                    sslmode=configuration.sslmode,
-                    connect_timeout=(
-                        configuration.connect_timeout_seconds
-                    ),
-                    application_name=(
-                        configuration.application_name
-                    ),
-                )
+                return connect_callable(**connection_kwargs)
 
             except Exception as exc:
                 raise PostgreSQLConnectionFactoryError(

@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from qseries_v2.oracle_intelligence.live_acquisition.oracle_postgresql_secure_configuration_connection_factory import (
     OraclePostgreSQLSecureConfigurationConnectionFactory,
     PostgreSQLDriverLoadError,
+    PostgreSQLConnectionReachabilityError,
     PostgreSQLSecretBoundaryError,
     PostgreSQLSecretEnvironmentContract,
 )
@@ -52,6 +53,18 @@ class FakeDriverModule:
         )
 
         return FakeConnection()
+
+
+def successful_reachability_probe(
+    *,
+    host,
+    port,
+    timeout_seconds,
+):
+    assert host == "db.oracle.internal"
+    assert port == 5432
+    assert timeout_seconds == 10
+    return "203.0.113.17"
 
 
 def build_secret_contract():
@@ -212,6 +225,7 @@ def run_connection_factory_test():
             "ORACLE_POSTGRES_PASSWORD": SECRET_VALUE,
         },
         module_loader=module_loader,
+        reachability_probe=successful_reachability_probe,
     )
 
     assert callable(factory)
@@ -270,6 +284,7 @@ def run_connection_factory_test():
         "application_name": (
             "qseries_oracle_live_acquisition"
         ),
+        "hostaddr": "203.0.113.17",
     }
 
     assert evidence.read_only is True
@@ -303,6 +318,7 @@ def run_missing_secret_fail_closed_test():
                 created_at=CREATED_AT,
                 environment={},
                 module_loader=lambda _: fake_driver,
+                reachability_probe=successful_reachability_probe,
             )
         )
 
@@ -329,6 +345,7 @@ def run_empty_secret_fail_closed_test():
                     "ORACLE_POSTGRES_PASSWORD": "",
                 },
                 module_loader=lambda _: fake_driver,
+                reachability_probe=successful_reachability_probe,
             )
         )
 
@@ -413,6 +430,7 @@ def run_driver_fail_closed_test():
                 module_loader=lambda _: (_ for _ in ()).throw(
                     ImportError("driver missing")
                 ),
+                reachability_probe=successful_reachability_probe,
             )
         )
 
@@ -436,6 +454,7 @@ def run_driver_fail_closed_test():
                     "ORACLE_POSTGRES_PASSWORD": SECRET_VALUE,
                 },
                 module_loader=lambda _: MissingConnect(),
+                reachability_probe=successful_reachability_probe,
             )
         )
 
@@ -445,6 +464,145 @@ def run_driver_fail_closed_test():
 
     except PostgreSQLDriverLoadError:
         pass
+
+
+
+def run_reachability_probe_fail_closed_test():
+    configuration = build_configuration()
+    fake_driver = FakeDriverModule()
+    probe_calls = []
+
+    def failing_probe(
+        *,
+        host,
+        port,
+        timeout_seconds,
+    ):
+        probe_calls.append(
+            {
+                "host": host,
+                "port": port,
+                "timeout_seconds": timeout_seconds,
+            }
+        )
+        raise PostgreSQLConnectionReachabilityError(
+            "PostgreSQL physical endpoint reachability probe timed out"
+        )
+
+    factory, _ = (
+        OraclePostgreSQLSecureConfigurationConnectionFactory()
+        .build_connection_factory(
+            configuration=configuration,
+            created_at=CREATED_AT,
+            environment={
+                "ORACLE_POSTGRES_PASSWORD": SECRET_VALUE,
+            },
+            module_loader=lambda _: fake_driver,
+            reachability_probe=failing_probe,
+        )
+    )
+
+    try:
+        factory()
+        raise AssertionError(
+            "unreachable PostgreSQL endpoint must fail closed"
+        )
+    except PostgreSQLConnectionReachabilityError as exc:
+        assert str(exc) == (
+            "PostgreSQL physical endpoint reachability probe timed out"
+        )
+
+    assert probe_calls == [
+        {
+            "host": "db.oracle.internal",
+            "port": 5432,
+            "timeout_seconds": 10,
+        }
+    ]
+    assert fake_driver.calls == []
+
+
+def run_reachability_probe_precedes_secret_driver_connect_test():
+    configuration = build_configuration()
+    event_order = []
+
+    class OrderedDriver:
+        def connect(self, **kwargs):
+            event_order.append("driver_connect")
+            assert kwargs["password"] == SECRET_VALUE
+            return FakeConnection()
+
+    def ordered_probe(**kwargs):
+        event_order.append("reachability_probe")
+        assert kwargs == {
+            "host": "db.oracle.internal",
+            "port": 5432,
+            "timeout_seconds": 10,
+        }
+        return "203.0.113.17"
+
+    factory, _ = (
+        OraclePostgreSQLSecureConfigurationConnectionFactory()
+        .build_connection_factory(
+            configuration=configuration,
+            created_at=CREATED_AT,
+            environment={
+                "ORACLE_POSTGRES_PASSWORD": SECRET_VALUE,
+            },
+            module_loader=lambda _: OrderedDriver(),
+            reachability_probe=ordered_probe,
+        )
+    )
+
+    connection = factory()
+    assert isinstance(connection, FakeConnection)
+    assert event_order == [
+        "reachability_probe",
+        "driver_connect",
+    ]
+
+def run_resolved_hostaddr_binding_test():
+    configuration = build_configuration()
+    fake_driver = FakeDriverModule()
+
+    factory, _ = (
+        OraclePostgreSQLSecureConfigurationConnectionFactory()
+        .build_connection_factory(
+            configuration=configuration,
+            created_at=CREATED_AT,
+            environment={
+                "ORACLE_POSTGRES_PASSWORD": SECRET_VALUE,
+            },
+            module_loader=lambda _: fake_driver,
+            reachability_probe=lambda **_: "2001:db8::17",
+        )
+    )
+
+    factory()
+    call = fake_driver.calls[0]
+    assert call["host"] == "db.oracle.internal"
+    assert call["hostaddr"] == "2001:db8::17"
+    assert call["connect_timeout"] == 10
+
+    blocked_driver = FakeDriverModule()
+    blocked_factory, _ = (
+        OraclePostgreSQLSecureConfigurationConnectionFactory()
+        .build_connection_factory(
+            configuration=configuration,
+            created_at=CREATED_AT,
+            environment={
+                "ORACLE_POSTGRES_PASSWORD": SECRET_VALUE,
+            },
+            module_loader=lambda _: blocked_driver,
+            reachability_probe=lambda **_: "not-an-ip-address",
+        )
+    )
+    try:
+        blocked_factory()
+        raise AssertionError("invalid resolved host address must fail closed")
+    except PostgreSQLConnectionReachabilityError:
+        pass
+    assert blocked_driver.calls == []
 
 
 def run_deterministic_evidence_test():
@@ -463,6 +621,7 @@ def run_deterministic_evidence_test():
                 "ORACLE_POSTGRES_PASSWORD": SECRET_VALUE,
             },
             module_loader=lambda _: first_driver,
+            reachability_probe=successful_reachability_probe,
         )
     )
 
@@ -475,6 +634,7 @@ def run_deterministic_evidence_test():
                 "ORACLE_POSTGRES_PASSWORD": SECRET_VALUE,
             },
             module_loader=lambda _: second_driver,
+            reachability_probe=successful_reachability_probe,
         )
     )
 
@@ -509,6 +669,9 @@ def main():
     run_empty_secret_fail_closed_test()
     run_forbidden_metadata_fail_closed_test()
     run_driver_fail_closed_test()
+    run_reachability_probe_fail_closed_test()
+    run_reachability_probe_precedes_secret_driver_connect_test()
+    run_resolved_hostaddr_binding_test()
     run_deterministic_evidence_test()
 
     result = {
@@ -551,6 +714,14 @@ def main():
         "empty_secret_blocked": True,
         "forbidden_secret_metadata_blocked": True,
         "missing_driver_blocked": True,
+        "bounded_endpoint_reachability_probe": True,
+        "unreachable_endpoint_fails_closed": True,
+        "reachability_probe_precedes_secret_driver_connect": True,
+        "driver_connect_timeout_preserved": True,
+        "resolved_hostaddr_bound_to_driver": True,
+        "canonical_hostname_preserved_for_ssl_identity": True,
+        "driver_dns_reresolution_avoided": True,
+        "invalid_resolved_hostaddr_fails_closed": True,
         "deterministic_configuration_hashing": True,
         "deterministic_factory_evidence": True,
         "read_only": configuration.read_only,

@@ -84,6 +84,7 @@ from datetime import datetime, timezone
 from hashlib import sha256
 import json
 import math
+import re
 from typing import Any, Callable, Mapping
 
 
@@ -265,6 +266,75 @@ def stable_hash(
     return sha256(
         canonical_json(value).encode("utf-8")
     ).hexdigest()
+
+
+
+MAX_FAILURE_MESSAGE_LENGTH = 1000
+
+_SECRET_PATTERNS = (
+    re.compile(r"(?i)\bpostgres(?:ql)?://[^\s\"\'<>]+"),
+    re.compile(r"(?i)\b(?:https?|postgres(?:ql)?)://[^\s/@:]+:[^\s/@]+@[^\s\"\'<>]+"),
+    re.compile(r"(?i)(authorization\s*[:=]\s*)(?:bearer\s+)?[^\s,;]+"),
+    re.compile(
+        r"(?i)(\b(?:database_url|password|passwd|api[_-]?key|token|secret|"
+        r"private[_-]?key|signing[_-]?key|dsn|connection_string)\b"
+        r"\s*[:=]\s*)(?:\"[^\"]*\"|\'[^\']*\'|[^\s,;]+)"
+    ),
+)
+
+
+def _sanitize_failure_type(value: Any) -> str:
+    raw = type(value).__name__ if isinstance(value, BaseException) else str(value)
+    normalized = re.sub(r"[^A-Za-z0-9_.-]", "_", raw.strip())
+    if not normalized:
+        return "UnknownCycleFailure"
+    return normalized[:200]
+
+
+def _sanitize_failure_message(value: Any) -> tuple[str, bool]:
+    raw = str(value)
+    normalized = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]", " ", raw)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    redacted = False
+
+    for pattern in _SECRET_PATTERNS:
+        if pattern.search(normalized):
+            redacted = True
+            if pattern.groups:
+                normalized = pattern.sub(r"\1[REDACTED]", normalized)
+            else:
+                normalized = pattern.sub("[REDACTED_DATABASE_URL]", normalized)
+
+    if len(normalized) > MAX_FAILURE_MESSAGE_LENGTH:
+        normalized = normalized[:MAX_FAILURE_MESSAGE_LENGTH]
+        redacted = True
+
+    if not normalized:
+        normalized = "cycle failure message unavailable"
+
+    return normalized, redacted
+
+
+def _build_failure_diagnostics(
+    *,
+    failure_type: Any,
+    failure_message: Any,
+    runner_id: str,
+    runner_engine_id: str,
+) -> tuple[str, str, str, bool]:
+    safe_type = _sanitize_failure_type(failure_type)
+    safe_message, redacted = _sanitize_failure_message(failure_message)
+    failure_identity_hash = stable_hash(
+        {
+            "schema_version": SCHEMA_VERSION,
+            "record_type": "canonical_cycle_failure_identity",
+            "failure_type": safe_type,
+            "failure_message": safe_message,
+            "runner_id": runner_id,
+            "runner_engine_id": runner_engine_id,
+        }
+    )
+    return safe_type, safe_message, failure_identity_hash, redacted
 
 
 def _immutable_mapping(
@@ -449,6 +519,11 @@ class ShadowCollectionSchedulerTickRecord:
     cycle_succeeded: bool | None
     cycle_status: str | None
     cycle_evidence_hash: str | None
+    cycle_failure_type: str | None
+    cycle_failure_message: str | None
+    cycle_failure_identity_hash: str | None
+    cycle_failure_redacted: bool
+    cycle_failure_diagnostics_present: bool
     previous_state_id: str
     previous_state_hash: str
     next_state_id: str
@@ -519,6 +594,11 @@ class ShadowCollectionSchedulerTickRecord:
             "cycle_succeeded": self.cycle_succeeded,
             "cycle_status": self.cycle_status,
             "cycle_evidence_hash": self.cycle_evidence_hash,
+            "cycle_failure_type": self.cycle_failure_type,
+            "cycle_failure_message": self.cycle_failure_message,
+            "cycle_failure_identity_hash": self.cycle_failure_identity_hash,
+            "cycle_failure_redacted": self.cycle_failure_redacted,
+            "cycle_failure_diagnostics_present": self.cycle_failure_diagnostics_present,
             "previous_state_id": self.previous_state_id,
             "previous_state_hash": self.previous_state_hash,
             "next_state_id": self.next_state_id,
@@ -784,6 +864,11 @@ class OracleControlledShadowCollectionSchedulerTick:
                     cycle_succeeded=None,
                     cycle_status=None,
                     cycle_evidence_hash=None,
+                    cycle_failure_type=None,
+                    cycle_failure_message=None,
+                    cycle_failure_identity_hash=None,
+                    cycle_failure_redacted=False,
+                    cycle_failure_diagnostics_present=False,
                     reason_codes=(
                         "polling_decision_not_eligible",
                         f"polling_status_{decision.decision_status}",
@@ -820,19 +905,54 @@ class OracleControlledShadowCollectionSchedulerTick:
                 cycle_result
             )
 
+            if cycle_succeeded:
+                cycle_failure_type = None
+                cycle_failure_message = None
+                cycle_failure_identity_hash = None
+                cycle_failure_redacted = False
+                cycle_failure_diagnostics_present = False
+            else:
+                (
+                    cycle_failure_type,
+                    cycle_failure_message,
+                    cycle_failure_identity_hash,
+                    cycle_failure_redacted,
+                ) = _build_failure_diagnostics(
+                    failure_type="OLA017CycleStatusFailure",
+                    failure_message=(
+                        "OLA-017 cycle returned non-success status: "
+                        f"{cycle_status}"
+                    ),
+                    runner_id=self._cycle_runner.runner_id,
+                    runner_engine_id=self._cycle_runner.engine_id,
+                )
+                cycle_failure_diagnostics_present = True
+
         except Exception as exc:
             cycle_succeeded = False
             cycle_status = "exception"
+            (
+                cycle_failure_type,
+                cycle_failure_message,
+                cycle_failure_identity_hash,
+                cycle_failure_redacted,
+            ) = _build_failure_diagnostics(
+                failure_type=exc,
+                failure_message=exc,
+                runner_id=self._cycle_runner.runner_id,
+                runner_engine_id=self._cycle_runner.engine_id,
+            )
+            cycle_failure_diagnostics_present = True
             cycle_evidence_hash = stable_hash(
                 {
                     "schema_version": SCHEMA_VERSION,
                     "record_type": "ola017_cycle_exception_evidence",
-                    "exception_type": type(exc).__name__,
-                    "exception_message": str(exc),
+                    "failure_type": cycle_failure_type,
+                    "failure_message": cycle_failure_message,
+                    "failure_identity_hash": cycle_failure_identity_hash,
+                    "failure_redacted": cycle_failure_redacted,
                     "runner_id": self._cycle_runner.runner_id,
-                    "runner_engine_id": (
-                        self._cycle_runner.engine_id
-                    ),
+                    "runner_engine_id": self._cycle_runner.engine_id,
                     "completed_at": normalized_completed_at,
                 }
             )
@@ -894,6 +1014,11 @@ class OracleControlledShadowCollectionSchedulerTick:
             cycle_succeeded=cycle_succeeded,
             cycle_status=cycle_status,
             cycle_evidence_hash=cycle_evidence_hash,
+            cycle_failure_type=cycle_failure_type,
+            cycle_failure_message=cycle_failure_message,
+            cycle_failure_identity_hash=cycle_failure_identity_hash,
+            cycle_failure_redacted=cycle_failure_redacted,
+            cycle_failure_diagnostics_present=cycle_failure_diagnostics_present,
             reason_codes=reason_codes,
             tick_metadata=immutable_tick_metadata,
             tick_status=tick_status,
@@ -1210,6 +1335,11 @@ class OracleControlledShadowCollectionSchedulerTick:
         cycle_succeeded: bool | None,
         cycle_status: str | None,
         cycle_evidence_hash: str | None,
+        cycle_failure_type: str | None,
+        cycle_failure_message: str | None,
+        cycle_failure_identity_hash: str | None,
+        cycle_failure_redacted: bool,
+        cycle_failure_diagnostics_present: bool,
         reason_codes: tuple[str, ...],
         tick_metadata: tuple[tuple[str, Any], ...],
         tick_status: str,
@@ -1280,6 +1410,11 @@ class OracleControlledShadowCollectionSchedulerTick:
             cycle_succeeded=cycle_succeeded,
             cycle_status=cycle_status,
             cycle_evidence_hash=cycle_evidence_hash,
+            cycle_failure_type=cycle_failure_type,
+            cycle_failure_message=cycle_failure_message,
+            cycle_failure_identity_hash=cycle_failure_identity_hash,
+            cycle_failure_redacted=cycle_failure_redacted,
+            cycle_failure_diagnostics_present=cycle_failure_diagnostics_present,
             previous_state_id=previous_state.state_id,
             previous_state_hash=previous_state.state_hash,
             next_state_id=next_state.state_id,
@@ -1360,6 +1495,15 @@ class OracleControlledShadowCollectionSchedulerTick:
             cycle_status=provisional.cycle_status,
             cycle_evidence_hash=(
                 provisional.cycle_evidence_hash
+            ),
+            cycle_failure_type=provisional.cycle_failure_type,
+            cycle_failure_message=provisional.cycle_failure_message,
+            cycle_failure_identity_hash=(
+                provisional.cycle_failure_identity_hash
+            ),
+            cycle_failure_redacted=provisional.cycle_failure_redacted,
+            cycle_failure_diagnostics_present=(
+                provisional.cycle_failure_diagnostics_present
             ),
             previous_state_id=provisional.previous_state_id,
             previous_state_hash=(

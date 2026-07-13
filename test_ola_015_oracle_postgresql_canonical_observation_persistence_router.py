@@ -78,6 +78,7 @@ class FakePostgreSQLState:
         self.observations = []
         self.checkpoints = {}
         self.schema_markers = set()
+        self.connection_count = 0
 
 
 class FakeCursor:
@@ -220,6 +221,7 @@ def build_backend():
     state = FakePostgreSQLState()
 
     def connection_factory():
+        state.connection_count += 1
         return FakeConnection(
             state
         )
@@ -556,6 +558,87 @@ def run_primary_routing_test():
     )
 
 
+
+def run_atomic_batch_routing_test():
+    router, backend, state = build_router()
+
+    observation_one = build_observation_one()
+    observation_two = build_observation_two()
+
+    baseline_connections = state.connection_count
+
+    evidences = router.route_batch(
+        (
+            observation_one,
+            observation_two,
+        ),
+        ROUTED_AT_TWO,
+    )
+
+    connection_delta = (
+        state.connection_count
+        - baseline_connections
+    )
+
+    assert len(evidences) == 2
+    assert all(evidence.accepted for evidence in evidences)
+    assert len(state.observations) == 2
+    assert state.sequence_number == 2
+    assert router.routing_record_count == 2
+
+    assert connection_delta == 3
+
+    first_record = router.get_routing_record(
+        observation_id=observation_one.observation_id
+    )
+    second_record = router.get_routing_record(
+        observation_id=observation_two.observation_id
+    )
+
+    assert first_record is not None
+    assert second_record is not None
+    assert first_record.persistence_sequence_number == 1
+    assert second_record.persistence_sequence_number == 2
+    assert first_record.prior_terminal_chain_hash == GENESIS_CHAIN_HASH
+    assert first_record.terminal_chain_hash == state.observations[0]["chain_hash"]
+    assert second_record.prior_terminal_chain_hash == first_record.terminal_chain_hash
+    assert second_record.terminal_chain_hash == state.observations[1]["chain_hash"]
+    assert backend.terminal_chain_hash() == second_record.terminal_chain_hash
+
+    first_metadata = dict(evidences[0].metadata)
+    second_metadata = dict(evidences[1].metadata)
+
+    assert first_metadata["routing_mode"] == "atomic_batch"
+    assert second_metadata["routing_mode"] == "atomic_batch"
+    assert first_metadata["batch_observation_count"] == 2
+    assert second_metadata["batch_observation_count"] == 2
+    assert first_metadata["persistence_sequence_number"] == 1
+    assert second_metadata["persistence_sequence_number"] == 2
+    assert first_metadata["persistence_atomic"] is True
+    assert second_metadata["persistence_verified"] is True
+
+    try:
+        router.route_batch(
+            (
+                observation_one,
+                observation_one,
+            ),
+            ROUTED_AT_TWO,
+        )
+
+        raise AssertionError(
+            "duplicate observation batch must fail closed"
+        )
+
+    except (
+        PostgreSQLPersistenceRoutingContractError,
+        PostgreSQLPersistenceRoutingFailure,
+    ):
+        pass
+
+    return connection_delta
+
+
 def run_duplicate_route_fail_closed_test():
     router, backend, state = build_router()
 
@@ -805,6 +888,8 @@ def main():
         second_record,
     ) = run_primary_routing_test()
 
+    batch_connection_delta = run_atomic_batch_routing_test()
+
     run_duplicate_route_fail_closed_test()
 
     run_external_duplicate_persistence_fail_closed_test()
@@ -834,6 +919,14 @@ def main():
             second_evidence.accepted
         ),
         "persistence_before_acceptance": True,
+        "atomic_batch_routing_supported": True,
+        "atomic_batch_uses_existing_ola_011_contract": True,
+        "batch_terminal_state_inspected_once_before_append": True,
+        "batch_terminal_state_verified_once_after_append": True,
+        "two_observations_routed_with_three_connections": (
+            batch_connection_delta == 3
+        ),
+        "per_observation_connection_amplification_removed_at_router_boundary": True,
         "persistence_committed": (
             first_record.persistence_committed
         ),

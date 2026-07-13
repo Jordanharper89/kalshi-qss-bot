@@ -315,6 +315,19 @@ class CountingExceptionRunner:
         )
 
 
+class CountingSecretExceptionRunner:
+    def __init__(self):
+        self.calls = 0
+
+    def __call__(self, **kwargs):
+        self.calls += 1
+        raise RuntimeError(
+            "database_url=postgresql://oracle:super-secret-password@db.example:5432/oracle "
+            "authorization: Bearer live-token-123 api_key=live-key-456 "
+            "safe_reason=connection_bootstrap_failed"
+        )
+
+
 def build_scheduler(
     runner,
 ):
@@ -382,6 +395,12 @@ def run_successful_tick_test():
     assert tick.cycle_status == "completed"
 
     assert len(tick.cycle_evidence_hash) == 64
+
+    assert tick.cycle_failure_type is None
+    assert tick.cycle_failure_message is None
+    assert tick.cycle_failure_identity_hash is None
+    assert tick.cycle_failure_redacted is False
+    assert tick.cycle_failure_diagnostics_present is False
 
     assert tick.previous_consecutive_failures == 0
 
@@ -495,6 +514,11 @@ def run_waiting_noop_test():
     assert tick.cycle_status is None
 
     assert tick.cycle_evidence_hash is None
+    assert tick.cycle_failure_type is None
+    assert tick.cycle_failure_message is None
+    assert tick.cycle_failure_identity_hash is None
+    assert tick.cycle_failure_redacted is False
+    assert tick.cycle_failure_diagnostics_present is False
 
     assert next_state == waiting_state()
 
@@ -545,6 +569,11 @@ def run_failure_increment_test():
     assert tick.cycle_invoked is True
 
     assert tick.cycle_succeeded is False
+    assert tick.cycle_failure_type == "OLA017CycleStatusFailure"
+    assert "blocked" in tick.cycle_failure_message
+    assert len(tick.cycle_failure_identity_hash) == 64
+    assert tick.cycle_failure_redacted is False
+    assert tick.cycle_failure_diagnostics_present is True
 
     assert tick.previous_consecutive_failures == 2
 
@@ -597,6 +626,11 @@ def run_threshold_suspension_test():
     assert tick.tick_status == "failed"
 
     assert tick.cycle_status == "exception"
+    assert tick.cycle_failure_type == "RuntimeError"
+    assert tick.cycle_failure_message == "deterministic shadow cycle failure"
+    assert len(tick.cycle_failure_identity_hash) == 64
+    assert tick.cycle_failure_redacted is False
+    assert tick.cycle_failure_diagnostics_present is True
 
     assert tick.previous_consecutive_failures == 3
 
@@ -630,6 +664,61 @@ def run_threshold_suspension_test():
     )
 
     return tick, next_state
+
+
+def run_secret_redaction_test():
+    runner = CountingSecretExceptionRunner()
+    scheduler = build_scheduler(runner)
+
+    tick, next_state, cycle_result = scheduler.run_tick(
+        readiness=build_readiness(),
+        polling_state=initial_state(),
+        evaluated_at=TICK_EVALUATED_AT,
+        started_at=TICK_STARTED_AT,
+        completed_at=TICK_COMPLETED_AT,
+        polling_decision_metadata={"scheduler": "OLA-021"},
+        cycle_kwargs={"cycle_id": "cycle.ola021.secret-redaction"},
+        tick_metadata={"mode": "shadow"},
+    )
+
+    assert runner.calls == 1
+    assert cycle_result is None
+    assert tick.tick_status == "failed"
+    assert tick.cycle_failure_type == "RuntimeError"
+    assert tick.cycle_failure_diagnostics_present is True
+    assert tick.cycle_failure_redacted is True
+    assert "super-secret-password" not in tick.cycle_failure_message
+    assert "live-token-123" not in tick.cycle_failure_message
+    assert "live-key-456" not in tick.cycle_failure_message
+    assert "postgresql://oracle:" not in tick.cycle_failure_message
+    assert "[REDACTED]" in tick.cycle_failure_message
+    assert "safe_reason=connection_bootstrap_failed" in tick.cycle_failure_message
+    assert len(tick.cycle_failure_identity_hash) == 64
+    assert tick.verify_tick_hash() is True
+    assert next_state.last_cycle_succeeded is False
+
+    canonical = tick.to_canonical_dict()
+    serialized = str(canonical)
+    assert "super-secret-password" not in serialized
+    assert "live-token-123" not in serialized
+    assert "live-key-456" not in serialized
+
+    second_runner = CountingSecretExceptionRunner()
+    second_scheduler = build_scheduler(second_runner)
+    second_tick, _, _ = second_scheduler.run_tick(
+        readiness=build_readiness(),
+        polling_state=initial_state(),
+        evaluated_at=TICK_EVALUATED_AT,
+        started_at=TICK_STARTED_AT,
+        completed_at=TICK_COMPLETED_AT,
+        polling_decision_metadata={"scheduler": "OLA-021"},
+        cycle_kwargs={"cycle_id": "cycle.ola021.secret-redaction"},
+        tick_metadata={"mode": "shadow"},
+    )
+    assert tick == second_tick
+    assert tick.cycle_failure_identity_hash == second_tick.cycle_failure_identity_hash
+
+    return tick
 
 
 def run_deterministic_replay_test():
@@ -778,6 +867,8 @@ def main():
         run_threshold_suspension_test()
     )
 
+    redacted_tick = run_secret_redaction_test()
+
     run_deterministic_replay_test()
 
     run_fail_closed_tests()
@@ -840,6 +931,32 @@ def main():
             suspended_tick.cycle_status
             == "exception"
         ),
+        "safe_canonical_failure_diagnostics": (
+            suspended_tick.cycle_failure_diagnostics_present
+        ),
+        "canonical_exception_type_preserved": (
+            suspended_tick.cycle_failure_type == "RuntimeError"
+        ),
+        "sanitized_failure_message_preserved": (
+            suspended_tick.cycle_failure_message
+            == "deterministic shadow cycle failure"
+        ),
+        "deterministic_failure_identity_hash": (
+            len(suspended_tick.cycle_failure_identity_hash) == 64
+        ),
+        "secret_bearing_failure_content_redacted": (
+            redacted_tick.cycle_failure_redacted
+        ),
+        "database_url_not_persisted": (
+            "postgresql://oracle:" not in redacted_tick.cycle_failure_message
+        ),
+        "authorization_token_not_persisted": (
+            "live-token-123" not in redacted_tick.cycle_failure_message
+        ),
+        "api_key_not_persisted": (
+            "live-key-456" not in redacted_tick.cycle_failure_message
+        ),
+        "scheduler_canonicalizer_weakened": False,
         "deterministic_tick_hashing": True,
         "deterministic_replay_valid": True,
         "continuous_polling_started": (
