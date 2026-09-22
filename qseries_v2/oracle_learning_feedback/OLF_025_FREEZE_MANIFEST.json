@@ -1,0 +1,14 @@
+{
+  "build_id": "OLF-025",
+  "cross_series_transfer": false,
+  "execution_authority": false,
+  "learner_state_hash": "1094ee2d1e378ce2e64792d14ee154d8b6e22ae26b479fd927d88bcea548e70b",
+  "manifest_sha256": "7a3b99080979650d769ba59433043285946478520b50067795c46eb8f9393689",
+  "proven_learning_child_unchanged": true,
+  "recency_decay": true,
+  "recent_markets_reasoned": 100,
+  "regime_calibrated": true,
+  "regime_contexts": 100,
+  "rejected_contexts": 0,
+  "revision": "OLF_025_EXPERIENCE_GENERALIZATION_REGIME_FREEZE_V1"
+}

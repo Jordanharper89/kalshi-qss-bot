@@ -1,0 +1,98 @@
+{
+  "modules": [
+    {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_121_persisted_sports_current_market_association_gate.py",
+      "imports": [
+        "from __future__ import annotations",
+        "from dataclasses import dataclass",
+        "from .oad_118_persisted_authoritative_sports_cohort import load_persisted_authoritative_sports_cohort",
+        "from .oad_119_persisted_sports_structured_descriptor import descriptors_from_persisted_sports_rows",
+        "from .oad_120_current_market_sports_team_pair_index import fetch_current_market_sports_candidates"
+      ],
+      "descriptor_assignments": [
+        {
+          "line": 15,
+          "expr": "structured_descriptors: int"
+        },
+        {
+          "line": 35,
+          "expr": "descriptors = descriptors_from_persisted_sports_rows(cohort.rows)"
+        },
+        {
+          "line": 36,
+          "expr": "markets, groups = fetch_current_market_sports_candidates(descriptors, limit=market_limit, timeout_seconds=market_timeout_seconds)"
+        }
+      ],
+      "descriptor_calls": [
+        {
+          "line": 35,
+          "expr": "descriptors_from_persisted_sports_rows(cohort.rows)"
+        },
+        {
+          "line": 36,
+          "expr": "fetch_current_market_sports_candidates(descriptors, limit=market_limit, timeout_seconds=market_timeout_seconds)"
+        },
+        {
+          "line": 43,
+          "expr": "PersistedSportsAssociationReport(persisted_observations=cohort.cohort_size, structured_descriptors=len(descriptors), current_markets=len(markets), observations_with_candidates=with_candidates, association_candidates=len(flat), associations=flat, ready_for_reasoning_evidence_comparison=bool(flat), execution_authority=False)"
+        },
+        {
+          "line": 45,
+          "expr": "len(descriptors)"
+        }
+      ]
+    },
+    {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_122_authoritative_sports_live_end_to_end_evidence_certification.py",
+      "imports": [
+        "from __future__ import annotations",
+        "from dataclasses import dataclass",
+        "from datetime import datetime, timezone",
+        "from .oad_118_persisted_authoritative_sports_cohort import load_persisted_authoritative_sports_cohort",
+        "from .oad_119_persisted_sports_structured_descriptor import descriptors_from_persisted_sports_rows",
+        "from .oad_120_current_market_sports_team_pair_index import fetch_current_market_sports_candidates"
+      ],
+      "descriptor_assignments": [
+        {
+          "line": 18,
+          "expr": "structured_descriptors: int"
+        },
+        {
+          "line": 22,
+          "expr": "descriptors: tuple"
+        },
+        {
+          "line": 41,
+          "expr": "descriptors = descriptors_from_persisted_sports_rows(cohort.rows)"
+        },
+        {
+          "line": 42,
+          "expr": "markets, groups = fetch_current_market_sports_candidates(descriptors, limit=market_limit, timeout_seconds=market_timeout_seconds)"
+        }
+      ],
+      "descriptor_calls": [
+        {
+          "line": 41,
+          "expr": "descriptors_from_persisted_sports_rows(cohort.rows)"
+        },
+        {
+          "line": 42,
+          "expr": "fetch_current_market_sports_candidates(descriptors, limit=market_limit, timeout_seconds=market_timeout_seconds)"
+        },
+        {
+          "line": 51,
+          "expr": "LiveSportsEndToEndEvidenceReport(persisted_observations=int(cohort.cohort_size), committed_new=int(cohort.committed_new), providers=tuple(cohort.providers), structured_descriptors=len(descriptors), current_markets=len(markets), observations_with_candidates=with_candidates, association_candidates=len(flat), descriptors=tuple(descriptors), associations=flat, certified_at=datetime.now(timezone.utc).isoformat(), read_only=True, probability_enabled=False, execution_authority=False)"
+        },
+        {
+          "line": 55,
+          "expr": "len(descriptors)"
+        },
+        {
+          "line": 59,
+          "expr": "tuple(descriptors)"
+        }
+      ]
+    }
+  ],
+  "execution_authority": false
+}

@@ -1,0 +1,19 @@
+{
+  "taxonomy": [
+    "GAME_WINNER",
+    "TEAM_TOTAL",
+    "GAME_TOTAL",
+    "SPREAD_MARGIN",
+    "PLAYER_STAT",
+    "TEAM_STAT",
+    "SCORING_OCCURRENCE",
+    "PLAYOFF_QUALIFICATION",
+    "CHAMPIONSHIP_FUTURE",
+    "SEASON_WINS",
+    "STANDINGS_RANKING",
+    "TOURNAMENT_ADVANCEMENT",
+    "AWARD",
+    "OTHER"
+  ],
+  "execution_authority": false
+}

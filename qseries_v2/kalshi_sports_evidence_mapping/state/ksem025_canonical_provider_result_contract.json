@@ -1,0 +1,15 @@
+{
+  "contracts": [
+    {
+      "name": "CanonicalProviderResult",
+      "line": 14,
+      "body": "@dataclass(frozen=True)\nclass CanonicalProviderResult:\n    league: str\n    events: tuple\n    event_count: int\n    authority: str\n    callable_name: str\n    execution_authority: bool = False"
+    },
+    {
+      "name": "acquire_canonical_events",
+      "line": 202,
+      "body": "def acquire_canonical_events(league, timeout=15, root=None):\n    league = str(league).upper()\n    if league not in ADMITTED:\n        raise RuntimeError(f'league not admitted: {league}')\n    if league in ('NFL', 'NCAAF', 'NBA'):\n        return _legacy(league, timeout)\n    return _promoted(league, timeout, root)"
+    }
+  ],
+  "execution_authority": false
+}

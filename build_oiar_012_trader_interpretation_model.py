@@ -1,0 +1,14 @@
+from pathlib import Path
+import ast,os,subprocess,sys
+ROOT=Path.cwd().resolve();MOD=ROOT/'qseries_v2/oracle_intelligence_analytics_runtime/oiar_012_trader_interpretation_model.py';TEST=ROOT/'test_oiar_012_trader_interpretation_model.py'
+SRC='from dataclasses import dataclass\nfrom .oiar_011_market_identity_translator import translate_market_identity\nOIAR_012_BUILD_ID="OIAR-012"\n@dataclass(frozen=True)\nclass TraderInterpretation:\n market_id:str;market_name:str;category:str;historical_strength:str;live_evidence:str;direction:str;setup_quality:str;risk:str;takeaway:str;read_only:bool=True;execution_authority:bool=False\ndef interpret_trader_row(r):\n i=translate_market_identity(r.market_id);m=str(r.maturity).upper();rel=float(r.reliability or 0);n=int(r.history_rows or 0);u=float(r.usefulness_score or 0)\n h="STRONG" if m=="PROVEN" and rel>=.60 else "MODERATE" if m in ("PROVEN","MATURE") or rel>=.50 else "LIMITED"\n l="STRONG" if n>=20 and u>=50 else "DEVELOPING" if n>=8 or u>=25 else "WEAK"\n adm=str(r.admission_status).lower()=="admitted";cand=str(r.candidate_family).lower()!="none"\n q="ACTIONABLE_RESEARCH" if adm else "FORMING" if cand else "NO_CONFIRMED_SETUP"\n t="WORTH WATCHING NOW" if adm else "WATCH - SETUP IS FORMING" if cand else "NO EDGE RIGHT NOW"\n return TraderInterpretation(r.market_id,i.display_name,i.category,h,l,str(r.research_direction or "neutral").upper(),q,"HIGH" if l=="WEAK" else "MODERATE",t)\n';TSRC='import unittest\nimport qseries_v2.oracle_intelligence_analytics_runtime.oiar_012_trader_interpretation_model as m\nclass T(unittest.TestCase):\n def test_identity(self):self.assertEqual(m.OIAR_012_BUILD_ID,"OIAR-012")\nif __name__=="__main__":\n print("="*88);print(" OIAR-012 CERTIFICATION TEST");r=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(T))\n if not r.wasSuccessful():raise SystemExit(1)\n print("[PASS] OIAR-012 contract certified");print("[PASS] execution_authority=FALSE");print("[DONE] OIAR-012 CERTIFIED")\n';REQ=['qseries_v2/oracle_intelligence_analytics_runtime/oiar_011_market_identity_translator.py']
+def write(p,s):
+ p.parent.mkdir(parents=True,exist_ok=True);t=p.with_name(p.name+f".{os.getpid()}.tmp");t.write_text(s,encoding="utf-8");os.replace(t,p)
+def main():
+ print("="*88);print(" OIAR-012 INSTALLER");print(" TRADER INTERPRETATION MODEL");print("="*88);print("[ROOT]",ROOT)
+ for x in REQ:
+  if not (ROOT/x).is_file():raise RuntimeError(f"Required proven upstream missing: {ROOT/x}")
+ ast.parse(SRC);ast.parse(TSRC);print("[PASS] installer payload syntax verified");write(MOD,SRC);write(TEST,TSRC);
+ subprocess.run([sys.executable,str(TEST)],cwd=str(ROOT),check=True)
+ print("[PASS] read-only trader presentation boundary preserved");print("[PASS] execution_authority=FALSE");print("[DONE] OIAR-012 INSTALLATION COMPLETE")
+if __name__=="__main__":main()

@@ -1,0 +1,135 @@
+{
+  "requested_tickers": [
+    "KXNCAAFGAME-26SEP12ALAUK-ALA",
+    "KXNCAAFGAME-26SEP12ALBYLIU-ALBY",
+    "KXNCAAFGAME-26SEP12ALSTTROY-TROY",
+    "KXNCAAFGAME-26SEP12APPECU-ECU",
+    "KXNCAAFGAME-26SEP12ARIZBYU-BYU",
+    "KXNCAAFGAME-26SEP12ARPBALCN-ALCN",
+    "KXNCAAFGAME-26SEP12ASUTXAM-TXAM",
+    "KXNCAAFGAME-26SEP12BGSUNEB-NEB",
+    "KXNCAAFGAME-26SEP12CALSYR-SYR",
+    "KXNCAAFGAME-26SEP12CAMPFLA-FLA",
+    "KXNCAAFGAME-26SEP12CCSUTOL-TOL",
+    "KXNCAAFGAME-26SEP12CHATEKY-CHAT",
+    "KXNCAAFGAME-26SEP12CHSOCIT-CIT",
+    "KXNCAAFGAME-26SEP12COLGCMU-CMU",
+    "KXNCAAFGAME-26SEP12DELVAN-VAN",
+    "KXNCAAFGAME-26SEP12DRKEUNI-UNI",
+    "KXNCAAFGAME-26SEP12DUKEILL-ILL",
+    "KXNCAAFGAME-26SEP12DUQYSU-YSU",
+    "KXNCAAFGAME-26SEP12EMUMSU-MSU",
+    "KXNCAAFGAME-26SEP12ETSUUNC-UNC",
+    "KXNCAAFGAME-26SEP12EWUSDAK-SDAK",
+    "KXNCAAFGAME-26SEP12FORCCAR-CCAR",
+    "KXNCAAFGAME-26SEP12FURMER-MER",
+    "KXNCAAFGAME-26SEP12GASOCLEM-CLEM",
+    "KXNCAAFGAME-26SEP12HCMOH-MOH",
+    "KXNCAAFGAME-26SEP12HOWIND-IND",
+    "KXNCAAFGAME-26SEP12ISUIOWA-IOWA",
+    "KXNCAAFGAME-26SEP12LINWMOSU-MOSU",
+    "KXNCAAFGAME-26SEP12LTLSU-LSU",
+    "KXNCAAFGAME-26SEP12MDCONN-MD",
+    "KXNCAAFGAME-26SEP12MEMBSU-BSU",
+    "KXNCAAFGAME-26SEP12MHUUNM-UNM",
+    "KXNCAAFGAME-26SEP12MONMWMU-WMU",
+    "KXNCAAFGAME-26SEP12MOREPEAY-PEAY",
+    "KXNCAAFGAME-26SEP12MRSTLAF-LAF",
+    "KXNCAAFGAME-26SEP12MSSTMINN-MSST",
+    "KXNCAAFGAME-26SEP12MTUMRSH-MRSH",
+    "KXNCAAFGAME-26SEP12NHCSDST-SDST",
+    "KXNCAAFGAME-26SEP12NWSTETAM-ETAM",
+    "KXNCAAFGAME-26SEP12ODUVT-VT",
+    "KXNCAAFGAME-26SEP12OKLAMICH-OKLA",
+    "KXNCAAFGAME-26SEP12OREOKST-ORE",
+    "KXNCAAFGAME-26SEP12PSUTEM-PSU",
+    "KXNCAAFGAME-26SEP12RICEND-ND",
+    "KXNCAAFGAME-26SEP12RMUAKR-AKR",
+    "KXNCAAFGAME-26SEP12SAMTNTC-TNTC",
+    "KXNCAAFGAME-26SEP12SDSUUCLA-UCLA",
+    "KXNCAAFGAME-26SEP12SEMOSIU-SIU",
+    "KXNCAAFGAME-26SEP12SHUMASS-MASS",
+    "KXNCAAFGAME-26SEP12SOUHOU-HOU"
+  ],
+  "pair_observations": [
+    {
+      "ticker": "KXNCAAFGAME-26SEP12OKLAMICH-OKLA",
+      "observation_id": "59697af0eead17d502bb3e1864b34e800d52577da9ccd2af94da8f2dac5c9cd7",
+      "query_count": 1,
+      "observations": [
+        {
+          "__type__": "CanonicalObservation",
+          "__repr__": "CanonicalObservation(schema_version='OLA-001', observation_id='59697af0eead17d502bb3e1864b34e800d52577da9ccd2af94da8f2dac5c9cd7', source_id='source.kalshi.market_data', source_observation_id='opc.kalshi.market.KXNCAAFGAME-26SEP12OKLAMICH-OKLA.578fe0084b6eb574602a3111b5b77217bb7b19eb72a010385645ec27f81b627e.20260818T213913823138Z', observation_type='market_snapshot', observed_at=datetime.datetime(2026, 7, 13, 21, 35, 19, 647908, tzinfo=datetime.timezone.utc), acquired_at=datetime.datetime(2026, 8, 18, 21, 39, 13, 823138, tzinfo=datetime.timezone.utc), acquisition_batch_id='batch.opc.027.20260818T213913822324Z.000800', payload=(('event_ticker', 'KXNCAAFGAME-26SEP12OKLAMICH'), ('execution_allowed', False), ('last_price_dollars', '0.4900'), ('liquidity_dollars', '0.0000'), ('market_title', 'Will Oklahoma win the Oklahoma vs Michigan college football game?'), ('no_ask_dollars', '0.5200'), ('no_bid_dollars', '0.5100'), ('opc_observation_epoch', '20260818T213913823138Z'), ('opc_snapshot', True), ('opc_source_state_hash', '578fe0084b6eb574602a3111b5b77217bb7b19eb72a010385645ec27f81b627e'), ('open_interest_fp', '30074.65'), ('previous_price_dollars', '0.0000'), ('previous_yes_ask_dollars', '0.0000'), ('previous_yes_bid_dollars', '0.0000'), ('source_close_time', '2026-09-14T16:00:00Z'), ('source_expiration_time', '2026-09-14T16:00:00Z'), ('source_market_id', 'KXNCAAFGAME-26SEP12OKLAMICH-OKLA'), ('source_open_time', '2026-05-20T19:08:00Z'), ('source_status_filter', 'active'), ('source_symbol', 'KXNCAAFGAME-26SEP12OKLAMICH-OKLA'), ('volume_24h_fp', '1084.73'), ('volume_fp', '34389.42'), ('yes_ask_dollars', '0.4900'), ('yes_ask_size_fp', '1001.81'), ('yes_bid_dollars', '0.4800'), ('yes_bid_size_fp', '28.66')), provenance=(('adapter_id', 'adapter.oracle.kalshi.opc.universal_snapshot'), ('http_method', 'GET'), ('opc_build', 'OPC-006-CORRECTION-V3'), ('public_endpoint', True), ('shadow_mode', True), ('source_api', 'kalshi_trade_api_v2'), ('source_endpoint', '/markets'), ('source_id', 'source.kalshi.market_data')), content_hash='70bdf35c4a88f102b17fdf70d98c416e8793379a977c79695815d66f1c3ef823', replay_hash='694404a00143df377f23e12b41d8f5cecebfc1b38cd03354f6a6690e1107a1e0', read_only=True, execution_allowed=False)"
+        }
+      ]
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12OKLAMICH-OKLA",
+      "observation_id": "79e883e2f948ba02daa66386d716baeb24df38fd7814d35a93e5e9b5f685c9dd",
+      "query_count": 1,
+      "observations": [
+        {
+          "__type__": "CanonicalObservation",
+          "__repr__": "CanonicalObservation(schema_version='OLA-001', observation_id='79e883e2f948ba02daa66386d716baeb24df38fd7814d35a93e5e9b5f685c9dd', source_id='source.kalshi.market_data', source_observation_id='kalshi.websocket.ticker.KXNCAAFGAME-26SEP12OKLAMICH-OKLA.1.0.f015bb523b7896c7', observation_type='ticker', observed_at=datetime.datetime(2026, 8, 14, 20, 43, 51, 456279, tzinfo=datetime.timezone.utc), acquired_at=datetime.datetime(2026, 8, 14, 20, 43, 51, 456279, tzinfo=datetime.timezone.utc), acquisition_batch_id='batch.oad054.46921.20260814T204351456279Z', payload=(('event_type', 'ticker'), ('message', {'dollar_open_interest': 25790, 'dollar_volume': 29086, 'last_trade_size_fp': '19.21', 'market_id': 'bf77b848-07d8-4cbb-b864-af2bbdf10b43', 'market_ticker': 'KXNCAAFGAME-26SEP12OKLAMICH-OKLA', 'open_interest_fp': '51580.82', 'price_dollars': '0.5000', 'time': '2026-08-14T20:43:06.045227Z', 'ts': 1786740186, 'ts_ms': 1786740186045, 'volume_fp': '58173.66', 'yes_ask_dollars': '0.4900', 'yes_ask_size_fp': '3.00', 'yes_bid_dollars': '0.4700', 'yes_bid_size_fp': '14.46'}), ('raw_message_hash', 'f015bb523b7896c7e5b7ead14292b5c315b5a9c443ecc5bed7564ba065590ba4'), ('seq', 0), ('sid', 1), ('source_market_id', 'KXNCAAFGAME-26SEP12OKLAMICH-OKLA')), provenance=(('adapter_id', 'adapter.oracle.kalshi.websocket.live'), ('read_only', True), ('source_id', 'source.kalshi.market_data'), ('transport', 'websocket')), content_hash='4583285dd92df5567096f8171cf72c0fcff0a24ec7d75331ab7179dd94ec395f', replay_hash='4c38b3c98c0f0cf0b2d03afcf50b8f07bcc4413e3bfc730f5ca2dfa161ed3dad', read_only=True, execution_allowed=False)"
+        }
+      ]
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12OKLAMICH-OKLA",
+      "observation_id": "870cafabeb43a908a2b0e6c89c8f8410ae13d1f2eb7aea3b8aac805a2372052a",
+      "query_count": 1,
+      "observations": [
+        {
+          "__type__": "CanonicalObservation",
+          "__repr__": "CanonicalObservation(schema_version='OLA-001', observation_id='870cafabeb43a908a2b0e6c89c8f8410ae13d1f2eb7aea3b8aac805a2372052a', source_id='source.kalshi.market_data', source_observation_id='kalshi.websocket.ticker.KXNCAAFGAME-26SEP12OKLAMICH-OKLA.1.0.7371333689c1f095', observation_type='ticker', observed_at=datetime.datetime(2026, 8, 16, 8, 44, 7, 869235, tzinfo=datetime.timezone.utc), acquired_at=datetime.datetime(2026, 8, 16, 8, 44, 7, 869235, tzinfo=datetime.timezone.utc), acquisition_batch_id='batch.oad054.433438.20260816T084407869235Z', payload=(('event_type', 'ticker'), ('message', {'dollar_open_interest': 27423, 'dollar_volume': 31353, 'last_trade_size_fp': '55.86', 'market_id': 'bf77b848-07d8-4cbb-b864-af2bbdf10b43', 'market_ticker': 'KXNCAAFGAME-26SEP12OKLAMICH-OKLA', 'open_interest_fp': '54846.44', 'price_dollars': '0.4600', 'time': '2026-08-16T08:42:00.834318Z', 'ts': 1786869720, 'ts_ms': 1786869720834, 'volume_fp': '62706.40', 'yes_ask_dollars': '0.4800', 'yes_ask_size_fp': '87.43', 'yes_bid_dollars': '0.4700', 'yes_bid_size_fp': '151.78'}), ('raw_message_hash', '7371333689c1f095d8b2fdf178cf2459345906b4c167ef71e506541883051a85'), ('seq', 0), ('sid', 1), ('source_market_id', 'KXNCAAFGAME-26SEP12OKLAMICH-OKLA')), provenance=(('adapter_id', 'adapter.oracle.kalshi.websocket.live'), ('read_only', True), ('source_id', 'source.kalshi.market_data'), ('transport', 'websocket')), content_hash='187d67f456da2e1a33220fe425457522d430968fc5e9ad12604a4790901e2d2f', replay_hash='80ebf5eedf4d79099111632a67cad8edac884c621bb5ae673b90ab9979d0c466', read_only=True, execution_allowed=False)"
+        }
+      ]
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12OKLAMICH-OKLA",
+      "observation_id": "abfa81b40e7270f503c0824b32e7cc2659f284950d0f0f2643a73ddb7fb1aff6",
+      "query_count": 1,
+      "observations": [
+        {
+          "__type__": "CanonicalObservation",
+          "__repr__": "CanonicalObservation(schema_version='OLA-001', observation_id='abfa81b40e7270f503c0824b32e7cc2659f284950d0f0f2643a73ddb7fb1aff6', source_id='source.kalshi.market_data', source_observation_id='opc.kalshi.market.KXNCAAFGAME-26SEP12OKLAMICH-OKLA.1549a2f67e5e77806ccf96a436ba1851350fb0174b25b61ba0f0253a2ad3e6b8.20260818T045459662027Z', observation_type='market_snapshot', observed_at=datetime.datetime(2026, 7, 13, 21, 35, 19, 647908, tzinfo=datetime.timezone.utc), acquired_at=datetime.datetime(2026, 8, 18, 4, 54, 59, 662027, tzinfo=datetime.timezone.utc), acquisition_batch_id='batch.opc.027.20260818T045459661830Z.000000', payload=(('event_ticker', 'KXNCAAFGAME-26SEP12OKLAMICH'), ('execution_allowed', False), ('last_price_dollars', '0.4700'), ('liquidity_dollars', '0.0000'), ('market_title', 'Will Oklahoma win the Oklahoma vs Michigan college football game?'), ('no_ask_dollars', '0.5300'), ('no_bid_dollars', '0.5100'), ('opc_observation_epoch', '20260818T045459662027Z'), ('opc_snapshot', True), ('opc_source_state_hash', '1549a2f67e5e77806ccf96a436ba1851350fb0174b25b61ba0f0253a2ad3e6b8'), ('open_interest_fp', '29705.52'), ('previous_price_dollars', '0.0000'), ('previous_yes_ask_dollars', '0.0000'), ('previous_yes_bid_dollars', '0.0000'), ('source_close_time', '2026-09-14T16:00:00Z'), ('source_expiration_time', '2026-09-14T16:00:00Z'), ('source_market_id', 'KXNCAAFGAME-26SEP12OKLAMICH-OKLA'), ('source_open_time', '2026-05-20T19:08:00Z'), ('source_status_filter', 'active'), ('source_symbol', 'KXNCAAFGAME-26SEP12OKLAMICH-OKLA'), ('volume_24h_fp', '2102.90'), ('volume_fp', '33970.04'), ('yes_ask_dollars', '0.4900'), ('yes_ask_size_fp', '2.58'), ('yes_bid_dollars', '0.4700'), ('yes_bid_size_fp', '3876.55')), provenance=(('adapter_id', 'adapter.oracle.kalshi.opc.universal_snapshot'), ('http_method', 'GET'), ('opc_build', 'OPC-006-CORRECTION-V3'), ('public_endpoint', True), ('shadow_mode', True), ('source_api', 'kalshi_trade_api_v2'), ('source_endpoint', '/markets'), ('source_id', 'source.kalshi.market_data')), content_hash='c3c746ed9dabea2d2dec20ab67c6d0bfde272f3766f10e87f8d2b2974895987f', replay_hash='761454f5fc73b532b03aa2815b37d6ab87bf55d234c7ff2ec9d9df5150ecadbd', read_only=True, execution_allowed=False)"
+        }
+      ]
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12OKLAMICH-OKLA",
+      "observation_id": "f7dbcedbf5208bf072acd4307967990c6e9a167ad0daa8dab8398e95b94b3887",
+      "query_count": 1,
+      "observations": [
+        {
+          "__type__": "CanonicalObservation",
+          "__repr__": "CanonicalObservation(schema_version='OLA-001', observation_id='f7dbcedbf5208bf072acd4307967990c6e9a167ad0daa8dab8398e95b94b3887', source_id='source.kalshi.market_data', source_observation_id='kalshi.websocket.ticker.KXNCAAFGAME-26SEP12OKLAMICH-OKLA.1.0.cc35976022543b7c', observation_type='ticker', observed_at=datetime.datetime(2026, 8, 14, 20, 49, 53, 4169, tzinfo=datetime.timezone.utc), acquired_at=datetime.datetime(2026, 8, 14, 20, 49, 53, 4169, tzinfo=datetime.timezone.utc), acquisition_batch_id='batch.oad054.49216.20260814T204953004169Z', payload=(('event_type', 'ticker'), ('message', {'dollar_open_interest': 25790, 'dollar_volume': 29086, 'last_trade_size_fp': '19.21', 'market_id': 'bf77b848-07d8-4cbb-b864-af2bbdf10b43', 'market_ticker': 'KXNCAAFGAME-26SEP12OKLAMICH-OKLA', 'open_interest_fp': '51580.82', 'price_dollars': '0.5000', 'time': '2026-08-14T20:48:48.701356Z', 'ts': 1786740528, 'ts_ms': 1786740528701, 'volume_fp': '58173.66', 'yes_ask_dollars': '0.4900', 'yes_ask_size_fp': '3.00', 'yes_bid_dollars': '0.4700', 'yes_bid_size_fp': '14.46'}), ('raw_message_hash', 'cc35976022543b7c0559e3cfba52956f1d0ce98cde5b34db6e674cb46331bd3b'), ('seq', 0), ('sid', 1), ('source_market_id', 'KXNCAAFGAME-26SEP12OKLAMICH-OKLA')), provenance=(('adapter_id', 'adapter.oracle.kalshi.websocket.live'), ('read_only', True), ('source_id', 'source.kalshi.market_data'), ('transport', 'websocket')), content_hash='262497469c72d52847b8554e9b69665a38d419c95daaa5aa099807ec34ab3975', replay_hash='bb4c7ca97017b196edffc5ea1d4ed66a03d29bd47850586977f9da11519ddd12', read_only=True, execution_allowed=False)"
+        }
+      ]
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12RICEND-ND",
+      "observation_id": "0c4098877edd6828ad6f5de6fd1a9c859c9fdf150e62ac1de0f77652981328a8",
+      "query_count": 1,
+      "observations": [
+        {
+          "__type__": "CanonicalObservation",
+          "__repr__": "CanonicalObservation(schema_version='OLA-001', observation_id='0c4098877edd6828ad6f5de6fd1a9c859c9fdf150e62ac1de0f77652981328a8', source_id='source.kalshi.market_data', source_observation_id='opc.kalshi.market.KXNCAAFGAME-26SEP12RICEND-ND.fd2ab0bd7dd80e0a9b5d5ee92af10e1504ba0782960e4b918ab648e08900a259.20260818T213913823137Z', observation_type='market_snapshot', observed_at=datetime.datetime(2026, 7, 13, 21, 35, 19, 647908, tzinfo=datetime.timezone.utc), acquired_at=datetime.datetime(2026, 8, 18, 21, 39, 13, 823137, tzinfo=datetime.timezone.utc), acquisition_batch_id='batch.opc.027.20260818T213913822324Z.000800', payload=(('event_ticker', 'KXNCAAFGAME-26SEP12RICEND'), ('execution_allowed', False), ('last_price_dollars', '0.9800'), ('liquidity_dollars', '0.0000'), ('market_title', 'Will Notre Dame win the Rice vs Notre Dame college football game?'), ('no_ask_dollars', '0.0300'), ('no_bid_dollars', '0.0200'), ('opc_observation_epoch', '20260818T213913823137Z'), ('opc_snapshot', True), ('opc_source_state_hash', 'fd2ab0bd7dd80e0a9b5d5ee92af10e1504ba0782960e4b918ab648e08900a259'), ('open_interest_fp', '6250.56'), ('previous_price_dollars', '0.0000'), ('previous_yes_ask_dollars', '0.0000'), ('previous_yes_bid_dollars', '0.0000'), ('source_close_time', '2026-09-14T19:30:00Z'), ('source_expiration_time', '2026-09-14T19:30:00Z'), ('source_market_id', 'KXNCAAFGAME-26SEP12RICEND-ND'), ('source_open_time', '2026-05-20T19:09:00Z'), ('source_status_filter', 'active'), ('source_symbol', 'KXNCAAFGAME-26SEP12RICEND-ND'), ('volume_24h_fp', '346.47'), ('volume_fp', '7909.28'), ('yes_ask_dollars', '0.9800'), ('yes_ask_size_fp', '2028.76'), ('yes_bid_dollars', '0.9700'), ('yes_bid_size_fp', '962.48')), provenance=(('adapter_id', 'adapter.oracle.kalshi.opc.universal_snapshot'), ('http_method', 'GET'), ('opc_build', 'OPC-006-CORRECTION-V3'), ('public_endpoint', True), ('shadow_mode', True), ('source_api', 'kalshi_trade_api_v2'), ('source_endpoint', '/markets'), ('source_id', 'source.kalshi.market_data')), content_hash='359a7d6b4211320f1d18965da9a805f23de0fe7e20959f38674eded1484c95f2', replay_hash='f04a0835b409748fae005d612199ccc1882a170163eea8c51d68bf9c24915038', read_only=True, execution_allowed=False)"
+        }
+      ]
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12RICEND-ND",
+      "observation_id": "a680b3e7d0e1b9c95bbede9b31bf2fbd1f05847b71a480d129fc2b35c19feb1e",
+      "query_count": 1,
+      "observations": [
+        {
+          "__type__": "CanonicalObservation",
+          "__repr__": "CanonicalObservation(schema_version='OLA-001', observation_id='a680b3e7d0e1b9c95bbede9b31bf2fbd1f05847b71a480d129fc2b35c19feb1e', source_id='source.kalshi.market_data', source_observation_id='opc.kalshi.market.KXNCAAFGAME-26SEP12RICEND-ND.c7d81b3cb94c0b5e47b7b4aaca6eae7250e51b54c4b8188409907911eef84d1e.20260818T045459662026Z', observation_type='market_snapshot', observed_at=datetime.datetime(2026, 7, 13, 21, 35, 19, 647908, tzinfo=datetime.timezone.utc), acquired_at=datetime.datetime(2026, 8, 18, 4, 54, 59, 662026, tzinfo=datetime.timezone.utc), acquisition_batch_id='batch.opc.027.20260818T045459661830Z.000000', payload=(('event_ticker', 'KXNCAAFGAME-26SEP12RICEND'), ('execution_allowed', False), ('last_price_dollars', '0.9800'), ('liquidity_dollars', '0.0000'), ('market_title', 'Will Notre Dame win the Rice vs Notre Dame college football game?'), ('no_ask_dollars', '0.0300'), ('no_bid_dollars', '0.0200'), ('opc_observation_epoch', '20260818T045459662026Z'), ('opc_snapshot', True), ('opc_source_state_hash', 'c7d81b3cb94c0b5e47b7b4aaca6eae7250e51b54c4b8188409907911eef84d1e'), ('open_interest_fp', '6239.85'), ('previous_price_dollars', '0.0000'), ('previous_yes_ask_dollars', '0.0000'), ('previous_yes_bid_dollars', '0.0000'), ('source_close_time', '2026-09-14T19:30:00Z'), ('source_expiration_time', '2026-09-14T19:30:00Z'), ('source_market_id', 'KXNCAAFGAME-26SEP12RICEND-ND'), ('source_open_time', '2026-05-20T19:09:00Z'), ('source_status_filter', 'active'), ('source_symbol', 'KXNCAAFGAME-26SEP12RICEND-ND'), ('volume_24h_fp', '4.03'), ('volume_fp', '7564.84'), ('yes_ask_dollars', '0.9800'), ('yes_ask_size_fp', '2371.68'), ('yes_bid_dollars', '0.9700'), ('yes_bid_size_fp', '935.00')), provenance=(('adapter_id', 'adapter.oracle.kalshi.opc.universal_snapshot'), ('http_method', 'GET'), ('opc_build', 'OPC-006-CORRECTION-V3'), ('public_endpoint', True), ('shadow_mode', True), ('source_api', 'kalshi_trade_api_v2'), ('source_endpoint', '/markets'), ('source_id', 'source.kalshi.market_data')), content_hash='c51a2ed374ae2d506c540debc1fec49593bd5623638431e5d0bce24bfe35e6eb', replay_hash='e1617c9acbee841369f64f59b0e5e0328c4e74772ca69e81d35d564569981f5e', read_only=True, execution_allowed=False)"
+        }
+      ]
+    }
+  ],
+  "direct_serialized_rows": [],
+  "execution_authority": false
+}

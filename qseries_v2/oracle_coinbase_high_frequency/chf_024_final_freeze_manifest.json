@@ -1,0 +1,27 @@
+{
+  "certified_range": "CHF-001..CHF-024",
+  "change_policy": "DEFECT_CORRECTIONS_ONLY",
+  "direction_enabled": false,
+  "execution_authority": false,
+  "frozen_at": "2026-09-10T20:17:22.002051+00:00",
+  "history": "FIXED_GRID_EVENT_TIME_ARCHIVE",
+  "launcher_sha256": "3f4f706570fc3208c64c75e449d3cfac7ca671c5f364dc428706c2a5fe1f434a",
+  "native_child_key": "coinbase_hf",
+  "native_child_runner": "run_coinbase_hf_live.py",
+  "persistence": "OAD-261 -> OPH-019 -> await_request -> OAD-068",
+  "probability_enabled": false,
+  "products": [
+    "BTC-USD",
+    "ETH-USD",
+    "SOL-USD"
+  ],
+  "publication_allowed": false,
+  "schema_version": "CHF-024",
+  "status": "FROZEN",
+  "windows_seconds": [
+    5,
+    15,
+    30,
+    60
+  ]
+}

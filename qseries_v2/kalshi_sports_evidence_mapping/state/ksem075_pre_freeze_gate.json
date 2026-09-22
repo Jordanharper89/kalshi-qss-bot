@@ -1,0 +1,10 @@
+{
+  "mapping_ready": true,
+  "full_accounting": true,
+  "exact_bound_count": 4,
+  "worker_heartbeat": true,
+  "launcher_surface_audited": true,
+  "launcher_already_contains_ksem": false,
+  "execution_authority": false,
+  "probability_enabled": false
+}

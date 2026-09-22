@@ -1,0 +1,198 @@
+{
+  "launcher_path": "run_oracle_LIVE.py",
+  "launcher_sha256": "d7f7d2f65ee10e93fd42af3751c25d670cee4eb6d79d037c27f9bb32570bd90f",
+  "line_count": 322,
+  "functions": [
+    {
+      "name": "_verify",
+      "lineno": 18,
+      "end_lineno": 22,
+      "async": false
+    },
+    {
+      "name": "build_boot_report",
+      "lineno": 24,
+      "end_lineno": 29,
+      "async": false
+    },
+    {
+      "name": "format_boot_report",
+      "lineno": 31,
+      "end_lineno": 49,
+      "async": false
+    },
+    {
+      "name": "_start",
+      "lineno": 64,
+      "end_lineno": 136,
+      "async": false
+    },
+    {
+      "name": "run_forever",
+      "lineno": 140,
+      "end_lineno": 306,
+      "async": false
+    },
+    {
+      "name": "main",
+      "lineno": 310,
+      "end_lineno": 319,
+      "async": false
+    },
+    {
+      "name": "_gmgn_cycle",
+      "lineno": 156,
+      "end_lineno": 160,
+      "async": false
+    },
+    {
+      "name": "_spawn",
+      "lineno": 162,
+      "end_lineno": 169,
+      "async": false
+    },
+    {
+      "name": "_recent_restarts",
+      "lineno": 171,
+      "end_lineno": 174,
+      "async": false
+    },
+    {
+      "name": "_gmgn_provider_state",
+      "lineno": 176,
+      "end_lineno": 206,
+      "async": false
+    },
+    {
+      "name": "_child_state",
+      "lineno": 208,
+      "end_lineno": 229,
+      "async": false
+    },
+    {
+      "name": "_overall",
+      "lineno": 231,
+      "end_lineno": 239,
+      "async": false
+    }
+  ],
+  "classes": [
+    {
+      "name": "OracleLiveBootReport",
+      "lineno": 11,
+      "end_lineno": 16
+    }
+  ],
+  "main_named_functions": [
+    {
+      "name": "run_forever",
+      "lineno": 140,
+      "end_lineno": 306,
+      "async": false
+    },
+    {
+      "name": "main",
+      "lineno": 310,
+      "end_lineno": 319,
+      "async": false
+    }
+  ],
+  "main_guards": [
+    {
+      "lineno": 321,
+      "end_lineno": 322,
+      "test": "__name__ == '__main__'",
+      "body": [
+        "raise SystemExit(main())"
+      ]
+    }
+  ],
+  "subprocess_calls": [
+    {
+      "call": "subprocess.Popen",
+      "lineno": 136
+    },
+    {
+      "call": "subprocess.Popen",
+      "lineno": 134
+    }
+  ],
+  "thread_calls": [],
+  "process_calls": [
+    {
+      "call": "subprocess.Popen",
+      "lineno": 136
+    },
+    {
+      "call": "subprocess.Popen",
+      "lineno": 134
+    }
+  ],
+  "runtime_markers": {
+    "fast_lane": [
+      52
+    ],
+    "inventory": [
+      43,
+      53
+    ],
+    "reasoning": [
+      27,
+      40,
+      44,
+      48,
+      54
+    ],
+    "learning": [
+      28,
+      41,
+      45,
+      48,
+      55,
+      60
+    ],
+    "coverage": [
+      56
+    ],
+    "canonical_writer": [
+      57
+    ],
+    "continuity": [
+      58
+    ],
+    "recovery": [
+      59
+    ],
+    "crypto_learning": [
+      60
+    ],
+    "gmgn_intelligence": [
+      61,
+      163,
+      226
+    ],
+    "terminal_dependency": [
+      15,
+      287
+    ],
+    "execution_authority": [
+      16,
+      287
+    ]
+  },
+  "imports": [
+    "__future__",
+    "os",
+    "argparse",
+    "importlib",
+    "subprocess",
+    "sys",
+    "time",
+    "dataclasses",
+    "pathlib"
+  ],
+  "sports_currently_integrated": false,
+  "audit_only": true,
+  "launcher_modified": false,
+  "execution_authority": false
+}

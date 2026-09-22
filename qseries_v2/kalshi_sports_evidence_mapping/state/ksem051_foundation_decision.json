@@ -1,0 +1,9 @@
+{
+  "root_cause_counts": {
+    "CANONICAL_SERIALIZED_COLUMN_UNAVAILABLE": 48
+  },
+  "decision": "AUDIT_CANONICAL_STORAGE_SCHEMA_BEFORE_NEW_ACQUISITION",
+  "osn_binding_ready": false,
+  "production_launcher_change_required": false,
+  "execution_authority": false
+}

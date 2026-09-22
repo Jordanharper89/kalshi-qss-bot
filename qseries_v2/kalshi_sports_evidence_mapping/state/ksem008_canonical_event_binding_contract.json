@@ -1,0 +1,10 @@
+{
+  "binding_states": [
+    "BOUND",
+    "UNBOUND",
+    "AMBIGUOUS",
+    "REJECTED"
+  ],
+  "silent_guessing": false,
+  "execution_authority": false
+}

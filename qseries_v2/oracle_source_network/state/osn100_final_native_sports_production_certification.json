@@ -1,0 +1,29 @@
+{
+  "admitted": [
+    "NFL",
+    "NCAAF",
+    "NBA",
+    "NHL",
+    "MLS",
+    "EPL"
+  ],
+  "held": [
+    "NCAAB",
+    "MLB_CANONICAL_EVENT_EXTRACTION_CERT_REQUIRED"
+  ],
+  "blocked": [
+    "UCL"
+  ],
+  "production_launcher": "run_oracle_LIVE.py",
+  "integration": "NATIVE_CHILDREN_REGISTRY",
+  "source_to_postgresql_readback_checkpoint": true,
+  "six_league_full_cycle_physical_certified": true,
+  "continuous_runtime_physical_certified": true,
+  "restart_recovery_physical_certified": false,
+  "restart_recovery_status": "DEFERRED_TO_ORACLE_RUNTIME_HARDENING",
+  "wrapper_retired": true,
+  "sports_source_activation_complete": true,
+  "sports_evidence_mapping_complete": false,
+  "terminal_dependency": "NONE",
+  "execution_authority": false
+}

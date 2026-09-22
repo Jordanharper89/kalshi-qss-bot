@@ -84,6 +84,7 @@ from qseries_v2.oracle_intelligence.live_acquisition.oracle_controlled_shadow_co
 )
 
 from qseries_v2.oracle_intelligence.live_acquisition.oracle_kalshi_live_read_readiness_gate import (
+    KalshiLiveReadReadinessFailure,
     OracleKalshiLiveReadReadinessGate,
 )
 
@@ -127,6 +128,70 @@ from qseries_v2.oracle_intelligence.live_acquisition.oracle_postgresql_secure_co
 
 from qseries_v2.oracle_intelligence.live_acquisition.oracle_postgresql_shadow_acquisition_cycle_orchestrator import (
     OraclePostgreSQLShadowAcquisitionCycleOrchestrator,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_production_lineage_graph_assembly_attestation import (
+    OracleProductionLineageGraphAssemblyAttestor,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_production_lineage_scheduler_activation_attestation import (
+    OracleProductionLineageSchedulerActivationAttestor,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_production_live_shadow_startup_readiness_attestation import (
+    OracleProductionLiveShadowStartupReadinessAttestor,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_production_live_shadow_start_authorization import (
+    OracleProductionLiveShadowStartAuthorizer,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_production_live_shadow_start_authorization_consumption import (
+    OracleProductionLiveShadowStartAuthorizationConsumer,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_production_live_shadow_launch_binding import (
+    OracleProductionLiveShadowLaunchBinder,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_production_live_shadow_controlled_launch_invocation import (
+    OracleProductionLiveShadowControlledLaunchInvoker,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_exact_runner_launch_callable_binding import (
+    OracleExactRunnerLaunchCallableBinder,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_production_live_shadow_controlled_launch_package_assembly import (
+    OracleProductionLiveShadowControlledLaunchPackageAssembler,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_production_live_shadow_controlled_launch_package_consumption import (
+    OracleProductionLiveShadowControlledLaunchPackageConsumer,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_production_live_shadow_controlled_launch_permit_execution import (
+    OracleProductionLiveShadowControlledLaunchPermitExecutor,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_production_live_shadow_persistent_service_activation import (
+    OracleProductionLiveShadowPersistentServiceActivator,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_persisted_cohort_lineage_production_wiring_contract import (
+    OraclePersistedCohortLineageProductionWiringContract,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_scheduler_cycle_lineage_completion_bridge import (
+    OracleSchedulerCycleLineageCompletionBridge,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_scheduler_lineage_production_adapter import (
+    OracleSchedulerLineageProductionAdapter,
+)
+
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_shadow_cycle_runner_lineage_callable_facade import (
+    OracleShadowCycleRunnerLineageCallableFacade,
 )
 
 from qseries_v2.oracle_intelligence.live_acquisition.oracle_service_isolation_canonical_intelligence_handoff_contract import (
@@ -186,6 +251,7 @@ DEFAULT_SERVICE_TICK_INTERVAL_SECONDS = 5
 
 FIRST_REAL_CORPUS_PAGE_LIMIT = 5
 FIRST_REAL_CORPUS_MAX_PAGES = 1
+FIRST_REAL_CORPUS_COHORT_SIZE = 5
 
 PASSWORD_ENVIRONMENT_VARIABLE = (
     "ORACLE_POSTGRES_PASSWORD"
@@ -548,6 +614,123 @@ def _active_rate_window_start(
     return checked_at
 
 
+
+
+
+def _normalize_stable_market_cohort(
+    market_tickers: Any,
+    *,
+    field_name: str = "stable_market_cohort",
+) -> tuple[str, ...]:
+    if not isinstance(
+        market_tickers,
+        (tuple, list),
+    ):
+        raise OracleFirstRealShadowCorpusLaunchError(
+            f"{field_name} must be a tuple or list"
+        )
+
+    normalized: list[str] = []
+    seen: set[str] = set()
+
+    for ticker in market_tickers:
+        if not isinstance(
+            ticker,
+            str,
+        ):
+            raise OracleFirstRealShadowCorpusLaunchError(
+                f"{field_name} values must be strings"
+            )
+
+        candidate = ticker.strip()
+
+        if not candidate:
+            raise OracleFirstRealShadowCorpusLaunchError(
+                f"{field_name} values must not be empty"
+            )
+
+        if candidate in seen:
+            raise OracleFirstRealShadowCorpusLaunchBlocked(
+                f"{field_name} must not contain duplicate tickers"
+            )
+
+        seen.add(candidate)
+        normalized.append(candidate)
+
+    if len(normalized) != FIRST_REAL_CORPUS_COHORT_SIZE:
+        raise OracleFirstRealShadowCorpusLaunchBlocked(
+            f"{field_name} must contain exactly "
+            f"{FIRST_REAL_CORPUS_COHORT_SIZE} market tickers"
+        )
+
+    return tuple(normalized)
+
+
+def _discover_stable_market_cohort(
+    *,
+    discovery_adapter: Any,
+    discovered_at: datetime,
+) -> tuple[str, ...]:
+    normalized_discovered_at = (
+        _rehydrate_canonical_aware_datetime(
+            discovered_at,
+            "stable_market_cohort.discovered_at",
+        )
+    )
+
+    if not hasattr(
+        discovery_adapter,
+        "acquire",
+    ) or not callable(
+        discovery_adapter.acquire
+    ):
+        raise OracleFirstRealShadowCorpusLaunchError(
+            "stable market cohort discovery adapter must expose acquire"
+        )
+
+    observations = discovery_adapter.acquire(
+        acquired_at=normalized_discovered_at,
+    )
+
+    if not isinstance(
+        observations,
+        tuple,
+    ):
+        raise OracleFirstRealShadowCorpusLaunchBlocked(
+            "stable market cohort discovery must return a tuple"
+        )
+
+    discovered_tickers: list[str] = []
+
+    for observation in observations:
+        payload = getattr(
+            observation,
+            "payload",
+            None,
+        )
+
+        if payload is None:
+            raise OracleFirstRealShadowCorpusLaunchBlocked(
+                "stable market cohort observation is missing payload"
+            )
+
+        try:
+            payload_mapping = dict(payload)
+        except (TypeError, ValueError) as exc:
+            raise OracleFirstRealShadowCorpusLaunchBlocked(
+                "stable market cohort payload must be canonical mapping evidence"
+            ) from exc
+
+        discovered_tickers.append(
+            payload_mapping.get(
+                "source_market_id"
+            )
+        )
+
+    return _normalize_stable_market_cohort(
+        discovered_tickers,
+        field_name="stable_market_cohort",
+    )
 
 
 def _build_production_acquisition_runtime(
@@ -1077,18 +1260,156 @@ def validate_first_real_launch_environment(
 
 
 class _ProductionLiveReadinessProvider:
+    """
+    OLA-069 production readiness recovery provider.
+
+    Important semantic correction:
+
+    The service runner's ``consecutive_failures`` value represents
+    polling or scheduler-cycle history. It is not authoritative
+    source-health failure evidence.
+
+    The OLA-018 readiness gate performs a fresh OLA-016 public
+    source-health probe during every evaluation. When that current
+    probe is healthy and reachable, the corresponding source-health
+    consecutive-failure count must start at zero.
+
+    Passing scheduler failures into OLA-002 as source-health failures
+    previously created a permanent poison state:
+
+        scheduler failures > health policy maximum
+            -> OLA-002 denies readiness
+            -> runner terminates
+            -> no successful cycle can reset the scheduler state
+
+    OLA-069 separates those contracts and contains temporary
+    readiness failures inside a read-only retry loop. No acquisition
+    cycle begins until OLA-018 returns a valid approved readiness
+    record.
+    """
 
     def __init__(
         self,
         *,
         gate: OracleKalshiLiveReadReadinessGate,
+        retry_base_seconds: float = 5.0,
+        retry_max_seconds: float = 60.0,
+        sleeper: Callable[[float], None] = time.sleep,
+        clock: Callable[[], datetime] = (
+            lambda: datetime.now(timezone.utc)
+        ),
     ) -> None:
+        if not isinstance(
+            gate,
+            OracleKalshiLiveReadReadinessGate,
+        ):
+            raise OracleFirstRealShadowCorpusLaunchError(
+                "gate must be OracleKalshiLiveReadReadinessGate"
+            )
+
+        if isinstance(retry_base_seconds, bool):
+            raise OracleFirstRealShadowCorpusLaunchError(
+                "retry_base_seconds must be numeric"
+            )
+
+        if isinstance(retry_max_seconds, bool):
+            raise OracleFirstRealShadowCorpusLaunchError(
+                "retry_max_seconds must be numeric"
+            )
+
+        try:
+            normalized_retry_base = float(
+                retry_base_seconds
+            )
+            normalized_retry_max = float(
+                retry_max_seconds
+            )
+        except (TypeError, ValueError) as exc:
+            raise OracleFirstRealShadowCorpusLaunchError(
+                "retry timing must be numeric"
+            ) from exc
+
+        if normalized_retry_base <= 0:
+            raise OracleFirstRealShadowCorpusLaunchError(
+                "retry_base_seconds must be positive"
+            )
+
+        if normalized_retry_max < normalized_retry_base:
+            raise OracleFirstRealShadowCorpusLaunchError(
+                "retry_max_seconds cannot be below "
+                "retry_base_seconds"
+            )
+
+        if not callable(sleeper):
+            raise OracleFirstRealShadowCorpusLaunchError(
+                "sleeper must be callable"
+            )
+
+        if not callable(clock):
+            raise OracleFirstRealShadowCorpusLaunchError(
+                "clock must be callable"
+            )
+
         self._gate = gate
+        self._retry_base_seconds = normalized_retry_base
+        self._retry_max_seconds = normalized_retry_max
+        self._sleeper = sleeper
+        self._clock = clock
+
         self._calls = 0
+        self._readiness_attempts = 0
+        self._transient_failure_count = 0
+        self._last_transient_failure = None
 
     @property
     def calls(self) -> int:
         return self._calls
+
+    @property
+    def readiness_attempts(self) -> int:
+        return self._readiness_attempts
+
+    @property
+    def transient_failure_count(self) -> int:
+        return self._transient_failure_count
+
+    @property
+    def last_transient_failure(self):
+        return self._last_transient_failure
+
+    def _retry_delay_seconds(
+        self,
+        retry_number: int,
+    ) -> float:
+        exponent = max(
+            0,
+            min(
+                int(retry_number) - 1,
+                10,
+            ),
+        )
+
+        return min(
+            self._retry_max_seconds,
+            self._retry_base_seconds
+            * (2 ** exponent),
+        )
+
+    def _fresh_timestamp(self) -> datetime:
+        value = self._clock()
+
+        if not isinstance(value, datetime):
+            raise OracleFirstRealShadowCorpusLaunchError(
+                "readiness recovery clock must return datetime"
+            )
+
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise OracleFirstRealShadowCorpusLaunchError(
+                "readiness recovery clock must return "
+                "timezone-aware datetime"
+            )
+
+        return value.astimezone(timezone.utc)
 
     def __call__(
         self,
@@ -1100,52 +1421,186 @@ class _ProductionLiveReadinessProvider:
     ):
         self._calls += 1
 
-        rate_observation = RateWindowObservation.create(
-            source_id=SOURCE_ID,
-            checked_at=checked_at,
-            window_started_at=(
-                _active_rate_window_start(
-                    checked_at
+        if (
+            isinstance(iteration_number, bool)
+            or not isinstance(iteration_number, int)
+            or iteration_number <= 0
+        ):
+            raise OracleFirstRealShadowCorpusLaunchError(
+                "iteration_number must be a positive int"
+            )
+
+        if (
+            isinstance(consecutive_failures, bool)
+            or not isinstance(consecutive_failures, int)
+            or consecutive_failures < 0
+        ):
+            raise OracleFirstRealShadowCorpusLaunchError(
+                "consecutive_failures must be a "
+                "non-negative int"
+            )
+
+        attempt_number = 0
+
+        while True:
+            attempt_number += 1
+            self._readiness_attempts += 1
+
+            if attempt_number == 1:
+                attempt_checked_at = (
+                    _rehydrate_canonical_aware_datetime(
+                        checked_at,
+                        "checked_at",
+                    )
                 )
-            ),
-            requests_used=min(
-                iteration_number,
-                80,
-            ),
-            metadata={
-                "counter_id": (
-                    "oracle.ola030.readiness.rate"
-                ),
-                "shadow_mode": True,
-            },
-        )
 
-        return self._gate.evaluate(
-            checked_at=checked_at,
-            evaluated_at=evaluated_at,
-            measured_latency_ms=1,
-            consecutive_failures=(
-                consecutive_failures
-            ),
-            rate_window_observation=(
-                rate_observation
-            ),
-            readiness_metadata={
-                "environment": "production",
-                "launch_engine_id": ENGINE_ID,
-                "iteration_number": iteration_number,
-                "continuous_polling": True,
-            },
-            replay_metadata={
-                "launch_engine_id": ENGINE_ID,
-                "iteration_number": iteration_number,
-            },
-            audit_metadata={
-                "launch_engine_id": ENGINE_ID,
-                "iteration_number": iteration_number,
-            },
-        )
+                attempt_evaluated_at = (
+                    _rehydrate_canonical_aware_datetime(
+                        evaluated_at,
+                        "evaluated_at",
+                    )
+                )
+            else:
+                # OLA-077 canonical retry timestamp-lineage correction:
+                #
+                # OLA-023 owns checked_at and evaluated_at for the complete
+                # service-runner iteration. Internal OLA-069 readiness
+                # recovery attempts remain part of that same iteration and
+                # must not establish a second timestamp authority.
+                #
+                # Preserve the caller-supplied canonical timestamps on every
+                # retry. Retry identity remains represented by
+                # readiness_attempt_number and the recovery audit metadata.
+                attempt_checked_at = (
+                    _rehydrate_canonical_aware_datetime(
+                        checked_at,
+                        "checked_at",
+                    )
+                )
 
+                attempt_evaluated_at = (
+                    _rehydrate_canonical_aware_datetime(
+                        evaluated_at,
+                        "evaluated_at",
+                    )
+                )
+
+            rate_observation = (
+                RateWindowObservation.create(
+                    source_id=SOURCE_ID,
+                    checked_at=attempt_checked_at,
+                    window_started_at=(
+                        _active_rate_window_start(
+                            attempt_checked_at
+                        )
+                    ),
+                    requests_used=min(
+                        iteration_number,
+                        80,
+                    ),
+                    metadata={
+                        "counter_id": (
+                            "oracle.ola030.readiness.rate"
+                        ),
+                        "shadow_mode": True,
+                        "ola_069_recovery_attempt": (
+                            attempt_number
+                        ),
+                    },
+                )
+            )
+
+            try:
+                readiness = self._gate.evaluate(
+                    checked_at=attempt_checked_at,
+                    evaluated_at=attempt_evaluated_at,
+                    measured_latency_ms=1,
+
+                    # OLA-069 semantic correction:
+                    # Scheduler/polling failures are not source-health
+                    # consecutive failures. OLA-018 performs a fresh
+                    # OLA-016 source probe on every attempt.
+                    consecutive_failures=0,
+
+                    rate_window_observation=(
+                        rate_observation
+                    ),
+                    readiness_metadata={
+                        "environment": "production",
+                        "launch_engine_id": ENGINE_ID,
+                        "iteration_number": (
+                            iteration_number
+                        ),
+                        "continuous_polling": True,
+                        "ola_069_readiness_recovery": True,
+                        "readiness_attempt_number": (
+                            attempt_number
+                        ),
+                        "scheduler_consecutive_failures": (
+                            consecutive_failures
+                        ),
+                        "source_health_consecutive_failures": 0,
+                    },
+                    replay_metadata={
+                        "launch_engine_id": ENGINE_ID,
+                        "iteration_number": (
+                            iteration_number
+                        ),
+                        "ola_069_readiness_recovery": True,
+                        "readiness_attempt_number": (
+                            attempt_number
+                        ),
+                    },
+                    audit_metadata={
+                        "launch_engine_id": ENGINE_ID,
+                        "iteration_number": (
+                            iteration_number
+                        ),
+                        "ola_069_readiness_recovery": True,
+                        "readiness_attempt_number": (
+                            attempt_number
+                        ),
+                        "scheduler_consecutive_failures": (
+                            consecutive_failures
+                        ),
+                        "source_health_consecutive_failures": 0,
+                    },
+                )
+
+                self._last_transient_failure = None
+                return readiness
+
+            except KalshiLiveReadReadinessFailure as exc:
+                self._transient_failure_count += 1
+                self._last_transient_failure = {
+                    "iteration_number": iteration_number,
+                    "attempt_number": attempt_number,
+                    "failure_type": type(exc).__name__,
+                    "failure_message": str(exc),
+                    "read_only": True,
+                    "execution_allowed": False,
+                }
+
+                delay_seconds = (
+                    self._retry_delay_seconds(
+                        attempt_number
+                    )
+                )
+
+                print(
+                    "[WARN] Oracle live readiness temporarily "
+                    "blocked; acquisition remains paused"
+                )
+                print(
+                    "[INFO] Readiness failure: "
+                    f"{type(exc).__name__}: {exc}"
+                )
+                print(
+                    "[INFO] Retrying read-only readiness in "
+                    f"{delay_seconds:.1f} seconds"
+                )
+
+                self._sleeper(delay_seconds)
 
 def _service_contract(
 ) -> OracleQSeriesServiceIsolationContract:
@@ -1330,8 +1785,45 @@ def build_real_oracle_shadow_graph(
         )
     )
 
+    lineage_production_wiring = (
+        OraclePersistedCohortLineageProductionWiringContract(
+            production_persistence_router=(
+                persistence_router
+            )
+        )
+    )
+
+    lineage_persistence_router = (
+        lineage_production_wiring
+        .staged_persistence_router
+    )
+
+    discovery_adapter_kwargs = {
+        "market_status": "open",
+        "page_limit": FIRST_REAL_CORPUS_PAGE_LIMIT,
+        "max_pages": FIRST_REAL_CORPUS_MAX_PAGES,
+        "timeout_seconds": 20,
+    }
+
+    if http_fetcher is not None:
+        discovery_adapter_kwargs["http_fetcher"] = (
+            http_fetcher
+        )
+
+    discovery_adapter = (
+        OracleKalshiPublicMarketShadowSourceAdapter(
+            **discovery_adapter_kwargs
+        )
+    )
+
+    stable_market_cohort = _discover_stable_market_cohort(
+        discovery_adapter=discovery_adapter,
+        discovered_at=clock_callable(),
+    )
+
     adapter_kwargs = {
         "market_status": "open",
+        "market_tickers": stable_market_cohort,
         "page_limit": FIRST_REAL_CORPUS_PAGE_LIMIT,
         "max_pages": FIRST_REAL_CORPUS_MAX_PAGES,
         "timeout_seconds": 20,
@@ -1347,6 +1839,15 @@ def build_real_oracle_shadow_graph(
             **adapter_kwargs
         )
     )
+
+    if (
+        shadow_adapter.market_tickers
+        != stable_market_cohort
+        or shadow_adapter.stable_cohort_filter_active is not True
+    ):
+        raise OracleFirstRealShadowCorpusLaunchBlocked(
+            "OLA-016 stable market cohort wiring failed closed"
+        )
 
     deduplication = (
         OracleAcquisitionDeduplicationLedger(
@@ -1365,14 +1866,18 @@ def build_real_oracle_shadow_graph(
         _build_production_acquisition_runtime(
             shadow_adapter=shadow_adapter,
             deduplication=deduplication,
-            persistence_router=persistence_router,
+            persistence_router=(
+                lineage_persistence_router
+            ),
         )
     )
 
     cycle_orchestrator = (
         OraclePostgreSQLShadowAcquisitionCycleOrchestrator(
             acquisition_runtime=acquisition_runtime,
-            postgresql_router=persistence_router,
+            postgresql_router=(
+                persistence_router
+            ),
             shadow_adapter=shadow_adapter,
             bootstrap_record=postgresql_bootstrap,
         )
@@ -1493,20 +1998,84 @@ def build_real_oracle_shadow_graph(
             audit_metadata=audit_metadata,
         )
 
+    lineage_completion_bridge = (
+        OracleSchedulerCycleLineageCompletionBridge(
+            production_wiring=(
+                lineage_production_wiring
+            )
+        )
+    )
+
+    lineage_scheduler_adapter = (
+        OracleSchedulerLineageProductionAdapter(
+            scheduler_cycle_callable=(
+                production_cycle_callable
+            ),
+            lineage_completion_bridge=(
+                lineage_completion_bridge
+            ),
+        )
+    )
+
+    lineage_cycle_callable = (
+        OracleShadowCycleRunnerLineageCallableFacade(
+            scheduler_adapter=(
+                lineage_scheduler_adapter
+            )
+        )
+    )
+
+    lineage_graph_attestation = (
+        OracleProductionLineageGraphAssemblyAttestor()
+        .attest(
+            production_persistence_router=(
+                persistence_router
+            ),
+            lineage_production_wiring=(
+                lineage_production_wiring
+            ),
+            lineage_persistence_router=(
+                lineage_persistence_router
+            ),
+            acquisition_runtime=(
+                acquisition_runtime
+            ),
+            cycle_orchestrator=(
+                cycle_orchestrator
+            ),
+            production_cycle_callable=(
+                production_cycle_callable
+            ),
+            lineage_completion_bridge=(
+                lineage_completion_bridge
+            ),
+            lineage_scheduler_adapter=(
+                lineage_scheduler_adapter
+            ),
+            lineage_cycle_callable=(
+                lineage_cycle_callable
+            ),
+        )
+    )
+
+    cycle_runner_binding = (
+        ShadowCycleRunnerBinding(
+            runner_id=(
+                "runner.ola017.ola030.production"
+            ),
+            engine_id="OLA-017",
+            source_id=SOURCE_ID,
+            adapter_id=ADAPTER_ID,
+            cycle_callable=(
+                lineage_cycle_callable
+            ),
+        )
+    )
+
     scheduler = (
         OracleControlledShadowCollectionSchedulerTick(
             polling_engine=polling_engine,
-            cycle_runner=ShadowCycleRunnerBinding(
-                runner_id=(
-                    "runner.ola017.ola030.production"
-                ),
-                engine_id="OLA-017",
-                source_id=SOURCE_ID,
-                adapter_id=ADAPTER_ID,
-                cycle_callable=(
-                    production_cycle_callable
-                ),
-            ),
+            cycle_runner=cycle_runner_binding,
         )
     )
 
@@ -1552,6 +2121,17 @@ def build_real_oracle_shadow_graph(
         )
     )
 
+    service_scheduler_binding = (
+        OracleLiveShadowSchedulerBinding(
+            scheduler_id=(
+                "scheduler.ola021."
+                "production.ola030"
+            ),
+            engine_id="OLA-021",
+            tick_callable=scheduler.run_tick,
+        )
+    )
+
     runner = OracleLiveShadowServiceRunner(
         bootstrap_record=service_bootstrap,
         readiness_provider=(
@@ -1566,14 +2146,7 @@ def build_real_oracle_shadow_graph(
                 ),
             )
         ),
-        scheduler=OracleLiveShadowSchedulerBinding(
-            scheduler_id=(
-                "scheduler.ola021."
-                "production.ola030"
-            ),
-            engine_id="OLA-021",
-            tick_callable=scheduler.run_tick,
-        ),
+        scheduler=service_scheduler_binding,
         state_writer=(
             OracleLiveShadowEvidenceWriterBinding(
                 writer_id=(
@@ -1629,6 +2202,80 @@ def build_real_oracle_shadow_graph(
             "launch_engine_id": ENGINE_ID,
             "first_real_corpus": True,
         },
+    )
+
+    lineage_scheduler_activation_attestation = (
+        OracleProductionLineageSchedulerActivationAttestor()
+        .attest(
+            lineage_cycle_callable=(
+                lineage_cycle_callable
+            ),
+            cycle_runner_binding=(
+                cycle_runner_binding
+            ),
+            scheduler=scheduler,
+            service_scheduler_binding=(
+                service_scheduler_binding
+            ),
+            runner=runner,
+        )
+    )
+
+    production_startup_readiness_attestation = (
+        OracleProductionLiveShadowStartupReadinessAttestor()
+        .attest(
+            lineage_graph_attestation=(
+                lineage_graph_attestation
+            ),
+            lineage_scheduler_activation_attestation=(
+                lineage_scheduler_activation_attestation
+            ),
+            service_bootstrap=service_bootstrap,
+            runner=runner,
+        )
+    )
+
+    production_start_authorization = (
+        OracleProductionLiveShadowStartAuthorizer()
+        .authorize(
+            startup_readiness_attestation=(
+                production_startup_readiness_attestation
+            ),
+            service_bootstrap=service_bootstrap,
+            runner=runner,
+        )
+    )
+
+    production_start_authorization_consumer = (
+        OracleProductionLiveShadowStartAuthorizationConsumer()
+    )
+
+    production_launch_binder = (
+        OracleProductionLiveShadowLaunchBinder()
+    )
+
+    production_controlled_launch_invoker = (
+        OracleProductionLiveShadowControlledLaunchInvoker()
+    )
+
+    production_exact_runner_launch_callable_binder = (
+        OracleExactRunnerLaunchCallableBinder()
+    )
+
+    production_controlled_launch_package_assembler = (
+        OracleProductionLiveShadowControlledLaunchPackageAssembler()
+    )
+
+    production_controlled_launch_package_consumer = (
+        OracleProductionLiveShadowControlledLaunchPackageConsumer()
+    )
+
+    production_controlled_launch_permit_executor = (
+        OracleProductionLiveShadowControlledLaunchPermitExecutor()
+    )
+
+    production_live_shadow_persistent_service_activator = (
+        OracleProductionLiveShadowPersistentServiceActivator()
     )
 
     def readiness_kwargs_factory(
@@ -1771,7 +2418,65 @@ def build_real_oracle_shadow_graph(
         "persistence_router": (
             persistence_router
         ),
+        "lineage_persistence_router": (
+            lineage_persistence_router
+        ),
+        "lineage_production_wiring": (
+            lineage_production_wiring
+        ),
+        "lineage_completion_bridge": (
+            lineage_completion_bridge
+        ),
+        "lineage_scheduler_adapter": (
+            lineage_scheduler_adapter
+        ),
+        "lineage_cycle_callable": (
+            lineage_cycle_callable
+        ),
+        "lineage_graph_attestation": (
+            lineage_graph_attestation
+        ),
+        "cycle_runner_binding": (
+            cycle_runner_binding
+        ),
+        "service_scheduler_binding": (
+            service_scheduler_binding
+        ),
+        "lineage_scheduler_activation_attestation": (
+            lineage_scheduler_activation_attestation
+        ),
+        "production_startup_readiness_attestation": (
+            production_startup_readiness_attestation
+        ),
+        "production_start_authorization": (
+            production_start_authorization
+        ),
+        "production_start_authorization_consumer": (
+            production_start_authorization_consumer
+        ),
+        "production_launch_binder": (
+            production_launch_binder
+        ),
+        "production_controlled_launch_invoker": (
+            production_controlled_launch_invoker
+        ),
+        "production_exact_runner_launch_callable_binder": (
+            production_exact_runner_launch_callable_binder
+        ),
+        "production_controlled_launch_package_assembler": (
+            production_controlled_launch_package_assembler
+        ),
+        "production_controlled_launch_package_consumer": (
+            production_controlled_launch_package_consumer
+        ),
+        "production_controlled_launch_permit_executor": (
+            production_controlled_launch_permit_executor
+        ),
+        "production_live_shadow_persistent_service_activator": (
+            production_live_shadow_persistent_service_activator
+        ),
         "shadow_adapter": shadow_adapter,
+        "stable_market_cohort": stable_market_cohort,
         "acquisition_runtime": (
             acquisition_runtime
         ),
@@ -2188,6 +2893,7 @@ def run_first_real_shadow_corpus(
         "readiness_kwargs_factory",
         "scheduler_kwargs_factory",
         "current_live_probe_callable",
+        "stable_market_cohort",
     }
 
     missing_graph_keys = sorted(
@@ -2202,6 +2908,11 @@ def run_first_real_shadow_corpus(
                 missing_graph_keys
             )
         )
+
+    stable_market_cohort = _normalize_stable_market_cohort(
+        graph["stable_market_cohort"],
+        field_name="production_graph.stable_market_cohort",
+    )
 
     graph_root = Path(
         graph["runtime_root"]

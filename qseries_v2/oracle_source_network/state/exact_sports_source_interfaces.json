@@ -1,0 +1,181 @@
+{
+  "execution_authority": false,
+  "leagues": {
+    "EPL": [
+      {
+        "functions": [
+          {
+            "async_function": false,
+            "constructs_canonical_event": false,
+            "name": "acquire_epl_fixtures",
+            "network_markers": [],
+            "optional_args": [
+              "timeout"
+            ],
+            "required_args": []
+          },
+          {
+            "async_function": false,
+            "constructs_canonical_event": false,
+            "name": "acquire_ucl_fixtures",
+            "network_markers": [],
+            "optional_args": [
+              "timeout"
+            ],
+            "required_args": []
+          }
+        ],
+        "missing": false,
+        "path": "qseries_v2/oracle_source_network/acquisition/european_soccer_official_live.py"
+      }
+    ],
+    "MLS": [
+      {
+        "functions": [
+          {
+            "async_function": false,
+            "constructs_canonical_event": false,
+            "name": "acquire_mls_schedule",
+            "network_markers": [],
+            "optional_args": [
+              "timeout"
+            ],
+            "required_args": []
+          }
+        ],
+        "missing": false,
+        "path": "qseries_v2/oracle_source_network/acquisition/mls_official_live.py"
+      }
+    ],
+    "NBA": [
+      {
+        "functions": [
+          {
+            "async_function": false,
+            "constructs_canonical_event": false,
+            "name": "acquire_nba_games",
+            "network_markers": [],
+            "optional_args": [
+              "timeout"
+            ],
+            "required_args": []
+          }
+        ],
+        "missing": false,
+        "path": "qseries_v2/oracle_source_network/acquisition/nba_official_live.py"
+      },
+      {
+        "functions": [
+          {
+            "async_function": false,
+            "constructs_canonical_event": false,
+            "name": "extract_basketball_events",
+            "network_markers": [],
+            "optional_args": [
+              "season",
+              "observed_at",
+              "authority"
+            ],
+            "required_args": [
+              "body",
+              "league",
+              "provider"
+            ]
+          }
+        ],
+        "missing": false,
+        "path": "qseries_v2/oracle_source_network/mapping/basketball_event_extractor.py"
+      }
+    ],
+    "NCAAF": [
+      {
+        "functions": [
+          {
+            "async_function": false,
+            "constructs_canonical_event": false,
+            "name": "acquire_ncaa_fbs_scoreboard",
+            "network_markers": [],
+            "optional_args": [
+              "timeout"
+            ],
+            "required_args": []
+          }
+        ],
+        "missing": false,
+        "path": "qseries_v2/oracle_source_network/acquisition/ncaa_football_official_live.py"
+      },
+      {
+        "functions": [
+          {
+            "async_function": false,
+            "constructs_canonical_event": true,
+            "name": "extract_ncaaf_live_events",
+            "network_markers": [],
+            "optional_args": [
+              "observed_at"
+            ],
+            "required_args": [
+              "body"
+            ]
+          }
+        ],
+        "missing": false,
+        "path": "qseries_v2/oracle_source_network/mapping/ncaaf_exact_scoreboard_extractor.py"
+      }
+    ],
+    "NFL": [
+      {
+        "functions": [
+          {
+            "async_function": false,
+            "constructs_canonical_event": false,
+            "name": "acquire_nfl_scores",
+            "network_markers": [],
+            "optional_args": [
+              "timeout"
+            ],
+            "required_args": []
+          }
+        ],
+        "missing": false,
+        "path": "qseries_v2/oracle_source_network/acquisition/nfl_official_live.py"
+      },
+      {
+        "functions": [
+          {
+            "async_function": false,
+            "constructs_canonical_event": false,
+            "name": "extract_nfl_live_events",
+            "network_markers": [],
+            "optional_args": [
+              "observed_at"
+            ],
+            "required_args": [
+              "body"
+            ]
+          }
+        ],
+        "missing": false,
+        "path": "qseries_v2/oracle_source_network/mapping/nfl_live_escaped_state_extractor.py"
+      }
+    ],
+    "NHL": [
+      {
+        "functions": [
+          {
+            "async_function": false,
+            "constructs_canonical_event": false,
+            "name": "acquire_nhl_schedule",
+            "network_markers": [],
+            "optional_args": [
+              "timeout"
+            ],
+            "required_args": []
+          }
+        ],
+        "missing": false,
+        "path": "qseries_v2/oracle_source_network/acquisition/nhl_official_live.py"
+      }
+    ]
+  }
+}

@@ -1,0 +1,444 @@
+{
+  "rows": [
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S2026935AAE3830C-F544BCDD3FA",
+      "market_ticker": "KXMLBHIT-26SEP062210WSHLAD-LADFFREEMAN5-2",
+      "event_ticker": "KXMLBHIT-26SEP062210WSHLAD",
+      "side": "no",
+      "league": null,
+      "proposition_type": "sports_other",
+      "title": "Freddie Freeman: 2+ hits?",
+      "subtitle": "",
+      "yes_sub_title": "Freddie Freeman: 2+",
+      "no_sub_title": "Freddie Freeman: 2+",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED",
+        "PROPOSITION_TYPE_NOT_EXACT"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S2026935AAE3830C-F544BCDD3FA",
+      "market_ticker": "KXMLBHIT-26SEP062210WSHLAD-LADWSMITH16-2",
+      "event_ticker": "KXMLBHIT-26SEP062210WSHLAD",
+      "side": "no",
+      "league": null,
+      "proposition_type": "sports_other",
+      "title": "Will Smith: 2+ hits?",
+      "subtitle": "",
+      "yes_sub_title": "Will Smith: 2+",
+      "no_sub_title": "Will Smith: 2+",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED",
+        "PROPOSITION_TYPE_NOT_EXACT"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S2026935AAE3830C-F544BCDD3FA",
+      "market_ticker": "KXMLBHIT-26SEP062210WSHLAD-WSHCABRAMS5-3",
+      "event_ticker": "KXMLBHIT-26SEP062210WSHLAD",
+      "side": "no",
+      "league": null,
+      "proposition_type": "sports_other",
+      "title": "CJ Abrams: 3+ hits?",
+      "subtitle": "",
+      "yes_sub_title": "CJ Abrams: 3+",
+      "no_sub_title": "CJ Abrams: 3+",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED",
+        "PROPOSITION_TYPE_NOT_EXACT"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S202650E09D3597A-D3F56E7C918",
+      "market_ticker": "KXATPMATCH-26SEP06CERBLO-BLO",
+      "event_ticker": "KXATPMATCH-26SEP06CERBLO",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "tournament_advancement",
+      "title": "Alexander Blockx wins",
+      "subtitle": "",
+      "yes_sub_title": "Alexander Blockx",
+      "no_sub_title": "Alexander Blockx",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S202650E09D3597A-D3F56E7C918",
+      "market_ticker": "KXATPMATCH-26SEP07GEAVAN-VAN",
+      "event_ticker": "KXATPMATCH-26SEP07GEAVAN",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "tournament_advancement",
+      "title": "Botic Van de Zandschulp wins",
+      "subtitle": "",
+      "yes_sub_title": "Botic Van de Zandschulp",
+      "no_sub_title": "Botic Van de Zandschulp",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S202650E09D3597A-D3F56E7C918",
+      "market_ticker": "KXITFWMATCH-26SEP06SHIKOK-KOK",
+      "event_ticker": "KXITFWMATCH-26SEP06SHIKOK",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "tournament_advancement",
+      "title": "Tahlia Kokkinis wins",
+      "subtitle": "",
+      "yes_sub_title": "Tahlia Kokkinis",
+      "no_sub_title": "Tahlia Kokkinis",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXITFMATCH-26SEP06BEAVIS-VIS",
+      "event_ticker": "KXITFMATCH-26SEP06BEAVIS",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "tournament_advancement",
+      "title": "Azuma Visaya wins",
+      "subtitle": "",
+      "yes_sub_title": "Azuma Visaya",
+      "no_sub_title": "Azuma Visaya",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXITFMATCH-26SEP06KHAHIL-KHA",
+      "event_ticker": "KXITFMATCH-26SEP06KHAHIL",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "tournament_advancement",
+      "title": "Teerapat Khantiweerawat wins",
+      "subtitle": "",
+      "yes_sub_title": "Teerapat Khantiweerawat",
+      "no_sub_title": "Teerapat Khantiweerawat",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXITFMATCH-26SEP06SHEABD-SHE",
+      "event_ticker": "KXITFMATCH-26SEP06SHEABD",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "tournament_advancement",
+      "title": "Matthew Shearer wins",
+      "subtitle": "",
+      "yes_sub_title": "Matthew Shearer",
+      "no_sub_title": "Matthew Shearer",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXITFMATCH-26SEP06STOISH-STO",
+      "event_ticker": "KXITFMATCH-26SEP06STOISH",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "tournament_advancement",
+      "title": "Stefan Storch wins",
+      "subtitle": "",
+      "yes_sub_title": "Stefan Storch",
+      "no_sub_title": "Stefan Storch",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXITFMATCH-26SEP06TAKIDO-IDO",
+      "event_ticker": "KXITFMATCH-26SEP06TAKIDO",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "tournament_advancement",
+      "title": "Kazushi Idogaki wins",
+      "subtitle": "",
+      "yes_sub_title": "Kazushi Idogaki",
+      "no_sub_title": "Kazushi Idogaki",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXITFMATCH-26SEP06TANTAK-TAN",
+      "event_ticker": "KXITFMATCH-26SEP06TANTAK",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "tournament_advancement",
+      "title": "Ryota Tanuma wins",
+      "subtitle": "",
+      "yes_sub_title": "Ryota Tanuma",
+      "no_sub_title": "Ryota Tanuma",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXITFMATCH-26SEP07CHABAN-CHA",
+      "event_ticker": "KXITFMATCH-26SEP07CHABAN",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "tournament_advancement",
+      "title": "Penn Charusorn wins",
+      "subtitle": "",
+      "yes_sub_title": "Penn Charusorn",
+      "no_sub_title": "Penn Charusorn",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXITFMATCH-26SEP07OLIGRO-OLI",
+      "event_ticker": "KXITFMATCH-26SEP07OLIGRO",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "tournament_advancement",
+      "title": "Eric Jr Olivarez wins",
+      "subtitle": "",
+      "yes_sub_title": "Eric Jr Olivarez",
+      "no_sub_title": "Eric Jr Olivarez",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXNCAAFGAME-26SEP07SMUFSU-SMU",
+      "event_ticker": "KXNCAAFGAME-26SEP07SMUFSU",
+      "side": "yes",
+      "league": "NCAAF",
+      "proposition_type": "sports_other",
+      "title": "SMU wins",
+      "subtitle": "",
+      "yes_sub_title": "SMU",
+      "no_sub_title": "SMU",
+      "status": "HELD",
+      "reasons": [
+        "PROPOSITION_TYPE_NOT_EXACT"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXWFIBAGAME-26SEP070530TURPUR-TUR",
+      "event_ticker": "KXWFIBAGAME-26SEP070530TURPUR",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "sports_other",
+      "title": "Turkiye wins",
+      "subtitle": "",
+      "yes_sub_title": "Turkiye",
+      "no_sub_title": "Turkiye",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED",
+        "PROPOSITION_TYPE_NOT_EXACT"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXWFIBAGAME-26SEP070830FRANGR-FRA",
+      "event_ticker": "KXWFIBAGAME-26SEP070830FRANGR",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "sports_other",
+      "title": "France wins",
+      "subtitle": "",
+      "yes_sub_title": "France",
+      "no_sub_title": "France",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED",
+        "PROPOSITION_TYPE_NOT_EXACT"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXWFIBAGAME-26SEP070830KORHUN-HUN",
+      "event_ticker": "KXWFIBAGAME-26SEP070830KORHUN",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "sports_other",
+      "title": "Hungary wins",
+      "subtitle": "",
+      "yes_sub_title": "Hungary",
+      "no_sub_title": "Hungary",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED",
+        "PROPOSITION_TYPE_NOT_EXACT"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXWFIBAGAME-26SEP071150ESPJPN-ESP",
+      "event_ticker": "KXWFIBAGAME-26SEP071150ESPJPN",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "sports_other",
+      "title": "Spain wins",
+      "subtitle": "",
+      "yes_sub_title": "Spain",
+      "no_sub_title": "Spain",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED",
+        "PROPOSITION_TYPE_NOT_EXACT"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXWFIBAGAME-26SEP071150MLIGER-GER",
+      "event_ticker": "KXWFIBAGAME-26SEP071150MLIGER",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "sports_other",
+      "title": "Germany wins",
+      "subtitle": "",
+      "yes_sub_title": "Germany",
+      "no_sub_title": "Germany",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED",
+        "PROPOSITION_TYPE_NOT_EXACT"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266AB886C1C09-91B20ABCEF8",
+      "market_ticker": "KXWFIBAGAME-26SEP071445CZEUSA-USA",
+      "event_ticker": "KXWFIBAGAME-26SEP071445CZEUSA",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "sports_other",
+      "title": "USA wins",
+      "subtitle": "",
+      "yes_sub_title": "USA",
+      "no_sub_title": "USA",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED",
+        "PROPOSITION_TYPE_NOT_EXACT"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266D566AEA523-B472702A227",
+      "market_ticker": "KXATPDOUBLES-26SEP06FERPARGRAZEB-GRAZEB",
+      "event_ticker": "KXATPDOUBLES-26SEP06FERPARGRAZEB",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "sports_other",
+      "title": "Marcel Granollers / Horacio Zeballos wins",
+      "subtitle": "",
+      "yes_sub_title": "Marcel Granollers / Horacio Zeballos",
+      "no_sub_title": "Marcel Granollers / Horacio Zeballos",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED",
+        "PROPOSITION_TYPE_NOT_EXACT"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266D566AEA523-B472702A227",
+      "market_ticker": "KXATPDOUBLES-26SEP06KIGKOVAREPAV-AREPAV",
+      "event_ticker": "KXATPDOUBLES-26SEP06KIGKOVAREPAV",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "sports_other",
+      "title": "Marcelo Arevalo / Mate Pavic wins",
+      "subtitle": "",
+      "yes_sub_title": "Marcelo Arevalo / Mate Pavic",
+      "no_sub_title": "Marcelo Arevalo / Mate Pavic",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED",
+        "PROPOSITION_TYPE_NOT_EXACT"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266D566AEA523-B472702A227",
+      "market_ticker": "KXLOLGAME-26SEP070500BLGAL-BLG",
+      "event_ticker": "KXLOLGAME-26SEP070500BLGAL",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "sports_other",
+      "title": "Bilibili Gaming wins",
+      "subtitle": "",
+      "yes_sub_title": "Bilibili Gaming",
+      "no_sub_title": "Bilibili Gaming",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED",
+        "PROPOSITION_TYPE_NOT_EXACT"
+      ],
+      "execution_authority": false
+    },
+    {
+      "parent_ticker": "KXMVECROSSCATEGORY-SHARD1-S20266D566AEA523-B472702A227",
+      "market_ticker": "KXWTADOUBLES-26SEP07HOZKLEDABSTE-DABSTE",
+      "event_ticker": "KXWTADOUBLES-26SEP07HOZKLEDABSTE",
+      "side": "yes",
+      "league": null,
+      "proposition_type": "tournament_advancement",
+      "title": "Gabriela Dabrowski / Luisa Stefani wins",
+      "subtitle": "",
+      "yes_sub_title": "Gabriela Dabrowski / Luisa Stefani",
+      "no_sub_title": "Gabriela Dabrowski / Luisa Stefani",
+      "status": "HELD",
+      "reasons": [
+        "SUPPORTED_LEAGUE_NOT_RESOLVED"
+      ],
+      "execution_authority": false
+    }
+  ],
+  "supported": 1,
+  "ready": 0,
+  "execution_authority": false
+}

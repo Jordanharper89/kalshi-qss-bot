@@ -1,0 +1,20 @@
+{
+  "children": {
+    "canonical_writer": "run_opr_003_persistent_single_writer_runtime.py",
+    "continuity": "run_oir_001_continuity_checkpoint_daemon.py",
+    "coverage": "run_opr_004_coverage_persistent_ingress.py",
+    "crypto_learning": "run_oad_207_crypto_continuous_learning_production_child.py",
+    "fast_lane": "run_opr_004_fast_lane_persistent_ingress.py",
+    "gmgn_intelligence": "run_oad_290_gmgn_clean_continuous_intelligence_child.py",
+    "inventory": "run_opr_004_inventory_persistent_ingress.py",
+    "learning": "run_opr_004_learning_persistent_ingress.py",
+    "reasoning": "run_olf_030_breadth_aware_reasoning_runtime.py",
+    "recovery": "run_oracle_background_recovery.py",
+    "sports": "run_osn_sports_continuous_runtime.py"
+  },
+  "has_run_forever": true,
+  "has_start_function": true,
+  "launcher_lines": 323,
+  "launcher_sha256": "48f80399b8706ca54ce4062544ba69dda09675e01e477392254dd4cab1da4694",
+  "schema_version": "KSEM-076"
+}

@@ -1,0 +1,2577 @@
+{
+  "execution_authority": false,
+  "learning_source_references": [
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 7,
+      "text": "OLR_036_REVISION=\"OLR_036_OUTCOME_EVIDENCE_LINKAGE_FOUNDATION_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 10,
+      "text": "class OutcomeEvidenceKey:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 11,
+      "text": "market_id:str"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 12,
+      "text": "ticker:str"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 13,
+      "text": "observation_id:str|None"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 14,
+      "text": "settled_at:str|None"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 19,
+      "text": "def build_outcome_evidence_key(record):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 21,
+      "text": "market_id=normalize_text(getter(\"market_id\",\"\") or getter(\"market_ticker\",\"\") or getter(\"ticker\",\"\"))"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 22,
+      "text": "ticker=normalize_text(getter(\"ticker\",\"\") or getter(\"market_ticker\",\"\") or market_id)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 23,
+      "text": "observation_id=normalize_text(getter(\"observation_id\",\"\")) or None"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 24,
+      "text": "settled_at=normalize_text(getter(\"settled_at\",\"\") or getter(\"resolved_at\",\"\")) or None"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 25,
+      "text": "return OutcomeEvidenceKey(market_id,ticker,observation_id,settled_at)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 31,
+      "text": "def verify_olr_036_outcome_evidence_linkage_foundation(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 32,
+      "text": "k=build_outcome_evidence_key({\"ticker\":\"KXTEST\",\"observation_id\":\"abc\"})"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_036_outcome_evidence_linkage_foundation.py",
+      "line": 33,
+      "text": "return OLR_036_BUILD_ID==\"OLR-036\" and k.market_id==\"KXTEST\" and len(deterministic_linkage_id(k))==64"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 3,
+      "text": "from .olr_036_outcome_evidence_linkage_foundation import build_outcome_evidence_key,normalize_text"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 5,
+      "text": "OLR_037_REVISION=\"OLR_037_MARKET_EVIDENCE_CANDIDATE_MATCHING_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 8,
+      "text": "class EvidenceMatch:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 18,
+      "text": "def score_candidate(outcome,candidate):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 19,
+      "text": "key=build_outcome_evidence_key(outcome)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 21,
+      "text": "obs=normalize_text(_get(candidate,\"observation_id\",\"\"))"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 22,
+      "text": "ticker=normalize_text(_get(candidate,\"ticker\",\"\") or _get(candidate,\"market_ticker\",\"\"))"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 23,
+      "text": "market=normalize_text(_get(candidate,\"market_id\",\"\") or ticker)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 24,
+      "text": "if key.observation_id and obs==key.observation_id:score+=100"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 25,
+      "text": "if key.ticker and ticker==key.ticker:score+=50"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 26,
+      "text": "if key.market_id and market==key.market_id:score+=50"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 29,
+      "text": "def match_outcome_to_evidence(outcome,candidates):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 30,
+      "text": "ranked=sorted(((score_candidate(outcome,c),c) for c in candidates),key=lambda x:x[0],reverse=True)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 31,
+      "text": "if not ranked or ranked[0][0]<=0:return EvidenceMatch(False,\"NONE\",0,None)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 33,
+      "text": "method=\"OBSERVATION_ID\" if score>=100 and build_outcome_evidence_key(outcome).observation_id else \"MARKET_ID\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 34,
+      "text": "return EvidenceMatch(True,method,score,candidate)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 36,
+      "text": "def verify_olr_037_market_evidence_candidate_matching(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_037_market_evidence_candidate_matching.py",
+      "line": 37,
+      "text": "m=match_outcome_to_evidence({\"ticker\":\"X\"},[{\"ticker\":\"X\"}])"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 3,
+      "text": "from .olr_036_outcome_evidence_linkage_foundation import deterministic_linkage_id,build_outcome_evidence_key"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 5,
+      "text": "OLR_038_REVISION=\"OLR_038_POSTGRESQL_OUTCOME_EVIDENCE_LINKAGE_LEDGER_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 6,
+      "text": "TABLE=\"oracle_outcome_evidence_linkage\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 9,
+      "text": "from qseries_v2.oracle_production_hardening.oph_019_postgresql_universal_ingestion_queue import connect"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 15,
+      "text": "market_id TEXT NOT NULL,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 16,
+      "text": "ticker TEXT NOT NULL,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 17,
+      "text": "observation_id TEXT,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 23,
+      "text": "CREATE INDEX IF NOT EXISTS oracle_outcome_evidence_linkage_market_idx"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 24,
+      "text": "ON public.{TABLE}(market_id,recorded_at);\"\"\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 29,
+      "text": "def record_linkage(outcome,match,root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 30,
+      "text": "ensure_linkage_schema(root);key=build_outcome_evidence_key(outcome);lid=deterministic_linkage_id(key)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 33,
+      "text": "obs=match.candidate.get(\"observation_id\") if hasattr(match.candidate,\"get\") else getattr(match.candidate,\"observation_id\",None)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 37,
+      "text": "(linkage_id,market_id,ticker,observation_id,matched,match_method,match_score)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 40,
+      "text": "observation_id=EXCLUDED.observation_id,matched=EXCLUDED.matched,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 42,
+      "text": "(lid,key.market_id,key.ticker,obs,bool(match.matched),str(match.method),int(match.score)))"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 46,
+      "text": "def verify_olr_038_postgresql_outcome_evidence_linkage_ledger(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 47,
+      "text": "from .olr_037_market_evidence_candidate_matching import verify_olr_037_market_evidence_candidate_matching"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_038_postgresql_outcome_evidence_linkage_ledger.py",
+      "line": 48,
+      "text": "return verify_olr_037_market_evidence_candidate_matching(root) and TABLE==\"oracle_outcome_evidence_linkage\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 4,
+      "text": "from .olr_037_market_evidence_candidate_matching import match_outcome_to_evidence"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 5,
+      "text": "from .olr_038_postgresql_outcome_evidence_linkage_ledger import record_linkage"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 7,
+      "text": "OLR_039_REVISION=\"OLR_039_EVIDENCE_COVERAGE_RECOVERY_ENGINE_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 11,
+      "text": "settled:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 14,
+      "text": "evidence_coverage:float"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 16,
+      "text": "def recover_evidence_links(outcomes,evidence_provider,root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 17,
+      "text": "settled=matched=missing=0"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 19,
+      "text": "for outcome in outcomes:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 20,
+      "text": "settled+=1"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 21,
+      "text": "candidates=tuple(evidence_provider(outcome) or ())"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 22,
+      "text": "match=match_outcome_to_evidence(outcome,candidates)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 23,
+      "text": "record_linkage(outcome,match,root)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 27,
+      "text": "coverage=0.0 if settled==0 else matched/settled"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 28,
+      "text": "return tuple(results),RecoveryMetrics(settled,matched,missing,coverage)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 30,
+      "text": "def verify_olr_039_evidence_coverage_recovery_engine(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 31,
+      "text": "from .olr_038_postgresql_outcome_evidence_linkage_ledger import verify_olr_038_postgresql_outcome_evidence_linkage_ledger"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_039_evidence_coverage_recovery_engine.py",
+      "line": 32,
+      "text": "return verify_olr_038_postgresql_outcome_evidence_linkage_ledger(root) and OLR_039_BUILD_ID==\"OLR-039\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 6,
+      "text": "OLR_040_REVISION=\"OLR_040_OUTCOME_EVIDENCE_LINKAGE_FREEZE_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 9,
+      "text": "from .olr_036_outcome_evidence_linkage_foundation import verify_olr_036_outcome_evidence_linkage_foundation"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 10,
+      "text": "from .olr_037_market_evidence_candidate_matching import verify_olr_037_market_evidence_candidate_matching"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 11,
+      "text": "from .olr_038_postgresql_outcome_evidence_linkage_ledger import verify_olr_038_postgresql_outcome_evidence_linkage_ledger"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 12,
+      "text": "from .olr_039_evidence_coverage_recovery_engine import verify_olr_039_evidence_coverage_recovery_engine"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 15,
+      "text": "\"olr_036\":verify_olr_036_outcome_evidence_linkage_foundation(root),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 16,
+      "text": "\"olr_037\":verify_olr_037_market_evidence_candidate_matching(root),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 17,
+      "text": "\"olr_038\":verify_olr_038_postgresql_outcome_evidence_linkage_ledger(root),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 18,
+      "text": "\"olr_039\":verify_olr_039_evidence_coverage_recovery_engine(root),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 22,
+      "text": "\"frozen_capability\":{\"deterministic_outcome_keys\":True,\"candidate_matching\":True,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 23,
+      "text": "\"postgresql_linkage_ledger\":True,\"evidence_coverage_recovery\":True,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 30,
+      "text": "def verify_olr_040_outcome_evidence_linkage_freeze(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 31,
+      "text": "from .olr_039_evidence_coverage_recovery_engine import verify_olr_039_evidence_coverage_recovery_engine"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_040_outcome_evidence_linkage_freeze.py",
+      "line": 32,
+      "text": "return verify_olr_039_evidence_coverage_recovery_engine(root) and OLR_040_BUILD_ID==\"OLR-040\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 5,
+      "text": "OLR_041_REVISION=\"OLR_041_POSTGRESQL_LIVE_EVIDENCE_LOOKUP_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 8,
+      "text": "from qseries_v2.oracle_production_hardening.oph_019_postgresql_universal_ingestion_queue import connect"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 11,
+      "text": "def lookup_market_evidence(outcome,root=None,limit=200):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 13,
+      "text": "ticker=\"\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 14,
+      "text": "market_id=\"\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 15,
+      "text": "if hasattr(outcome,\"get\"):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 16,
+      "text": "ticker=str(outcome.get(\"ticker\") or outcome.get(\"market_ticker\") or \"\").strip()"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 17,
+      "text": "market_id=str(outcome.get(\"market_id\") or ticker).strip()"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 19,
+      "text": "ticker=str(getattr(outcome,\"ticker\",\"\") or getattr(outcome,\"market_ticker\",\"\")).strip()"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 20,
+      "text": "market_id=str(getattr(outcome,\"market_id\",\"\") or ticker).strip()"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 22,
+      "text": "if not ticker and not market_id:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 26,
+      "text": "\"\"\"SELECT observation_id,ticker,market_id,sequence_number,observed_at"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 28,
+      "text": "WHERE ticker=%s OR market_id=%s"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 29,
+      "text": "ORDER BY sequence_number DESC"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 31,
+      "text": "\"\"\"SELECT observation_id,market_ticker AS ticker,market_ticker AS market_id,sequence_number,observed_at"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 33,
+      "text": "WHERE market_ticker=%s"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 34,
+      "text": "ORDER BY sequence_number DESC"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 44,
+      "text": "cur.execute(sql,(ticker,market_id,int(limit)))"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 46,
+      "text": "cur.execute(sql,(ticker,int(limit)))"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 49,
+      "text": "\"observation_id\":r[0],"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 50,
+      "text": "\"ticker\":r[1],"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 51,
+      "text": "\"market_id\":r[2],"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 52,
+      "text": "\"sequence_number\":r[3],"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 62,
+      "text": "def verify_olr_041_postgresql_live_evidence_lookup(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 63,
+      "text": "from .olr_040_outcome_evidence_linkage_freeze import verify_olr_040_outcome_evidence_linkage_freeze"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_041_postgresql_live_evidence_lookup.py",
+      "line": 64,
+      "text": "return verify_olr_040_outcome_evidence_linkage_freeze(root) and OLR_041_BUILD_ID==\"OLR-041\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 3,
+      "text": "from .olr_037_market_evidence_candidate_matching import match_outcome_to_evidence"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 4,
+      "text": "from .olr_041_postgresql_live_evidence_lookup import lookup_market_evidence"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 7,
+      "text": "OLR_042_REVISION=\"OLR_042_LIVE_EVIDENCE_ADMISSION_GATE_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 10,
+      "text": "class EvidenceAdmission:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 11,
+      "text": "admitted:bool"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 17,
+      "text": "def admit_outcome_evidence(outcome,root=None,min_score=50):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 18,
+      "text": "candidates=lookup_market_evidence(outcome,root)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 19,
+      "text": "match=match_outcome_to_evidence(outcome,candidates)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 21,
+      "text": "return EvidenceAdmission(False,\"EVIDENCE_MISSING\",0,\"NONE\",None)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 23,
+      "text": "return EvidenceAdmission(False,\"EVIDENCE_SCORE_BELOW_THRESHOLD\",match.score,match.method,match.candidate)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 24,
+      "text": "return EvidenceAdmission(True,\"ADMITTED\",match.score,match.method,match.candidate)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 26,
+      "text": "def verify_olr_042_live_evidence_admission_gate(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 27,
+      "text": "from .olr_041_postgresql_live_evidence_lookup import verify_olr_041_postgresql_live_evidence_lookup"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_042_live_evidence_admission_gate.py",
+      "line": 28,
+      "text": "return verify_olr_041_postgresql_live_evidence_lookup(root) and OLR_042_BUILD_ID==\"OLR-042\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 3,
+      "text": "from .olr_038_postgresql_outcome_evidence_linkage_ledger import record_linkage"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 4,
+      "text": "from .olr_042_live_evidence_admission_gate import admit_outcome_evidence"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 7,
+      "text": "OLR_043_REVISION=\"OLR_043_LIVE_LEARNING_EVIDENCE_ADAPTER_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 10,
+      "text": "class LearningEvidenceMetrics:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 11,
+      "text": "settled:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 12,
+      "text": "evidence_matched:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 13,
+      "text": "evidence_missing:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 14,
+      "text": "admitted:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 15,
+      "text": "evidence_coverage:float"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 17,
+      "text": "def adapt_learning_batch(outcomes,root=None,min_score=50):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 18,
+      "text": "admitted=[]"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 19,
+      "text": "settled=matched=missing=0"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 20,
+      "text": "for outcome in outcomes:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 21,
+      "text": "settled+=1"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 22,
+      "text": "gate=admit_outcome_evidence(outcome,root,min_score)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 26,
+      "text": "match.matched=gate.admitted"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 30,
+      "text": "record_linkage(outcome,match,root)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 31,
+      "text": "if gate.admitted:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 33,
+      "text": "admitted.append((outcome,gate.candidate,gate))"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 36,
+      "text": "coverage=0.0 if settled==0 else matched/settled"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 37,
+      "text": "return tuple(admitted),LearningEvidenceMetrics(settled,matched,missing,len(admitted),coverage)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 39,
+      "text": "def verify_olr_043_live_learning_evidence_adapter(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 40,
+      "text": "from .olr_042_live_evidence_admission_gate import verify_olr_042_live_evidence_admission_gate"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_043_live_learning_evidence_adapter.py",
+      "line": 41,
+      "text": "return verify_olr_042_live_evidence_admission_gate(root) and OLR_043_BUILD_ID==\"OLR-043\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_044_continuous_learner_evidence_runtime_cutover.py",
+      "line": 6,
+      "text": "OLR_044_REVISION=\"OLR_044_CONTINUOUS_LEARNER_EVIDENCE_RUNTIME_CUTOVER_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_044_continuous_learner_evidence_runtime_cutover.py",
+      "line": 7,
+      "text": "WRAPPER=\"run_olr_044_continuous_learning_with_evidence.py\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_044_continuous_learner_evidence_runtime_cutover.py",
+      "line": 11,
+      "text": "candidates=["
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_044_continuous_learner_evidence_runtime_cutover.py",
+      "line": 16,
+      "text": "for name in candidates:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_044_continuous_learner_evidence_runtime_cutover.py",
+      "line": 25,
+      "text": "\"from qseries_v2.oracle_learning.olr_043_live_learning_evidence_adapter import adapt_learning_batch\","
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_044_continuous_learner_evidence_runtime_cutover.py",
+      "line": 30,
+      "text": "\"    print(' OLR-044 CONTINUOUS LEARNER EVIDENCE RUNTIME',flush=True)\","
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_044_continuous_learner_evidence_runtime_cutover.py",
+      "line": 32,
+      "text": "\"    print('[OLR-044] live_evidence_linkage=ENABLED execution_authority=FALSE',flush=True)\","
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_044_continuous_learner_evidence_runtime_cutover.py",
+      "line": 37,
+      "text": "def verify_olr_044_continuous_learner_evidence_runtime_cutover(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_044_continuous_learner_evidence_runtime_cutover.py",
+      "line": 38,
+      "text": "from .olr_043_live_learning_evidence_adapter import verify_olr_043_live_learning_evidence_adapter"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_044_continuous_learner_evidence_runtime_cutover.py",
+      "line": 40,
+      "text": "return verify_olr_043_live_learning_evidence_adapter(root) and (root/WRAPPER).is_file()"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 6,
+      "text": "OLR_045_REVISION=\"OLR_045_LIVE_EVIDENCE_GROUNDED_LEARNING_FREEZE_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 9,
+      "text": "from .olr_041_postgresql_live_evidence_lookup import verify_olr_041_postgresql_live_evidence_lookup"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 10,
+      "text": "from .olr_042_live_evidence_admission_gate import verify_olr_042_live_evidence_admission_gate"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 11,
+      "text": "from .olr_043_live_learning_evidence_adapter import verify_olr_043_live_learning_evidence_adapter"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 12,
+      "text": "from .olr_044_continuous_learner_evidence_runtime_cutover import verify_olr_044_continuous_learner_evidence_runtime_cutover"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 15,
+      "text": "\"olr_041\":verify_olr_041_postgresql_live_evidence_lookup(root),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 16,
+      "text": "\"olr_042\":verify_olr_042_live_evidence_admission_gate(root),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 17,
+      "text": "\"olr_043\":verify_olr_043_live_learning_evidence_adapter(root),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 18,
+      "text": "\"olr_044\":verify_olr_044_continuous_learner_evidence_runtime_cutover(root),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 26,
+      "text": "\"live_postgresql_evidence_lookup\":True,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 27,
+      "text": "\"evidence_admission_gate\":True,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 29,
+      "text": "\"continuous_learning_evidence_wrapper\":True,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 30,
+      "text": "\"missing_evidence_abstains\":True,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 40,
+      "text": "def verify_olr_045_live_evidence_grounded_learning_freeze(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 41,
+      "text": "from .olr_044_continuous_learner_evidence_runtime_cutover import verify_olr_044_continuous_learner_evidence_runtime_cutover"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_045_live_evidence_grounded_learning_freeze.py",
+      "line": 42,
+      "text": "return verify_olr_044_continuous_learner_evidence_runtime_cutover(root) and OLR_045_BUILD_ID==\"OLR-045\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_046_oracle_live_evidence_learner_launcher_cutover.py",
+      "line": 6,
+      "text": "OLR_046_REVISION=\"OLR_046_ORACLE_LIVE_EVIDENCE_LEARNER_LAUNCHER_CUTOVER_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_046_oracle_live_evidence_learner_launcher_cutover.py",
+      "line": 7,
+      "text": "TARGET_LEARNING_RUNNER=\"run_olr_044_continuous_learning_with_evidence.py\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_046_oracle_live_evidence_learner_launcher_cutover.py",
+      "line": 41,
+      "text": "def verify_olr_046_oracle_live_evidence_learner_launcher_cutover(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_047_live_learning_metrics_contract.py",
+      "line": 9,
+      "text": "settled:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_047_live_learning_metrics_contract.py",
+      "line": 10,
+      "text": "evidence_matched:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_047_live_learning_metrics_contract.py",
+      "line": 11,
+      "text": "evidence_missing:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_047_live_learning_metrics_contract.py",
+      "line": 12,
+      "text": "admitted:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_047_live_learning_metrics_contract.py",
+      "line": 14,
+      "text": "evidence_coverage:float"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_047_live_learning_metrics_contract.py",
+      "line": 17,
+      "text": "def build_live_learning_metrics(settled,evidence_matched,evidence_missing,admitted,applied):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_047_live_learning_metrics_contract.py",
+      "line": 18,
+      "text": "settled=int(settled);evidence_matched=int(evidence_matched);evidence_missing=int(evidence_missing)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_047_live_learning_metrics_contract.py",
+      "line": 19,
+      "text": "admitted=int(admitted);applied=int(applied)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_047_live_learning_metrics_contract.py",
+      "line": 20,
+      "text": "coverage=0.0 if settled<=0 else evidence_matched/settled"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_047_live_learning_metrics_contract.py",
+      "line": 21,
+      "text": "yield_=0.0 if settled<=0 else applied/settled"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_047_live_learning_metrics_contract.py",
+      "line": 22,
+      "text": "return LiveLearningMetrics(settled,evidence_matched,evidence_missing,admitted,applied,coverage,yield_)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_047_live_learning_metrics_contract.py",
+      "line": 28,
+      "text": "and abs(m.evidence_coverage-.25)<1e-12"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_048_postgresql_live_learning_metrics_read_model.py",
+      "line": 3,
+      "text": "from .olr_038_postgresql_outcome_evidence_linkage_ledger import _db as _link_db,TABLE as LINK_TABLE"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_048_postgresql_live_learning_metrics_read_model.py",
+      "line": 7,
+      "text": "OLR_048_REVISION=\"OLR_048_POSTGRESQL_LIVE_LEARNING_METRICS_READ_MODEL_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_048_postgresql_live_learning_metrics_read_model.py",
+      "line": 9,
+      "text": "def read_linkage_metrics(root=None,settled_limit=100):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_048_postgresql_live_learning_metrics_read_model.py",
+      "line": 21,
+      "text": ") s\"\"\",(int(settled_limit),))"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_048_postgresql_live_learning_metrics_read_model.py",
+      "line": 22,
+      "text": "matched,missing,settled=cur.fetchone()"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_048_postgresql_live_learning_metrics_read_model.py",
+      "line": 23,
+      "text": "matched=int(matched or 0);missing=int(missing or 0);settled=int(settled or 0)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_048_postgresql_live_learning_metrics_read_model.py",
+      "line": 24,
+      "text": "return build_live_learning_metrics(settled,matched,missing,matched,0)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_048_postgresql_live_learning_metrics_read_model.py",
+      "line": 26,
+      "text": "def verify_olr_048_postgresql_live_learning_metrics_read_model(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 4,
+      "text": "from .olr_046_oracle_live_evidence_learner_launcher_cutover import verify_olr_046_oracle_live_evidence_learner_launcher_cutover"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 5,
+      "text": "from .olr_048_postgresql_live_learning_metrics_read_model import read_linkage_metrics"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 8,
+      "text": "OLR_049_REVISION=\"OLR_049_PRODUCTION_EVIDENCE_LEARNING_HEALTH_VERIFICATION_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 11,
+      "text": "class EvidenceLearningHealth:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 13,
+      "text": "settled:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 14,
+      "text": "evidence_matched:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 15,
+      "text": "evidence_missing:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 16,
+      "text": "evidence_coverage:float"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 20,
+      "text": "def production_evidence_learning_health(root=None,settled_limit=100):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 22,
+      "text": "active=verify_olr_046_oracle_live_evidence_learner_launcher_cutover(root)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 23,
+      "text": "metrics=read_linkage_metrics(root,settled_limit)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 24,
+      "text": "healthy=bool(active and metrics.settled>=0)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 25,
+      "text": "return EvidenceLearningHealth("
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 26,
+      "text": "active,metrics.settled,metrics.evidence_matched,metrics.evidence_missing,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 27,
+      "text": "metrics.evidence_coverage,metrics.learning_yield,healthy"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 30,
+      "text": "def verify_olr_049_production_evidence_learning_health_verification(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_049_production_evidence_learning_health_verification.py",
+      "line": 31,
+      "text": "h=production_evidence_learning_health(root,100)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_050_production_evidence_learning_activation_freeze.py",
+      "line": 4,
+      "text": "from .olr_049_production_evidence_learning_health_verification import production_evidence_learning_health"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_050_production_evidence_learning_activation_freeze.py",
+      "line": 7,
+      "text": "OLR_050_REVISION=\"OLR_050_PRODUCTION_EVIDENCE_LEARNING_ACTIVATION_FREEZE_V1\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_050_production_evidence_learning_activation_freeze.py",
+      "line": 11,
+      "text": "health=production_evidence_learning_health(root,100)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_050_production_evidence_learning_activation_freeze.py",
+      "line": 13,
+      "text": "raise RuntimeError(\"Production evidence-learning activation verification failed\")"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_050_production_evidence_learning_activation_freeze.py",
+      "line": 19,
+      "text": "\"oracle_live_learning_child_evidence_enabled\":True,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_050_production_evidence_learning_activation_freeze.py",
+      "line": 21,
+      "text": "\"postgresql_metrics_read_model\":True,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_050_production_evidence_learning_activation_freeze.py",
+      "line": 23,
+      "text": "\"missing_evidence_abstains\":True,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_050_production_evidence_learning_activation_freeze.py",
+      "line": 33,
+      "text": "def verify_olr_050_production_evidence_learning_activation_freeze(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_050_production_evidence_learning_activation_freeze.py",
+      "line": 34,
+      "text": "h=production_evidence_learning_health(root,100)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 7,
+      "text": "OLR_051_REVISION=\"OLR_051_PRODUCTION_OUTCOME_EVIDENCE_LINKAGE_DIAGNOSTIC_CORRECTION_V2\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 10,
+      "text": "\"oracle_outcome_evidence_linkage\","
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 24,
+      "text": "outcome_candidates:tuple[dict,...]"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 25,
+      "text": "evidence_candidates:tuple[dict,...]"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 26,
+      "text": "selected_outcome_table:str|None"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 27,
+      "text": "selected_evidence_table:str|None"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 28,
+      "text": "outcome_count:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 29,
+      "text": "sample_ticker:str|None"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 30,
+      "text": "sample_market_id:str|None"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 31,
+      "text": "sample_observation_id:str|None"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 32,
+      "text": "evidence_rows_for_ticker:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 33,
+      "text": "evidence_rows_for_market_id:int"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 34,
+      "text": "exact_observation_id_match:bool"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 39,
+      "text": "from qseries_v2.oracle_production_hardening.oph_019_postgresql_universal_ingestion_queue import connect"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 67,
+      "text": "identity={\"ticker\",\"market_ticker\",\"market_id\"}"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 72,
+      "text": "if kind==\"outcome\":"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 74,
+      "text": "(\"settled\",10),(\"outcome\",9),(\"resolution\",8),(\"resolved\",8),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 79,
+      "text": "(\"settled_at\",8),(\"resolved_at\",8),(\"result\",5),(\"outcome\",5),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 80,
+      "text": "(\"status\",3),(\"ticker\",2),(\"market_ticker\",2),(\"market_id\",2)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 85,
+      "text": "(\"canonical\",10),(\"observation\",9),(\"evidence\",8),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 90,
+      "text": "(\"observation_id\",10),(\"sequence_number\",5),(\"observed_at\",5),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 91,
+      "text": "(\"ticker\",2),(\"market_ticker\",2),(\"market_id\",2)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 97,
+      "text": "def _discover_candidates(cur,kind):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 117,
+      "text": "ticker_col=\"ticker\" if \"ticker\" in cols else (\"market_ticker\" if \"market_ticker\" in cols else None)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 118,
+      "text": "market_col=\"market_id\" if \"market_id\" in cols else ticker_col"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 119,
+      "text": "obs_col=\"observation_id\" if \"observation_id\" in cols else None"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 120,
+      "text": "return ticker_col,market_col,obs_col"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 124,
+      "text": "ticker_col,market_col,obs_col=_identity_columns(cols)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 127,
+      "text": "for c in (ticker_col,market_col,obs_col):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 136,
+      "text": "\"settled_at\",\"resolved_at\",\"updated_at\",\"created_at\",\"observed_at\","
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 137,
+      "text": "\"sequence_number\",\"id\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 145,
+      "text": "if ticker_col:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 146,
+      "text": "where_parts.append(f\"{ticker_col} IS NOT NULL\")"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 147,
+      "text": "if market_col and market_col!=ticker_col:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 158,
+      "text": "ticker=str(data.get(ticker_col) or \"\").strip() if ticker_col else \"\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 159,
+      "text": "market=str(data.get(market_col) or \"\").strip() if market_col else ticker"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 161,
+      "text": "if ticker or market:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 163,
+      "text": "\"ticker\":ticker or market,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 164,
+      "text": "\"market_id\":market or ticker,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 165,
+      "text": "\"observation_id\":obs or None,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 171,
+      "text": "ticker_col,market_col,obs_col=_identity_columns(cols)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 173,
+      "text": "ticker_count=0"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 177,
+      "text": "if ticker_col and sample[\"ticker\"]:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 179,
+      "text": "f\"SELECT COUNT(*) FROM public.{candidate.table} WHERE {ticker_col}=%s\","
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 180,
+      "text": "(sample[\"ticker\"],),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 182,
+      "text": "ticker_count=int(cur.fetchone()[0])"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 184,
+      "text": "if market_col and sample[\"market_id\"]:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 187,
+      "text": "(sample[\"market_id\"],),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 191,
+      "text": "if obs_col and sample.get(\"observation_id\"):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 194,
+      "text": "(sample[\"observation_id\"],),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 198,
+      "text": "return ticker_count,market_count,obs_match"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 205,
+      "text": "outcomes=_discover_candidates(cur,\"outcome\")"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 206,
+      "text": "evidence=_discover_candidates(cur,\"evidence\")"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 208,
+      "text": "outcome_dump=tuple({"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 213,
+      "text": "} for x in outcomes[:10])"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 215,
+      "text": "evidence_dump=tuple({"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 220,
+      "text": "} for x in evidence[:10])"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 222,
+      "text": "if not outcomes:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 224,
+      "text": "outcome_dump,evidence_dump,None,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 225,
+      "text": "evidence[0].table if evidence else None,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 227,
+      "text": "\"NO_NONEMPTY_OUTCOME_SOURCE_WITH_MARKET_IDENTITY\","
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 231,
+      "text": "if not evidence:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 233,
+      "text": "outcome_dump,evidence_dump,outcomes[0].table,None,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 234,
+      "text": "outcomes[0].row_count,None,None,None,0,0,False,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 235,
+      "text": "\"NO_NONEMPTY_EVIDENCE_SOURCE_WITH_MARKET_IDENTITY\","
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 239,
+      "text": "selected_outcome=outcomes[0]"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 240,
+      "text": "selected_evidence=evidence[0]"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 242,
+      "text": "sample=_select_sample(cur,selected_outcome)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 246,
+      "text": "outcome_dump,evidence_dump,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 247,
+      "text": "selected_outcome.table,selected_evidence.table,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 248,
+      "text": "selected_outcome.row_count,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 250,
+      "text": "\"SELECTED_OUTCOME_SOURCE_HAS_NO_USABLE_MARKET_IDENTITY\","
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 254,
+      "text": "ticker_count,market_count,obs_match=_count_matches("
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 255,
+      "text": "cur,selected_evidence,sample"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 259,
+      "text": "likely=\"OBSERVATION_ID_MATCH_EXISTS_LINKAGE_RUNTIME_NOT_CONSUMING_IT\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 260,
+      "text": "elif ticker_count>0 or market_count>0:"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 261,
+      "text": "likely=\"MARKET_IDENTITY_MATCH_EXISTS_COLUMN_MAPPING_OR_ADMISSION_BREAK\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 263,
+      "text": "likely=\"OUTCOME_IDENTITY_AND_EVIDENCE_IDENTITY_DO_NOT_ALIGN\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 266,
+      "text": "outcome_dump,evidence_dump,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 267,
+      "text": "selected_outcome.table,selected_evidence.table,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 268,
+      "text": "selected_outcome.row_count,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 269,
+      "text": "sample[\"ticker\"],sample[\"market_id\"],sample.get(\"observation_id\"),"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 270,
+      "text": "ticker_count,market_count,obs_match,likely,False,"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 284,
+      "text": "def verify_olr_051_production_outcome_evidence_linkage_diagnostic(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 285,
+      "text": "from .olr_050_production_evidence_learning_activation_freeze import verify_olr_050_production_evidence_learning_activation_freeze"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_linkage_diagnostic.py",
+      "line": 287,
+      "text": "verify_olr_050_production_evidence_learning_activation_freeze(root)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 7,
+      "text": "OLR_051_REVISION=\"OLR_051_PRODUCTION_OUTCOME_EVIDENCE_SCHEMA_DIAGNOSTIC_CORRECTION_V3\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 29,
+      "text": "from qseries_v2.oracle_production_hardening.oph_019_postgresql_universal_ingestion_queue import connect"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 76,
+      "text": "\"settled\",\"outcome\",\"evidence\",\"ledger\",\"postgres\",\"sequence_number\","
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 77,
+      "text": "\"observation_id\",\"market_ticker\",\"ticker\",\"market_id\",\"learned_total\","
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 78,
+      "text": "\"evidence_missing\",\"exact_evidence\",\"candidates\",\"admitted\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 109,
+      "text": "any(c in x.columns for c in (\"ticker\",\"market_ticker\",\"market_id\",\"observation_id\"))"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 112,
+      "text": "learner_mentions_sql=(\"select \" in ref_text or \"insert into \" in ref_text or \"postgres\" in ref_text)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 116,
+      "text": "return \"NO_NONEMPTY_PUBLIC_POSTGRESQL_TABLES_FOUND\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 118,
+      "text": "return \"LEARNER_APPEARS_TO_USE_NON_POSTGRESQL_OR_FILE_BACKED_OUTCOME_EVIDENCE_STORAGE\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 120,
+      "text": "return \"POSTGRESQL_SCHEMA_EXISTS_BUT_IDENTITY_COLUMNS_DIFFER_FROM_OLR_041_ASSUMPTIONS\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 123,
+      "text": "return \"OUTCOME_EVIDENCE_STORAGE_CONTRACT_UNRESOLVED\""
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 160,
+      "text": "def verify_olr_051_production_outcome_evidence_schema_diagnostic(root=None):"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 161,
+      "text": "from .olr_050_production_evidence_learning_activation_freeze import verify_olr_050_production_evidence_learning_activation_freeze"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_051_production_outcome_evidence_schema_diagnostic.py",
+      "line": 163,
+      "text": "verify_olr_050_production_evidence_learning_activation_freeze(root)"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 2,
+      "text": "from .olr_036_outcome_evidence_linkage_foundation import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 3,
+      "text": "from .olr_037_market_evidence_candidate_matching import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 4,
+      "text": "from .olr_038_postgresql_outcome_evidence_linkage_ledger import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 5,
+      "text": "from .olr_039_evidence_coverage_recovery_engine import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 6,
+      "text": "from .olr_040_outcome_evidence_linkage_freeze import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 7,
+      "text": "from .olr_041_postgresql_live_evidence_lookup import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 8,
+      "text": "from .olr_042_live_evidence_admission_gate import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 9,
+      "text": "from .olr_043_live_learning_evidence_adapter import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 10,
+      "text": "from .olr_044_continuous_learner_evidence_runtime_cutover import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 11,
+      "text": "from .olr_045_live_evidence_grounded_learning_freeze import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 12,
+      "text": "from .olr_046_oracle_live_evidence_learner_launcher_cutover import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 14,
+      "text": "from .olr_048_postgresql_live_learning_metrics_read_model import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 15,
+      "text": "from .olr_049_production_evidence_learning_health_verification import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 16,
+      "text": "from .olr_050_production_evidence_learning_activation_freeze import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 17,
+      "text": "from .olr_051_production_outcome_evidence_linkage_diagnostic import *"
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\__init__.py",
+      "line": 18,
+      "text": "from .olr_051_production_outcome_evidence_schema_diagnostic import *"
+    },
+    {
+      "file": "run_olr_005_physical_settled_outcome_read_verification.py",
+      "line": 2,
+      "text": "from qseries_v2.oracle_learning_runtime.olr_002_settled_outcome_read_model import fetch_recent_settled_markets"
+    },
+    {
+      "file": "run_olr_005_physical_settled_outcome_read_verification.py",
+      "line": 4,
+      "text": "print(\"=\"*72);print(\" OLR-005 PHYSICAL SETTLED OUTCOME READ VERIFICATION\");print(\"=\"*72)"
+    },
+    {
+      "file": "run_olr_005_physical_settled_outcome_read_verification.py",
+      "line": 5,
+      "text": "rows=fetch_recent_settled_markets(Path.cwd(),limit=20)"
+    },
+    {
+      "file": "run_olr_005_physical_settled_outcome_read_verification.py",
+      "line": 6,
+      "text": "print(f\"[SETTLED] outcomes={len(rows)}\")"
+    },
+    {
+      "file": "run_olr_005_physical_settled_outcome_read_verification.py",
+      "line": 8,
+      "text": "print(f\"[SETTLED] ticker={x.ticker} result={x.result} settlement_ts={x.settlement_ts}\")"
+    },
+    {
+      "file": "run_olr_005_physical_settled_outcome_read_verification.py",
+      "line": 9,
+      "text": "print(\"[PASS] Physical Kalshi settled-outcome read path verified\")"
+    },
+    {
+      "file": "run_olr_005_physical_settled_outcome_read_verification.py",
+      "line": 10,
+      "text": "print(\"[DONE] OLR-005 PHYSICAL OUTCOME READ VERIFIED\")"
+    },
+    {
+      "file": "run_olr_010_physical_high_coverage_learning_verification.py",
+      "line": 7,
+      "text": "print(\"[PASS] Real settled outcomes scanned through historical evidence matcher + durable ledger\")"
+    },
+    {
+      "file": "run_olr_010_physical_high_coverage_learning_verification.py",
+      "line": 8,
+      "text": "if s.metrics.learning_events_applied:print(\"[PASS] Real outcome-grounded learning events applied to frozen OCL runtime\")"
+    },
+    {
+      "file": "run_olr_010_physical_high_coverage_learning_verification.py",
+      "line": 9,
+      "text": "else:print(\"[PASS] No eligible unmatched outcome/evidence pair in sample; no fabricated learning applied\")"
+    },
+    {
+      "file": "run_olr_020_physical_production_feedback_verification.py",
+      "line": 8,
+      "text": "print(f\"[LEARNED STATE] cycles={state.cycles} outcomes_learned={state.outcomes_learned} learned_records={state.learned_records} markets={len(state.learned_market_counts)}\")"
+    },
+    {
+      "file": "run_olr_025_physical_calibration_market_behavior_verification.py",
+      "line": 2,
+      "text": "from qseries_v2.oracle_learning_runtime.olr_022_outcome_calibration_record import build_outcome_calibration_record"
+    },
+    {
+      "file": "run_olr_025_physical_calibration_market_behavior_verification.py",
+      "line": 14,
+      "text": "no_prob=recover_pre_settlement_probability({\"observation_id\":\"physical\"})"
+    },
+    {
+      "file": "run_olr_025_physical_calibration_market_behavior_verification.py",
+      "line": 18,
+      "text": "record=build_outcome_calibration_record(\"KXPHYSICAL\",{\"yes_price\":60},\"yes\")"
+    },
+    {
+      "file": "run_olr_030_physical_durable_calibration_live_feedback_verification.py",
+      "line": 2,
+      "text": "from qseries_v2.oracle_learning_runtime.olr_026_durable_calibration_ledger import load_calibration_ledger"
+    },
+    {
+      "file": "run_olr_030_physical_durable_calibration_live_feedback_verification.py",
+      "line": 10,
+      "text": "ledger_path=root/\"runtime_state\"/\"oracle_calibration_ledger.json\""
+    },
+    {
+      "file": "run_olr_030_physical_durable_calibration_live_feedback_verification.py",
+      "line": 11,
+      "text": "ledger=load_calibration_ledger(ledger_path)"
+    },
+    {
+      "file": "run_olr_030_physical_durable_calibration_live_feedback_verification.py",
+      "line": 12,
+      "text": "print(f\"[CALIBRATION LEDGER] records={len(ledger)} path=runtime_state\\\\oracle_calibration_ledger.json\")"
+    },
+    {
+      "file": "run_olr_034_continuous_calibration_ingestion.py",
+      "line": 5,
+      "text": "p=argparse.ArgumentParser();p.add_argument(\"--settled-limit\",type=int,default=100);p.add_argument(\"--evidence-limit\",type=int,default=25);p.add_argument(\"--cadence-seconds\",type=float,default=30.0);p.add_argument(\"--once\",action=\"store_true\");a=p.parse_args(argv)"
+    },
+    {
+      "file": "run_olr_034_continuous_calibration_ingestion.py",
+      "line": 9,
+      "text": "c=run_calibration_runtime_cycle(root,a.settled_limit,a.evidence_limit);i=c.ingestion;s=c.state;f=c.feedback"
+    },
+    {
+      "file": "run_olr_034_continuous_calibration_ingestion.py",
+      "line": 10,
+      "text": "print(f\"[CALIBRATION] cycle={s.cycles_completed} settled={i.settled_scanned} learned={i.learned_settlements} exact_evidence={i.exact_evidence_matches} candidates={i.candidates} admitted={i.admitted} duplicates={i.duplicate_records} abstentions={i.probability_abstentions} ledger_records={i.ledger_records}\",flush=True)"
+    },
+    {
+      "file": "run_olr_035_physical_continuous_calibration_ingestion_verification.py",
+      "line": 16,
+      "text": "settled_limit=50,"
+    },
+    {
+      "file": "run_olr_035_physical_continuous_calibration_ingestion_verification.py",
+      "line": 17,
+      "text": "evidence_limit=25,"
+    },
+    {
+      "file": "run_olr_035_physical_continuous_calibration_ingestion_verification.py",
+      "line": 21,
+      "text": "f\"[CALIBRATION] settled={cycle.settled_scanned} \""
+    },
+    {
+      "file": "run_olr_035_physical_continuous_calibration_ingestion_verification.py",
+      "line": 23,
+      "text": "f\"exact_evidence={cycle.exact_evidence_matches} \""
+    },
+    {
+      "file": "run_olr_035_physical_continuous_calibration_ingestion_verification.py",
+      "line": 24,
+      "text": "f\"candidates={cycle.candidates} \""
+    },
+    {
+      "file": "run_olr_035_physical_continuous_calibration_ingestion_verification.py",
+      "line": 25,
+      "text": "f\"admitted={cycle.admitted} \""
+    },
+    {
+      "file": "run_olr_035_physical_continuous_calibration_ingestion_verification.py",
+      "line": 28,
+      "text": "f\"ledger_records={cycle.ledger_records}\""
+    },
+    {
+      "file": "run_olr_040_physical_learning_consumption_verification.py",
+      "line": 13,
+      "text": "for ticker,row in list(sorted(feedback.items()))[:25]:"
+    },
+    {
+      "file": "run_olr_040_physical_learning_consumption_verification.py",
+      "line": 16,
+      "text": "print(f\"[LEARNING] market={ticker} samples={row.samples} mature={row.mature} stable={row.stable} available={x.available} adjustment={x.bounded_adjustment:.4f} reason={x.reason}\")"
+    },
+    {
+      "file": "run_olr_044_continuous_learning_with_evidence.py",
+      "line": 3,
+      "text": "from qseries_v2.oracle_learning.olr_043_live_learning_evidence_adapter import adapt_learning_batch"
+    },
+    {
+      "file": "run_olr_044_continuous_learning_with_evidence.py",
+      "line": 8,
+      "text": "print(' OLR-044 CONTINUOUS LEARNER EVIDENCE RUNTIME',flush=True)"
+    },
+    {
+      "file": "run_olr_044_continuous_learning_with_evidence.py",
+      "line": 10,
+      "text": "print('[OLR-044] live_evidence_linkage=ENABLED execution_authority=FALSE',flush=True)"
+    },
+    {
+      "file": "qseries_v2\\oracle_api.py",
+      "line": 23,
+      "text": "ticker=f\"ORACLE-{kind.upper()}\","
+    },
+    {
+      "file": "qseries_v2\\oracle_api.py",
+      "line": 36,
+      "text": "ticker=\"ORACLE-ERROR\","
+    },
+    {
+      "file": "qseries_v2\\oracle_api.py",
+      "line": 59,
+      "text": "ticker=f\"{category.upper()}-SCAN\","
+    },
+    {
+      "file": "qseries_v2\\oracle_api.py",
+      "line": 67,
+      "text": "ticker=f\"{category.upper()}-ERROR\","
+    },
+    {
+      "file": "qseries_v2\\play_model.py",
+      "line": 6,
+      "text": "ticker: str"
+    },
+    {
+      "file": "qseries_v2\\views.py",
+      "line": 38,
+      "text": "Ticker: {play.get('ticker')}"
+    },
+    {
+      "file": "qseries_v2\\views.py",
+      "line": 61,
+      "text": "lines.append(f\"{i}. {p.get('mission')} | {p.get('ticker')}\")"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_adapter.py",
+      "line": 18,
+      "text": "market_id = raw.get(\"id\") or raw.get(\"market_id\") or raw.get(\"ticker\")"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_adapter.py",
+      "line": 19,
+      "text": "ticker = raw.get(\"ticker\") or raw.get(\"market_ticker\") or market_id"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_adapter.py",
+      "line": 20,
+      "text": "title = raw.get(\"title\") or raw.get(\"subtitle\") or raw.get(\"name\") or ticker"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_adapter.py",
+      "line": 37,
+      "text": "market_id=market_id,"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_adapter.py",
+      "line": 38,
+      "text": "ticker=ticker,"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_adapter.py",
+      "line": 49,
+      "text": "event_ticker=raw.get(\"event_ticker\", \"\"),"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_analysis_bridge.py",
+      "line": 4,
+      "text": "Takes raw Kalshi market data, converts it into Oracle Evidence,"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_analysis_bridge.py",
+      "line": 17,
+      "text": "evidence = kalshi_oracle_bridge.market_to_evidence(raw_market)"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_analysis_bridge.py",
+      "line": 20,
+      "text": "ticker=market.ticker,"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_analysis_bridge.py",
+      "line": 22,
+      "text": "evidence=[evidence],"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_analysis_bridge.py",
+      "line": 28,
+      "text": "\"evidence\": evidence,"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_bootstrap.py",
+      "line": 22,
+      "text": "and diagnostics.get(\"evidence_ready\") is True"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_diagnostics.py",
+      "line": 4,
+      "text": "Checks Kalshi adapter health, registry state, normalization, evidence bridge,"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_diagnostics.py",
+      "line": 23,
+      "text": "\"ticker\": \"KALSHI-DIAG\","
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_diagnostics.py",
+      "line": 32,
+      "text": "evidence = kalshi_oracle_bridge.market_to_evidence(raw)"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_diagnostics.py",
+      "line": 41,
+      "text": "\"market_normalized\": market.ticker == \"KALSHI-DIAG\","
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_diagnostics.py",
+      "line": 42,
+      "text": "\"evidence_ready\": evidence.category == \"market\","
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_diagnostics.py",
+      "line": 43,
+      "text": "\"analysis_ready\": analysis[\"packet\"][\"ticker\"] == \"KALSHI-DIAG\","
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_event_bus.py",
+      "line": 18,
+      "text": "\"ticker\": market.ticker,"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_event_bus.py",
+      "line": 20,
+      "text": "\"evidence\": market.as_evidence(),"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_oracle_bridge.py",
+      "line": 2,
+      "text": "ADP-004 Kalshi to Oracle Evidence Bridge"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_oracle_bridge.py",
+      "line": 4,
+      "text": "Converts normalized Kalshi market payloads into Oracle Evidence objects."
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_oracle_bridge.py",
+      "line": 7,
+      "text": "from qseries_v2.oi.evidence_engine import Evidence, evidence_engine"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_oracle_bridge.py",
+      "line": 13,
+      "text": "def market_to_evidence(self, raw_market):"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_oracle_bridge.py",
+      "line": 15,
+      "text": "evidence_data = market.as_evidence()"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_oracle_bridge.py",
+      "line": 17,
+      "text": "return Evidence("
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_oracle_bridge.py",
+      "line": 18,
+      "text": "source=evidence_data[\"source\"],"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_oracle_bridge.py",
+      "line": 19,
+      "text": "category=evidence_data[\"category\"],"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_oracle_bridge.py",
+      "line": 20,
+      "text": "value=evidence_data[\"value\"],"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_oracle_bridge.py",
+      "line": 24,
+      "text": "evidence = self.market_to_evidence(raw_market)"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_oracle_bridge.py",
+      "line": 25,
+      "text": "evidence_engine.add(evidence)"
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_oracle_bridge.py",
+      "line": 26,
+      "text": "return evidence"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 35,
+      "text": "ticker: str"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 36,
+      "text": "event_ticker: Optional[str]"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 123,
+      "text": "ticker=raw.get(\"ticker\") or \"\","
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 124,
+      "text": "event_ticker=raw.get(\"event_ticker\"),"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 148,
+      "text": "tickers: Optional[str] = None,"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 149,
+      "text": "series_ticker: Optional[str] = None,"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 163,
+      "text": "if tickers:"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 164,
+      "text": "params[\"tickers\"] = tickers"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 166,
+      "text": "if series_ticker:"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 167,
+      "text": "params[\"series_ticker\"] = series_ticker"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 225,
+      "text": "def fetch_tickers(self, tickers: List[str]) -> Dict[str, Any]:"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 226,
+      "text": "joined = \",\".join([t.strip() for t in tickers if t and t.strip()])"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 227,
+      "text": "return self.fetch_markets(status=\"\", tickers=joined, limit=max(1, len(tickers)))"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "line": 263,
+      "text": "\"sample_tickers\": [m.get(\"ticker\") for m in snapshot.get(\"markets\", [])[:5]],"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 35,
+      "text": "self._markets_by_ticker: Dict[str, Dict[str, Any]] = {}"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 75,
+      "text": "for ticker, market in self._markets_by_ticker.items():"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 76,
+      "text": "event_ticker = market.get(\"event_ticker\")"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 77,
+      "text": "if event_ticker:"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 78,
+      "text": "self._markets_by_event.setdefault(event_ticker, []).append(ticker)"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 80,
+      "text": "series_ticker = market.get(\"series_ticker\") or self._infer_series_ticker(ticker)"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 81,
+      "text": "if series_ticker:"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 82,
+      "text": "self._markets_by_series.setdefault(series_ticker, []).append(ticker)"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 86,
+      "text": "self._markets_by_category.setdefault(category, []).append(ticker)"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 88,
+      "text": "def _infer_series_ticker(self, ticker: str) -> Optional[str]:"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 89,
+      "text": "if not ticker or \"-\" not in ticker:"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 91,
+      "text": "return ticker.split(\"-\")[0]"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 151,
+      "text": "incoming_by_ticker = {"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 152,
+      "text": "market.get(\"ticker\"): market"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 154,
+      "text": "if market.get(\"ticker\")"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 158,
+      "text": "old_tickers = set(self._markets_by_ticker.keys())"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 159,
+      "text": "new_tickers = set(incoming_by_ticker.keys())"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 161,
+      "text": "added_tickers = sorted(list(new_tickers - old_tickers))"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 162,
+      "text": "removed_tickers = sorted(list(old_tickers - new_tickers))"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 164,
+      "text": "changed_tickers = []"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 167,
+      "text": "for ticker in sorted(list(new_tickers & old_tickers)):"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 168,
+      "text": "if self._market_changed(self._markets_by_ticker[ticker], incoming_by_ticker[ticker]):"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 169,
+      "text": "changed_tickers.append(ticker)"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 173,
+      "text": "self._markets_by_ticker = incoming_by_ticker"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 186,
+      "text": "\"count\": len(self._markets_by_ticker),"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 187,
+      "text": "\"added\": len(added_tickers),"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 188,
+      "text": "\"changed\": len(changed_tickers),"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 189,
+      "text": "\"removed\": len(removed_tickers),"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 191,
+      "text": "\"added_tickers\": added_tickers[:25],"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 192,
+      "text": "\"changed_tickers\": changed_tickers[:25],"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 193,
+      "text": "\"removed_tickers\": removed_tickers[:25],"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 204,
+      "text": "for ticker in added_tickers[:50]:"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 205,
+      "text": "self._emit(\"adp.market.created\", {\"ticker\": ticker, \"timestamp\": time.time()})"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 207,
+      "text": "for ticker in changed_tickers[:50]:"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 208,
+      "text": "self._emit(\"adp.market.changed\", {\"ticker\": ticker, \"timestamp\": time.time()})"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 210,
+      "text": "for ticker in removed_tickers[:50]:"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 211,
+      "text": "self._emit(\"adp.market.removed\", {\"ticker\": ticker, \"timestamp\": time.time()})"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 225,
+      "text": "\"count\": len(self._markets_by_ticker),"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 253,
+      "text": "def get_market(self, ticker: str) -> Optional[Dict[str, Any]]:"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 255,
+      "text": "market = self._markets_by_ticker.get(ticker)"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 260,
+      "text": "return [dict(m) for m in self._markets_by_ticker.values()]"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 266,
+      "text": "for m in self._markets_by_ticker.values()"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 270,
+      "text": "def get_event(self, event_ticker: str) -> List[Dict[str, Any]]:"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 272,
+      "text": "tickers = self._markets_by_event.get(event_ticker, [])"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 273,
+      "text": "return [dict(self._markets_by_ticker[t]) for t in tickers if t in self._markets_by_ticker]"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 275,
+      "text": "def get_series(self, series_ticker: str) -> List[Dict[str, Any]]:"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 277,
+      "text": "tickers = self._markets_by_series.get(series_ticker, [])"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 278,
+      "text": "return [dict(self._markets_by_ticker[t]) for t in tickers if t in self._markets_by_ticker]"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 282,
+      "text": "tickers = self._markets_by_category.get(category, [])"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 283,
+      "text": "return [dict(self._markets_by_ticker[t]) for t in tickers if t in self._markets_by_ticker]"
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "line": 290,
+      "text": "\"market_count\": len(self._markets_by_ticker),"
+    },
+    {
+      "file": "qseries_v2\\adapters\\universal_market_schema.py",
+      "line": 16,
+      "text": "market_id: str"
+    },
+    {
+      "file": "qseries_v2\\adapters\\universal_market_schema.py",
+      "line": 17,
+      "text": "ticker: str"
+    },
+    {
+      "file": "qseries_v2\\adapters\\universal_market_schema.py",
+      "line": 30,
+      "text": "event_ticker: str = \"\""
+    },
+    {
+      "file": "qseries_v2\\adapters\\universal_market_schema.py",
+      "line": 39,
+      "text": "def as_evidence(self):"
+    },
+    {
+      "file": "qseries_v2\\adapters\\universal_market_schema.py",
+      "line": 44,
+      "text": "\"market_id\": self.market_id,"
+    },
+    {
+      "file": "qseries_v2\\adapters\\universal_market_schema.py",
+      "line": 45,
+      "text": "\"ticker\": self.ticker,"
+    },
+    {
+      "file": "qseries_v2\\adapters\\universal_market_schema.py",
+      "line": 75,
+      "text": "market_id,"
+    },
+    {
+      "file": "qseries_v2\\adapters\\universal_market_schema.py",
+      "line": 76,
+      "text": "ticker,"
+    },
+    {
+      "file": "qseries_v2\\adapters\\universal_market_schema.py",
+      "line": 87,
+      "text": "event_ticker=\"\","
+    },
+    {
+      "file": "qseries_v2\\adapters\\universal_market_schema.py",
+      "line": 98,
+      "text": "market_id=str(market_id),"
+    },
+    {
+      "file": "qseries_v2\\adapters\\universal_market_schema.py",
+      "line": 99,
+      "text": "ticker=str(ticker),"
+    },
+    {
+      "file": "qseries_v2\\adapters\\universal_market_schema.py",
+      "line": 110,
+      "text": "event_ticker=event_ticker,"
+    },
+    {
+      "file": "qseries_v2\\integration\\canonical_prediction_contract.py",
+      "line": 20,
+      "text": "market_id: str"
+    },
+    {
+      "file": "qseries_v2\\integration\\canonical_prediction_contract.py",
+      "line": 43,
+      "text": "evidence: Dict[str, Any]"
+    },
+    {
+      "file": "qseries_v2\\integration\\canonical_prediction_contract.py",
+      "line": 77,
+      "text": "market_id: str,"
+    },
+    {
+      "file": "qseries_v2\\integration\\canonical_prediction_contract.py",
+      "line": 89,
+      "text": "prediction_id=f\"{engine_id}:{market_id}:{datetime.now(timezone.utc).timestamp()}\","
+    },
+    {
+      "file": "qseries_v2\\integration\\canonical_prediction_contract.py",
+      "line": 91,
+      "text": "market_id=market_id,"
+    },
+    {
+      "file": "qseries_v2\\integration\\historical_outcome_tracking_engine_adapter.py",
+      "line": 15,
+      "text": "from qseries_v2.oracle_intelligence.historical_outcome_tracking_engine import ("
+    },
+    {
+      "file": "qseries_v2\\integration\\historical_outcome_tracking_engine_adapter.py",
+      "line": 16,
+      "text": "create_historical_outcome_tracking_engine,"
+    },
+    {
+      "file": "qseries_v2\\integration\\historical_outcome_tracking_engine_adapter.py",
+      "line": 20,
+      "text": "class HistoricalOutcomeTrackingEngineAdapter:"
+    },
+    {
+      "file": "qseries_v2\\integration\\historical_outcome_tracking_engine_adapter.py",
+      "line": 22,
+      "text": "self.engine = engine or create_historical_outcome_tracking_engine()"
+    },
+    {
+      "file": "qseries_v2\\integration\\historical_outcome_tracking_engine_adapter.py",
+      "line": 23,
+      "text": "self.engine_id = \"oracle.historical_outcome_tracking\""
+    },
+    {
+      "file": "qseries_v2\\integration\\historical_outcome_tracking_engine_adapter.py",
+      "line": 32,
+      "text": "name=\"Historical Outcome Tracking Engine\","
+    },
+    {
+      "file": "qseries_v2\\integration\\historical_outcome_tracking_engine_adapter.py",
+      "line": 34,
+      "text": "description=\"Tracks historical prediction outcomes and converts accuracy into Oracle predictions.\","
+    },
+    {
+      "file": "qseries_v2\\integration\\historical_outcome_tracking_engine_adapter.py",
+      "line": 41,
+      "text": "name=\"track_historical_outcomes\","
+    },
+    {
+      "file": "qseries_v2\\integration\\historical_outcome_tracking_engine_adapter.py",
+      "line": 43,
+      "text": "inputs=[\"market_id\", \"payload\"],"
+    }
+  ],
+  "likely_break": "IDENTITY_COLUMNS_EXIST_DIAGNOSTIC_MUST_TARGET_ACTUAL_LEARNER_TABLE_CONTRACT",
+  "nonempty_tables": [
+    {
+      "columns": [
+        "sequence_number",
+        "observation_id",
+        "content_hash",
+        "source_id",
+        "source_observation_id",
+        "observation_type",
+        "acquisition_batch_id",
+        "observed_at",
+        "acquired_at",
+        "persisted_at",
+        "observation_replay_hash",
+        "canonical_observation_json",
+        "previous_chain_hash",
+        "chain_hash"
+      ],
+      "row_count": 2735870,
+      "table": "oracle_canonical_observations"
+    },
+    {
+      "columns": [
+        "request_id",
+        "producer",
+        "priority",
+        "observations",
+        "observation_count",
+        "status",
+        "admitted_at",
+        "next_attempt_at",
+        "claimed_at",
+        "worker_id",
+        "attempts",
+        "completed_at",
+        "result_payload",
+        "last_error_type",
+        "last_error_message"
+      ],
+      "row_count": 1321,
+      "table": "oracle_universal_ingestion_queue"
+    },
+    {
+      "columns": [
+        "telemetry_id",
+        "observed_at",
+        "request_id",
+        "producer",
+        "phase",
+        "category",
+        "retryable",
+        "terminal",
+        "attempt",
+        "observation_count",
+        "elapsed_ms",
+        "error_type",
+        "error_message"
+      ],
+      "row_count": 682,
+      "table": "oracle_writer_retry_telemetry"
+    },
+    {
+      "columns": [
+        "state_id",
+        "terminal_sequence_number",
+        "terminal_chain_hash"
+      ],
+      "row_count": 1,
+      "table": "oracle_canonical_persistence_state"
+    }
+  ]
+}

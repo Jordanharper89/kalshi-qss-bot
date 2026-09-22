@@ -1,0 +1,25 @@
+{
+  "build_id": "OPH-033",
+  "frozen_capability": {
+    "canonical_writer_count": 1,
+    "classified_single_writer_runtime": true,
+    "durable_retry_telemetry": true,
+    "execution_authority": false,
+    "producer_direct_write_authority": false,
+    "routing_failure_classification": true,
+    "sqlite_active_ingestion": false
+  },
+  "manifest_sha256": "1b831205500925a82d54457e452bd9437e04c867ac670b6cc2e671b486aeca2c",
+  "report": {
+    "canonical_writer": "run_oph_031_classified_single_writer_reliability_runtime.py",
+    "execution_authority": false,
+    "failure_classification": true,
+    "launcher_verified": true,
+    "producer_children": 5,
+    "sqlite_active_ingestion": false,
+    "stale_claim_recovery": true,
+    "telemetry_backend": "PostgreSQL"
+  },
+  "revision": "OPH_033_POSTGRESQL_PERSISTENCE_RELIABILITY_FREEZE_V1",
+  "telemetry_counts_at_freeze": {}
+}

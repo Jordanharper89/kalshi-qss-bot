@@ -447,13 +447,9 @@ def run_append_contract_test():
         == backend.terminal_chain_hash()
     )
 
-    assert result.persisted_observation_ids == tuple(
-        sorted(
-            (
-                observation_one.observation_id,
-                observation_two.observation_id,
-            )
-        )
+    assert result.persisted_observation_ids == (
+        observation_one.observation_id,
+        observation_two.observation_id,
     )
 
     assert result.read_only is True
@@ -769,6 +765,8 @@ def main():
         ),
         "backend_health_status": health.health_status,
         "atomic_batch_append_required": True,
+        "persisted_observation_order_preserved": True,
+        "batch_chain_order_contract_preserved": True,
         "duplicate_observation_identity_rejected": (
             duplicate_result.committed is False
         ),

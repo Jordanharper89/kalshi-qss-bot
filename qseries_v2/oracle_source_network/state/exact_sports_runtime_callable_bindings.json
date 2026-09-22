@@ -1,0 +1,156 @@
+{
+  "admitted": [
+    "NFL",
+    "NCAAF",
+    "NBA",
+    "NHL",
+    "MLS",
+    "EPL"
+  ],
+  "authority": "OSN-071 exact source interface manifest + runtime signature verification",
+  "bindings": [
+    {
+      "canonical": false,
+      "execution_authority": false,
+      "function": "acquire_nfl_scores",
+      "league": "NFL",
+      "module": "qseries_v2.oracle_source_network.acquisition.nfl_official_live",
+      "optional": [
+        "timeout"
+      ],
+      "physical_test": "test_osn_044_nfl_exact_live_escaped_state_event_extractor_REPAIR.py",
+      "required": [],
+      "source": "OSN071_EXACT_INTERFACE_MANIFEST"
+    },
+    {
+      "canonical": false,
+      "execution_authority": false,
+      "function": "extract_nfl_live_events",
+      "league": "NFL",
+      "module": "qseries_v2.oracle_source_network.mapping.nfl_live_escaped_state_extractor",
+      "optional": [
+        "observed_at"
+      ],
+      "physical_test": "test_osn_044_nfl_exact_live_escaped_state_event_extractor_REPAIR.py",
+      "required": [
+        "body"
+      ],
+      "source": "OSN071_EXACT_INTERFACE_MANIFEST"
+    },
+    {
+      "canonical": false,
+      "execution_authority": false,
+      "function": "acquire_ncaa_fbs_scoreboard",
+      "league": "NCAAF",
+      "module": "qseries_v2.oracle_source_network.acquisition.ncaa_football_official_live",
+      "optional": [
+        "timeout"
+      ],
+      "physical_test": "test_osn_045_ncaaf_exact_scoreboard_event_extractor_REPAIR.py",
+      "required": [],
+      "source": "OSN071_EXACT_INTERFACE_MANIFEST"
+    },
+    {
+      "canonical": false,
+      "execution_authority": false,
+      "function": "extract_ncaaf_live_events",
+      "league": "NCAAF",
+      "module": "qseries_v2.oracle_source_network.mapping.ncaaf_exact_scoreboard_extractor",
+      "optional": [
+        "observed_at"
+      ],
+      "physical_test": "test_osn_045_ncaaf_exact_scoreboard_event_extractor_REPAIR.py",
+      "required": [
+        "body"
+      ],
+      "source": "OSN071_EXACT_INTERFACE_MANIFEST"
+    },
+    {
+      "canonical": false,
+      "execution_authority": false,
+      "function": "acquire_nba_games",
+      "league": "NBA",
+      "module": "qseries_v2.oracle_source_network.acquisition.nba_official_live",
+      "optional": [
+        "timeout"
+      ],
+      "physical_test": "test_osn_016_nba_official_physical_acquisition.py",
+      "required": [],
+      "source": "OSN071_EXACT_INTERFACE_MANIFEST"
+    },
+    {
+      "canonical": false,
+      "execution_authority": false,
+      "function": "extract_basketball_events",
+      "league": "NBA",
+      "module": "qseries_v2.oracle_source_network.mapping.basketball_event_extractor",
+      "optional": [
+        "season",
+        "observed_at",
+        "authority"
+      ],
+      "physical_test": "test_osn_016_nba_official_physical_acquisition.py",
+      "required": [
+        "body",
+        "league",
+        "provider"
+      ],
+      "source": "OSN071_EXACT_INTERFACE_MANIFEST"
+    },
+    {
+      "canonical": false,
+      "execution_authority": false,
+      "function": "acquire_nhl_schedule",
+      "league": "NHL",
+      "module": "qseries_v2.oracle_source_network.acquisition.nhl_official_live",
+      "optional": [
+        "timeout"
+      ],
+      "physical_test": "test_osn_051_nhl_official_json_event_surface_physical_gate.py",
+      "required": [],
+      "source": "OSN071_EXACT_INTERFACE_MANIFEST"
+    },
+    {
+      "canonical": false,
+      "execution_authority": false,
+      "function": "acquire_mls_schedule",
+      "league": "MLS",
+      "module": "qseries_v2.oracle_source_network.acquisition.mls_official_live",
+      "optional": [
+        "timeout"
+      ],
+      "physical_test": "test_osn_052_mls_official_stats_exact_query_event_surface_REPAIR.py",
+      "required": [],
+      "source": "OSN071_EXACT_INTERFACE_MANIFEST"
+    },
+    {
+      "canonical": false,
+      "execution_authority": false,
+      "function": "acquire_epl_fixtures",
+      "league": "EPL",
+      "module": "qseries_v2.oracle_source_network.acquisition.european_soccer_official_live",
+      "optional": [
+        "timeout"
+      ],
+      "physical_test": "test_osn_053_epl_official_json_event_surface_physical_gate.py",
+      "required": [],
+      "source": "OSN071_EXACT_INTERFACE_MANIFEST"
+    }
+  ],
+  "blocked": [
+    "UCL"
+  ],
+  "execution_authority": false,
+  "held": [
+    "NCAAB",
+    "MLB_CANONICAL_EVENT_EXTRACTION_CERT_REQUIRED"
+  ],
+  "physical_certification_tests": {
+    "EPL": "test_osn_053_epl_official_json_event_surface_physical_gate.py",
+    "MLS": "test_osn_052_mls_official_stats_exact_query_event_surface_REPAIR.py",
+    "NBA": "test_osn_016_nba_official_physical_acquisition.py",
+    "NCAAF": "test_osn_045_ncaaf_exact_scoreboard_event_extractor_REPAIR.py",
+    "NFL": "test_osn_044_nfl_exact_live_escaped_state_event_extractor_REPAIR.py",
+    "NHL": "test_osn_051_nhl_official_json_event_surface_physical_gate.py"
+  }
+}

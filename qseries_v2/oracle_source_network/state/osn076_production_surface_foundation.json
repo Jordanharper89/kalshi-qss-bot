@@ -1,0 +1,43 @@
+{
+  "rows": [
+    {
+      "league": "NHL",
+      "source_path": "qseries_v2/oracle_source_network/acquisition/nhl_official_json_event_surface.py",
+      "promoted_path": "qseries_v2/oracle_source_network/providers/production_surfaces/nhl_proven_surface.py",
+      "sha256": "32eb8630985142529ab5403b195fb48e501aa2bcab64f0ccfcbb66d313f4a8f3",
+      "canonical_constructor_present": true,
+      "byte_exact_promotion": true,
+      "execution_authority": false
+    },
+    {
+      "league": "MLS",
+      "source_path": "qseries_v2/oracle_source_network/certification/mls_official_stats_exact_query_probe.py",
+      "promoted_path": "qseries_v2/oracle_source_network/providers/production_surfaces/mls_proven_surface.py",
+      "sha256": "14246b0e6adc917db563d3e66237d9e218ce1b1666cb08aacbddbdc8e9aa1a07",
+      "canonical_constructor_present": true,
+      "byte_exact_promotion": true,
+      "execution_authority": false
+    },
+    {
+      "league": "EPL",
+      "source_path": "qseries_v2/oracle_source_network/acquisition/epl_official_fpl_event_surface.py",
+      "promoted_path": "qseries_v2/oracle_source_network/providers/production_surfaces/epl_proven_surface.py",
+      "sha256": "6dd22f077548bb9ee007ea6d07a27aca2978cde77af577f9538d9cd4026c4e6f",
+      "canonical_constructor_present": true,
+      "byte_exact_promotion": true,
+      "execution_authority": false
+    }
+  ],
+  "nhl_candidates": [
+    [
+      40,
+      "qseries_v2/oracle_source_network/acquisition/nhl_official_json_event_surface.py"
+    ],
+    [
+      0,
+      "qseries_v2/oracle_source_network/providers/production_surfaces/nhl_proven_surface.py"
+    ]
+  ],
+  "selection_rule": "EXECUTABLE_CANONICAL_CONSTRUCTOR_PLUS_PROVEN_OFFICIAL_SURFACE",
+  "execution_authority": false
+}

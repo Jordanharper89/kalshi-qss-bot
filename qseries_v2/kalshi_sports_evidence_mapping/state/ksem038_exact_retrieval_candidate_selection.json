@@ -1,0 +1,46 @@
+{
+  "viable": [
+    {
+      "file": "qseries_v2\\oracle_learning_feedback\\olf_008_related_market_learning_resolver.py",
+      "function": "resolve_related_market_learning",
+      "args": [
+        "root",
+        "market_ticker"
+      ],
+      "line": 24,
+      "score": 220
+    },
+    {
+      "file": "qseries_v2\\oracle_learning_runtime\\olr_017_market_feedback_resolver.py",
+      "function": "resolve_market_feedback",
+      "args": [
+        "snapshot",
+        "market_ticker",
+        "min_records"
+      ],
+      "line": 18,
+      "score": 220
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_exact_sports_unknown_cohort_postgresql_identity_recovery_audit.py",
+      "function": "_read_market_snapshot_observations",
+      "args": [
+        "backend",
+        "tickers"
+      ],
+      "line": 262,
+      "score": 120
+    }
+  ],
+  "selected": {
+    "file": "qseries_v2\\oracle_learning_feedback\\olf_008_related_market_learning_resolver.py",
+    "function": "resolve_related_market_learning",
+    "args": [
+      "root",
+      "market_ticker"
+    ],
+    "line": 24,
+    "score": 220
+  },
+  "execution_authority": false
+}

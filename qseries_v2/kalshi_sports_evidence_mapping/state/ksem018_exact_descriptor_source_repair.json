@@ -1,0 +1,28 @@
+{
+  "function_body": "def fetch_current_market_sports_candidates(descriptors, limit=1000, timeout_seconds=20):\n    markets, _ = fetch_current_open_kalshi_market_index(limit=limit, timeout_seconds=timeout_seconds)\n    groups = tuple(((d, candidate_markets_for_sports_descriptor(d, markets)) for d in tuple(descriptors)))\n    return (tuple(markets), groups)",
+  "callsites": [
+    {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_121_persisted_sports_current_market_association_gate.py",
+      "line": 36,
+      "args": [
+        "descriptors"
+      ],
+      "keywords": {
+        "limit": "market_limit",
+        "timeout_seconds": "market_timeout_seconds"
+      }
+    },
+    {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_122_authoritative_sports_live_end_to_end_evidence_certification.py",
+      "line": 42,
+      "args": [
+        "descriptors"
+      ],
+      "keywords": {
+        "limit": "market_limit",
+        "timeout_seconds": "market_timeout_seconds"
+      }
+    }
+  ],
+  "execution_authority": false
+}

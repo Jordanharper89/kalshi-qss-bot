@@ -1,0 +1,9 @@
+{
+  "launcher": "run_oracle_live_WITH_OSN_SPORTS.py",
+  "base_launcher": "run_oracle_LIVE.py",
+  "base_sha256": "d7f7d2f65ee10e93fd42af3751c25d670cee4eb6d79d037c27f9bb32570bd90f",
+  "base_mutated": false,
+  "sports_child": "qseries_v2.oracle_source_network.runtime.sports_supervised_child",
+  "terminal_dependency": "NONE",
+  "execution_authority": false
+}

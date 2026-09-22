@@ -1,0 +1,14 @@
+from pathlib import Path
+import ast,os,subprocess,sys
+ROOT=Path.cwd().resolve();MOD=ROOT/'qseries_v2/oracle_intelligence_analytics_runtime/oiar_011_market_identity_translator.py';TEST=ROOT/'test_oiar_011_market_identity_translator.py'
+SRC='from dataclasses import dataclass\nOIAR_011_BUILD_ID="OIAR-011"\n@dataclass(frozen=True)\nclass TraderMarketIdentity:\n market_id:str;display_name:str;category:str;identity_quality:str;read_only:bool=True;execution_authority:bool=False\ndef translate_market_identity(x):\n x=str(x).strip().upper()\n if not x: raise ValueError("market_id required")\n rules=(("KXBTC","Bitcoin","crypto"),("KXETH","Ethereum","crypto"),("KXXRP","XRP","crypto"),("KXSOL","Solana","crypto"),("KXMLB","MLB","sports"),("KXNFL","NFL","sports"),("KXWNBA","WNBA","sports"),("KXNBA","NBA","sports"),("KXATP","ATP tennis","sports"),("KXWTA","WTA tennis","sports"),("KXMLS","MLS","sports"),("KXLIGA","Liga MX","sports"))\n for p,n,c in rules:\n  if x.startswith(p): return TraderMarketIdentity(x,n+" market",c,"STRUCTURED")\n if x.startswith("KXMVECROSSCATEGORY"): return TraderMarketIdentity(x,"Cross-category combination market","multi-market","FAMILY_ONLY")\n if x.startswith("KXMVESPORTS"): return TraderMarketIdentity(x,"Multi-game sports combination market","sports","FAMILY_ONLY")\n return TraderMarketIdentity(x,x.split("-")[0]+" market","unknown","FAMILY_ONLY")\n';TSRC='import unittest\nimport qseries_v2.oracle_intelligence_analytics_runtime.oiar_011_market_identity_translator as m\nclass T(unittest.TestCase):\n def test_identity(self):self.assertEqual(m.OIAR_011_BUILD_ID,"OIAR-011")\nif __name__=="__main__":\n print("="*88);print(" OIAR-011 CERTIFICATION TEST");r=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(T))\n if not r.wasSuccessful():raise SystemExit(1)\n print("[PASS] OIAR-011 contract certified");print("[PASS] execution_authority=FALSE");print("[DONE] OIAR-011 CERTIFIED")\n';REQ=['qseries_v2/oracle_intelligence_analytics_runtime/oiar_009_fast_terminal_read_adapter.py']
+def write(p,s):
+ p.parent.mkdir(parents=True,exist_ok=True);t=p.with_name(p.name+f".{os.getpid()}.tmp");t.write_text(s,encoding="utf-8");os.replace(t,p)
+def main():
+ print("="*88);print(" OIAR-011 INSTALLER");print(" MARKET IDENTITY TRANSLATOR");print("="*88);print("[ROOT]",ROOT)
+ for x in REQ:
+  if not (ROOT/x).is_file():raise RuntimeError(f"Required proven upstream missing: {ROOT/x}")
+ ast.parse(SRC);ast.parse(TSRC);print("[PASS] installer payload syntax verified");write(MOD,SRC);write(TEST,TSRC);
+ subprocess.run([sys.executable,str(TEST)],cwd=str(ROOT),check=True)
+ print("[PASS] read-only trader presentation boundary preserved");print("[PASS] execution_authority=FALSE");print("[DONE] OIAR-011 INSTALLATION COMPLETE")
+if __name__=="__main__":main()

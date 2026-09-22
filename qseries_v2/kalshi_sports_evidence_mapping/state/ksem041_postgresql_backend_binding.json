@@ -1,0 +1,36 @@
+{
+  "callers": [
+    {
+      "function": "run_exact_sports_unknown_cohort_postgresql_identity_recovery_audit",
+      "args": [
+        "root"
+      ],
+      "call": "_read_market_snapshot_observations(backend, tickers)",
+      "body": "def run_exact_sports_unknown_cohort_postgresql_identity_recovery_audit(root=None):\n    root = Path(root or Path.cwd()).resolve()\n\n    markets, snapshot_id, cohort_source = _load_current_market_cohort()\n    market_rows = [_extract_market_fields(m) for m in markets]\n\n    unknown_candidates = []\n    classifier_paths = Counter()\n    for market, fields in zip(markets, market_rows):\n        is_unknown, path, detail = _looks_sports_unknown(market)\n        classifier_paths[path] += 1\n        if is_unknown and fields[\"ticker\"]:\n            unknown_candidates.append({\n                **fields,\n                \"isolation_path\": path,\n                \"classification_detail\": detail,\n            })\n\n    # Deduplicate by actual market ticker before touching PostgreSQL.\n    dedup = {}\n    for row in unknown_candidates:\n        dedup.setdefault(row[\"ticker\"], row)\n    unknown_candidates = list(dedup.values())\n    tickers = [r[\"ticker\"] for r in unknown_candidates]\n\n    _, backend = _router_backend(root)\n    raw = _read_market_snapshot_observations(backend, tickers)\n\n    restored = []\n    request_cls = _request_class(backend)\n\n    if raw and isinstance(raw[0], tuple) and raw[0] and raw[0][0] == \"PAIR\":\n        # Exact cohort only. Restore at most one useful market_snapshot per ticker.\n        by_ticker = defaultdict(list)\n        for _, ticker, obs_id in raw:\n            by_ticker[ticker].append(obs_id)\n\n        for ticker in tickers:\n            chosen = None\n            # Cap exact queries per market to avoid the prior 10k serialized-query mistake.\n            for obs_id in by_ticker.get(ticker, [])[:8]:\n                req = _request_for_observation_id(request_cls, backend, obs_id)\n                observations = backend.query(request=req)\n                for obs in observations:\n                    ident = _extract_snapshot_identity(obs)\n                    if ident[\"observation_type\"] == \"market_snapshot\":\n                        chosen = ident\n                        chosen[\"ticker\"] = ticker\n                        chosen[\"observation_id\"] = obs_id\n                        break\n                if chosen is not None:\n                    break\n            if chosen is not None:\n                restored.append(chosen)\n    else:\n        for value in raw:\n            ident = _extract_snapshot_identity(value)\n            if ident[\"observation_type\"] == \"market_snapshot\":\n                restored.append(ident)\n\n    # One snapshot per ticker.\n    snapshots = {}\n    for rec in restored:\n        ticker = rec.get(\"source_market_id\") or rec.get(\"source_symbol\") or rec.get(\"ticker\")\n        if ticker and ticker in dedup and ticker not in snapshots:\n            snapshots[ticker] = rec\n\n    assignments = []\n    family_counts = Counter()\n    reason_counts = Counter()\n\n    for ticker, candidate in sorted(dedup.items()):\n        snap = snapshots.get(ticker)\n        title = (snap or {}).get(\"market_title\") or candidate.get(\"title\")\n        event_ticker = (snap or {}).get(\"event_ticker\") or candidate.get(\"event_ticker\")\n        identity_text = \" | \".join(x for x in (\n            ticker, title, event_ticker, candidate.get(\"series_ticker\")\n        ) if x)\n\n        family, reason, evidence = _resolve_family(identity_text)\n        family_counts[family] += 1\n        reason_counts[reason] += 1\n\n        assignments.append({\n            \"ticker\": ticker,\n            \"market_title\": title,\n            \"event_ticker\": event_ticker,\n            \"series_ticker\": candidate.get(\"series_ticker\"),\n            \"current_family\": \"sports:UNKNOWN\",\n            \"recommended_family\": family,\n            \"reason\": reason,\n            \"evidence\": evidence,\n            \"postgres_market_snapshot_found\": snap is not None,\n            \"isolation_path\": candidate[\"isolation_path\"],\n        })\n\n    report = {\n        \"read_only\": True,\n        \"execution_authority\": False,\n        \"probability_enabled\": False,\n        \"postgres_transaction\": \"BEGIN READ ONLY\",\n        \"current_market_cohort_source\": cohort_source,\n        \"snapshot_id\": snapshot_id,\n        \"current_market_count\": len(markets),\n        \"sports_unknown_candidate_count\": len(unknown_candidates),\n        \"unique_sports_unknown_tickers\": len(tickers),\n        \"postgres_market_snapshots_recovered\": len(snapshots),\n        \"classifier_isolation_paths\": dict(classifier_paths),\n        \"family_counts\": dict(family_counts.most_common()),\n        \"reason_counts\": dict(reason_counts.most_common()),\n        \"assignments\": assignments,\n    }\n\n    report_path = root / \"OAD_EXACT_SPORTS_UNKNOWN_COHORT_POSTGRESQL_IDENTITY_RECOVERY_AUDIT.json\"\n    unknown_path = root / \"OAD_EXACT_SPORTS_UNKNOWN_COHORT_STILL_UNKNOWN.json\"\n\n    report_path.write_text(json.dumps(report, indent=2, sort_keys=True, default=str), encoding=\"utf-8\")\n    still_unknown = [r for r in assignments if r[\"recommended_family\"] == \"UNKNOWN\"]\n    unknown_path.write_text(json.dumps(still_unknown, indent=2, sort_keys=True, default=str), encoding=\"utf-8\")\n\n    return report, report_path, unknown_path"
+    }
+  ],
+  "backend_assignments": [
+    "backend = getattr(router, '_persistence_backend', None)",
+    "conn = backend._connect()",
+    "_, backend = _router_backend(root)",
+    "raw = _read_market_snapshot_observations(backend, tickers)",
+    "request_cls = _request_class(backend)",
+    "req = _request_for_observation_id(request_cls, backend, obs_id)",
+    "observations = backend.query(request=req)"
+  ],
+  "imports": [
+    "from __future__ import annotations",
+    "import dataclasses",
+    "import importlib",
+    "import inspect",
+    "import json",
+    "import re",
+    "import uuid",
+    "from collections import Counter, defaultdict",
+    "from datetime import datetime, timezone",
+    "from pathlib import Path",
+    "from typing import Any, Iterable",
+    "from qseries_v2.oracle_production_hardening.oph_007_physical_single_postgresql_writer_runtime import build_existing_canonical_router"
+  ],
+  "execution_authority": false
+}

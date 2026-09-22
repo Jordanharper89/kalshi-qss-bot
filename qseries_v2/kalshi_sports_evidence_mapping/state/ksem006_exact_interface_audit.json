@@ -1,0 +1,312 @@
+{
+  "modules": [
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_101_universal_classification_exhaustive_diagnostic.py",
+      "sha256": "a7d33d3dae05e1adeb60d12b5a8c8489d41dd72d4cde69fc897fae80d0281f7c",
+      "functions": [
+        {
+          "name": "_prefix",
+          "signature": {
+            "args": [
+              "ticker"
+            ],
+            "required": [
+              "ticker"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 109
+        },
+        {
+          "name": "_normalize_spaces",
+          "signature": {
+            "args": [
+              "value"
+            ],
+            "required": [
+              "value"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 112
+        },
+        {
+          "name": "_phrase_pattern",
+          "signature": {
+            "args": [
+              "term"
+            ],
+            "required": [
+              "term"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 115
+        },
+        {
+          "name": "_term_match",
+          "signature": {
+            "args": [
+              "text",
+              "term"
+            ],
+            "required": [
+              "text",
+              "term"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 128
+        },
+        {
+          "name": "_signals",
+          "signature": {
+            "args": [
+              "text",
+              "scope"
+            ],
+            "required": [
+              "text",
+              "scope"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 131
+        },
+        {
+          "name": "_parent_container_context",
+          "signature": {
+            "args": [
+              "market"
+            ],
+            "required": [
+              "market"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 144
+        },
+        {
+          "name": "_proper_name_shape",
+          "signature": {
+            "args": [
+              "text"
+            ],
+            "required": [
+              "text"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 151
+        },
+        {
+          "name": "_keys",
+          "signature": {
+            "args": [
+              "signals"
+            ],
+            "required": [
+              "signals"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 158
+        },
+        {
+          "name": "_sibling_signals",
+          "signature": {
+            "args": [
+              "legs",
+              "current_index"
+            ],
+            "required": [
+              "legs",
+              "current_index"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 161
+        },
+        {
+          "name": "classify_isolated_root_cause",
+          "signature": {
+            "args": [
+              "leg",
+              "parent_market",
+              "sibling_legs"
+            ],
+            "required": [
+              "leg",
+              "parent_market",
+              "sibling_legs"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 169
+        },
+        {
+          "name": "verify_boundary_matcher",
+          "signature": {
+            "args": [],
+            "required": [],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 267
+        },
+        {
+          "name": "run_exhaustive_diagnostic",
+          "signature": {
+            "args": [
+              "limit",
+              "example_limit"
+            ],
+            "required": [],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 284
+        },
+        {
+          "name": "diagnostic_to_dict",
+          "signature": {
+            "args": [
+              "r"
+            ],
+            "required": [
+              "r"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 400
+        }
+      ],
+      "classes": [
+        {
+          "name": "EvidenceSignal",
+          "line": 74,
+          "methods": []
+        },
+        {
+          "name": "DiagnosticCluster",
+          "line": 81,
+          "methods": []
+        },
+        {
+          "name": "ExhaustiveDiagnostic",
+          "line": 91,
+          "methods": []
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_099_mixed_domain_cross_category_decomposition.py",
+      "sha256": "d8df25c9af58ac40df061daa13d97e78f695ae533057de7dc072fac7b10a2737",
+      "functions": [
+        {
+          "name": "_non_sports_override",
+          "signature": {
+            "args": [
+              "text"
+            ],
+            "required": [
+              "text"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 22
+        },
+        {
+          "name": "decompose_mixed_market",
+          "signature": {
+            "args": [
+              "market"
+            ],
+            "required": [
+              "market"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 28
+        }
+      ],
+      "classes": [
+        {
+          "name": "DecomposedLeg",
+          "line": 13,
+          "methods": []
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_088_sports_market_type_resolver.py",
+      "sha256": "ef705b7fdd04a705580d916f53335b4acec55c950b490a8e94867e1930861481",
+      "functions": [
+        {
+          "name": "resolve_sports_market_type",
+          "signature": {
+            "args": [
+              "m"
+            ],
+            "required": [
+              "m"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 19
+        }
+      ],
+      "classes": [
+        {
+          "name": "SportsMarketType",
+          "line": 7,
+          "methods": []
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_098_structured_sports_entity_type_recognition.py",
+      "sha256": "649852e2166a9ebb137c6d56f4044fa38a0260c52a4394447b247fcf6bfa240d",
+      "functions": [
+        {
+          "name": "recognize_sports_entity_type",
+          "signature": {
+            "args": [
+              "text"
+            ],
+            "required": [
+              "text"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 31
+        }
+      ],
+      "classes": [
+        {
+          "name": "SportsEntityType",
+          "line": 10,
+          "methods": []
+        }
+      ]
+    }
+  ],
+  "module_count": 4,
+  "ast_parsed": true,
+  "execution_authority": false
+}

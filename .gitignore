@@ -75,4 +75,19 @@ Optional[Dict[str*
 *.sqlite3
 qseries_v2/data/
 oracle/data/
-runtime/
+runtime/secrets/
+*.key# Oracle local runtime/generated data
+/runtime_state/
+/state/
+/logs/
+/small_debug_zip/
+
+# Local Git synchronization diagnostics
+/git_sync_status.txt
+/git_sync_untracked.txt
+/git_sync_diff_stat.txt
+
+# Python generated caches
+__pycache__/
+*.pyc
+

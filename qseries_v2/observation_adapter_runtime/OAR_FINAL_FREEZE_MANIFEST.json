@@ -1,0 +1,128 @@
+{
+  "build_range": "OAR-001 through OAR-029",
+  "defect_corrections_only": true,
+  "execution_allowed": false,
+  "files": [
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_001_runtime_foundation.py",
+      "sha256": "83e8c136b4f573ed8badb7c21034e7e4289252e79db0a7dbb20785987b83742f"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_002_adapter_scheduler.py",
+      "sha256": "68f8e661c642abd758fe532f24549371150e178826065aabb80c63f69236adf7"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_003_multi_adapter_runner.py",
+      "sha256": "773c012c4269931d9ebea865fea58c919606352bb9536e0d98217e1c5719e32e"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_004_continuous_service_loop.py",
+      "sha256": "3f52afec02fa49bdb2be6377cfbd2746a25cd007a7edd62b9c771a906c750256"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_005_runtime_lifecycle.py",
+      "sha256": "deea4e668f19f5692b9dd661428435af8b27da9e1aeb64f2dde6dbabd358438d"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_006_production_launch_boundary.py",
+      "sha256": "1195e8fb7f62815acdaa089a736d4163ef55b8a990df2b225e7e08cea5ab2e08"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_007_adapter_health_model.py",
+      "sha256": "c26b30774d2b3fc0dd4c11c928632cee497b703f7deb722a549a2d9a405925aa"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_008_failure_isolation_controller.py",
+      "sha256": "3071b0ae65a32c776446a1e59199d7d9f2439602c3f5b9014f86eb1843a4f760"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_009_runtime_health_registry.py",
+      "sha256": "c25753256154b0d3b2f0b642c4817afb5b82335ce53394b9397b6e26e8748458"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_010_canonical_live_observation_bus.py",
+      "sha256": "8c734238cb3b11fd5afd2c638fde38e8c30580463a26693bc62e370954dc315f"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_011_live_observation_admission.py",
+      "sha256": "026cd22d21ece647d2b9a55c863e821db9f5b78b7e4716290b652110e84a9cba"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_012_live_observation_bus_registry.py",
+      "sha256": "38c2ff8d82aa555e62d45a68ae0ff193ce6dbd072a3f4b6722a690e0a974f8ab"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_013_oi_canonical_handoff.py",
+      "sha256": "9cd4d195817d63d2d7642211e15122fea2e7a4927d1cd71165290c83aa2fb8e1"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_014_umd_market_correlation_handoff.py",
+      "sha256": "0acdf801ce5c5d1e4c2c214094f7d9658c31bcd928dbf458c41ea2efc7f41fd6"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_015_oml_memory_intake_handoff.py",
+      "sha256": "fbc20d903fbb376b2393f789cc9500feaa9fc35114f941d27199396439557ddd"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_016_umd_boundary_resolver.py",
+      "sha256": "7d98a8abd2400df55dc7e65ae1d4d45264af7514b73d6f94acde5cdd4e902ad3"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_017_oml_boundary_resolver.py",
+      "sha256": "b73a603dcfdba1ec1c709773725cd0c6a4b816ce7aab5e9e35e551a8b8e06f6d"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_018_oi_umd_oml_integration.py",
+      "sha256": "7b59251e9cf9f6aeef000af2a6013cff60c565dac39858e0378f3271ac3c3837"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_019_exact_umd_market_identity_binding.py",
+      "sha256": "2e186cd950b4ab31b039fe9cc25751d6ac9e78eb022c5a5735cd99d1e4e509b4"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_020_exact_oml_observation_intake_binding.py",
+      "sha256": "1260c4b2a5593138f2dfa657c1e3146fb228e9362252b724f760583f7ce7ecb6"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_021_live_intelligence_pipeline_coordinator.py",
+      "sha256": "70f3e36213e268c8373b20d4d95d74e37f123d08f14e7f51aea5295af1f36a0f"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_022_terminal_live_intelligence_read_model.py",
+      "sha256": "71a7f58ca720e39745b271486991e864bb36888fbaf5272a44b3258ea9426f5b"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_023_terminal_live_query_router.py",
+      "sha256": "2f3e9462bf2cfae68b2f5f50888680f44c2ee785160da9997ac844db3cba21ce"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_024_oit_live_intelligence_bridge.py",
+      "sha256": "41ec57abedf7255fa12e886c91cdbf703847cbb78e6c3439b9692c1dbc143e34"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_025_oit_ask_dispatch_resolver.py",
+      "sha256": "307ed995b0ee9668f41ecda138614ac6d025bb49dfff73da80045921e24fcb17"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_026_live_ask_dispatch_binding.py",
+      "sha256": "4030b479d4e7a4c41d703ba5805b91a4ed54ff9f42485f705f91140481b8ce6e"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_027_terminal_live_query_e2e.py",
+      "sha256": "38a0302566808ea1d187c3aefbd70bcb26cc7e8fa92824793e1a04611e9ed0b7"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_028_full_live_intelligence_certification.py",
+      "sha256": "d667d2aeae1b65508934c9201a33f8a7e1bf38bbde0a266132c985abd11c0a30"
+    },
+    {
+      "path": "qseries_v2/observation_adapter_runtime/oar_029_terminal_live_activation.py",
+      "sha256": "1676b8dc74987c55ccbb32d988acf75771abd31f88b6aa46b1736329907c2071"
+    }
+  ],
+  "frozen": true,
+  "persistence_allowed": false,
+  "publication_allowed": false,
+  "read_only": true,
+  "revision": "OAR_FINAL_FREEZE_MANIFEST_V1"
+}

@@ -1,0 +1,8 @@
+{
+  "league": "NHL",
+  "observation_id": "0fe0c4fc9305cc8dc578117296b1e7eb8fa1d335a8700d45d74bd95988d280eb",
+  "provider_event_id": "2026020001",
+  "committed_at": "2026-09-17T20:51:41.221149+00:00",
+  "readback_count": 1,
+  "execution_authority": false
+}

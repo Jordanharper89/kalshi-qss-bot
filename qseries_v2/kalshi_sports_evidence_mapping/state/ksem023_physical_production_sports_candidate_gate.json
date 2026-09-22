@@ -1,0 +1,12 @@
+{
+  "persisted_observations": 15,
+  "providers": [
+    "statsapi.mlb.com"
+  ],
+  "structured_descriptors": 15,
+  "current_markets": 100,
+  "descriptor_groups": 15,
+  "observations_with_candidates": 0,
+  "association_candidates": 0,
+  "execution_authority": false
+}

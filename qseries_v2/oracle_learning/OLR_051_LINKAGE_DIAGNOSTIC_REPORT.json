@@ -1,0 +1,15 @@
+{
+  "evidence_candidates": [],
+  "evidence_rows_for_market_id": 0,
+  "evidence_rows_for_ticker": 0,
+  "exact_observation_id_match": false,
+  "execution_authority": false,
+  "likely_break": "NO_NONEMPTY_OUTCOME_SOURCE_WITH_MARKET_IDENTITY",
+  "outcome_candidates": [],
+  "outcome_count": 0,
+  "sample_market_id": null,
+  "sample_observation_id": null,
+  "sample_ticker": null,
+  "selected_evidence_table": null,
+  "selected_outcome_table": null
+}

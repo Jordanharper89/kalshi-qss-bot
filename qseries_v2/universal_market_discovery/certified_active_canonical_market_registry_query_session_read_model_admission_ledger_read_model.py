@@ -1,0 +1,721 @@
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from types import MappingProxyType
+from typing import Any, Mapping, Tuple
+
+from .universal_market_discovery_foundation import (
+    UMD_SUBSYSTEM_ID,
+    ImmutableLineage,
+    deterministic_sha256,
+)
+from .certified_active_canonical_market_registry_query_session_read_model_admission_ledger import (
+    CertifiedActiveMarketQuerySessionReadModelAdmissionLedgerEntry,
+    ReadOnlyActiveMarketQuerySessionReadModelAdmissionLedger,
+)
+
+UMD_034_BUILD_ID = "UMD-034"
+UMD_034_BUILD_NAME = (
+    "Certified Active Canonical Market Registry "
+    "Query Session Read Model Admission Ledger Read Model"
+)
+UMD_034_REVISION = (
+    "UMD_034_CERTIFIED_ACTIVE_CANONICAL_MARKET_REGISTRY_"
+    "QUERY_SESSION_READ_MODEL_ADMISSION_LEDGER_READ_MODEL_CORRECTION_V2"
+)
+UMD_034_SCHEMA_VERSION = "1.0.0"
+
+PROHIBITED_CAPABILITIES = (
+    "network_discovery",
+    "market_scanning",
+    "ledger_append",
+    "ledger_mutation",
+    "record_deletion",
+    "record_reordering",
+    "read_model_persistence",
+    "query_session_mutation",
+    "active_registry_mutation",
+    "oracle_memory_mutation",
+    "publication",
+    "order_submission",
+    "trade_execution",
+)
+
+
+def _text(value: str, field_name: str) -> str:
+    if not isinstance(value, str):
+        raise TypeError(f"{field_name} must be a string")
+    normalized = " ".join(value.strip().split())
+    if not normalized:
+        raise ValueError(f"{field_name} must not be empty")
+    return normalized
+
+
+def _sha256(value: str, field_name: str) -> str:
+    normalized = _text(value, field_name).lower()
+    if len(normalized) != 64:
+        raise ValueError(
+            f"{field_name} must contain 64 hexadecimal characters"
+        )
+    if any(
+        character not in "0123456789abcdef"
+        for character in normalized
+    ):
+        raise ValueError(
+            f"{field_name} must be lowercase SHA-256 hexadecimal"
+        )
+    return normalized
+
+
+def _freeze(value: Mapping[str, Any]) -> Mapping[str, Any]:
+    if not isinstance(value, Mapping):
+        raise TypeError("metadata must be a mapping")
+    return MappingProxyType(
+        dict(
+            sorted(
+                (str(key), item)
+                for key, item in value.items()
+            )
+        )
+    )
+
+
+@dataclass(frozen=True, slots=True)
+class CertifiedActiveMarketQuerySessionReadModelAdmissionLedgerReadModel:
+    source_ledger_hash: str
+    total_entry_count: int
+    admitted_entry_count: int
+    rejected_entry_count: int
+    ordered_entry_ids: Tuple[str, ...]
+    ordered_read_model_hashes: Tuple[str, ...]
+    ordered_decision_ids: Tuple[str, ...]
+    admitted_entry_ids: Tuple[str, ...]
+    rejected_entry_ids: Tuple[str, ...]
+    latest_entry_id: str | None
+    latest_admitted_entry_id: str | None
+    metadata: Mapping[str, Any]
+    lineage: ImmutableLineage
+    _entry_position_by_id: Mapping[str, int] = field(
+        init=False,
+        repr=False,
+    )
+    _read_model_position_by_hash: Mapping[str, int] = field(
+        init=False,
+        repr=False,
+    )
+    _decision_position_by_id: Mapping[str, int] = field(
+        init=False,
+        repr=False,
+    )
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "source_ledger_hash",
+            _sha256(
+                self.source_ledger_hash,
+                "source_ledger_hash",
+            ),
+        )
+
+        for field_name in (
+            "total_entry_count",
+            "admitted_entry_count",
+            "rejected_entry_count",
+        ):
+            value = getattr(self, field_name)
+            if not isinstance(value, int):
+                raise TypeError(
+                    f"{field_name} must be an integer"
+                )
+            if value < 0:
+                raise ValueError(
+                    f"{field_name} must be non-negative"
+                )
+
+        if (
+            self.admitted_entry_count
+            + self.rejected_entry_count
+            != self.total_entry_count
+        ):
+            raise ValueError(
+                "admitted and rejected counts must partition total count"
+            )
+
+        tuple_fields = (
+            "ordered_entry_ids",
+            "ordered_read_model_hashes",
+            "ordered_decision_ids",
+            "admitted_entry_ids",
+            "rejected_entry_ids",
+        )
+        for field_name in tuple_fields:
+            value = getattr(self, field_name)
+            if not isinstance(value, tuple):
+                object.__setattr__(
+                    self,
+                    field_name,
+                    tuple(value),
+                )
+
+        ordered_entry_ids = tuple(
+            _text(value, "ordered_entry_id")
+            for value in self.ordered_entry_ids
+        )
+        ordered_read_model_hashes = tuple(
+            _sha256(value, "ordered_read_model_hash")
+            for value in self.ordered_read_model_hashes
+        )
+        ordered_decision_ids = tuple(
+            _text(value, "ordered_decision_id")
+            for value in self.ordered_decision_ids
+        )
+        admitted_entry_ids = tuple(
+            _text(value, "admitted_entry_id")
+            for value in self.admitted_entry_ids
+        )
+        rejected_entry_ids = tuple(
+            _text(value, "rejected_entry_id")
+            for value in self.rejected_entry_ids
+        )
+
+        object.__setattr__(
+            self,
+            "ordered_entry_ids",
+            ordered_entry_ids,
+        )
+        object.__setattr__(
+            self,
+            "ordered_read_model_hashes",
+            ordered_read_model_hashes,
+        )
+        object.__setattr__(
+            self,
+            "ordered_decision_ids",
+            ordered_decision_ids,
+        )
+        object.__setattr__(
+            self,
+            "admitted_entry_ids",
+            admitted_entry_ids,
+        )
+        object.__setattr__(
+            self,
+            "rejected_entry_ids",
+            rejected_entry_ids,
+        )
+
+        if len(ordered_entry_ids) != self.total_entry_count:
+            raise ValueError(
+                "ordered_entry_ids length must equal total count"
+            )
+        if len(ordered_read_model_hashes) != self.total_entry_count:
+            raise ValueError(
+                "ordered_read_model_hashes length must equal total count"
+            )
+        if len(ordered_decision_ids) != self.total_entry_count:
+            raise ValueError(
+                "ordered_decision_ids length must equal total count"
+            )
+        if len(admitted_entry_ids) != self.admitted_entry_count:
+            raise ValueError(
+                "admitted_entry_ids length must equal admitted count"
+            )
+        if len(rejected_entry_ids) != self.rejected_entry_count:
+            raise ValueError(
+                "rejected_entry_ids length must equal rejected count"
+            )
+
+        if len(set(ordered_entry_ids)) != len(ordered_entry_ids):
+            raise ValueError("ordered_entry_ids must be unique")
+        if (
+            len(set(ordered_read_model_hashes))
+            != len(ordered_read_model_hashes)
+        ):
+            raise ValueError(
+                "ordered_read_model_hashes must be unique"
+            )
+        if (
+            len(set(ordered_decision_ids))
+            != len(ordered_decision_ids)
+        ):
+            raise ValueError(
+                "ordered_decision_ids must be unique"
+            )
+
+        if set(admitted_entry_ids).intersection(
+            rejected_entry_ids
+        ):
+            raise ValueError(
+                "admitted and rejected entry IDs must be disjoint"
+            )
+        if (
+            set(admitted_entry_ids).union(rejected_entry_ids)
+            != set(ordered_entry_ids)
+        ):
+            raise ValueError(
+                "admission partitions must cover ordered entry IDs"
+            )
+
+        if self.latest_entry_id is None:
+            if ordered_entry_ids:
+                raise ValueError(
+                    "latest_entry_id required when entries exist"
+                )
+        else:
+            object.__setattr__(
+                self,
+                "latest_entry_id",
+                _text(
+                    self.latest_entry_id,
+                    "latest_entry_id",
+                ),
+            )
+            if self.latest_entry_id != ordered_entry_ids[-1]:
+                raise ValueError(
+                    "latest_entry_id must equal final ordered entry ID"
+                )
+
+        if self.latest_admitted_entry_id is None:
+            if admitted_entry_ids:
+                raise ValueError(
+                    "latest_admitted_entry_id required when admitted entries exist"
+                )
+        else:
+            object.__setattr__(
+                self,
+                "latest_admitted_entry_id",
+                _text(
+                    self.latest_admitted_entry_id,
+                    "latest_admitted_entry_id",
+                ),
+            )
+            if self.latest_admitted_entry_id != admitted_entry_ids[-1]:
+                raise ValueError(
+                    "latest_admitted_entry_id must equal final admitted entry ID"
+                )
+
+        object.__setattr__(
+            self,
+            "metadata",
+            _freeze(self.metadata),
+        )
+
+        if self.lineage.subsystem_id != UMD_SUBSYSTEM_ID:
+            raise ValueError("read-model lineage must belong to UMD")
+        if self.lineage.build_id != UMD_034_BUILD_ID:
+            raise ValueError(
+                "read-model lineage must use build_id UMD-034"
+            )
+        if self.source_ledger_hash not in self.lineage.parent_hashes:
+            raise ValueError(
+                "read-model lineage must include source ledger hash"
+            )
+
+        object.__setattr__(
+            self,
+            "_entry_position_by_id",
+            MappingProxyType(
+                {
+                    entry_id: index
+                    for index, entry_id in enumerate(
+                        ordered_entry_ids,
+                        start=1,
+                    )
+                }
+            ),
+        )
+        object.__setattr__(
+            self,
+            "_read_model_position_by_hash",
+            MappingProxyType(
+                {
+                    read_model_hash: index
+                    for index, read_model_hash in enumerate(
+                        ordered_read_model_hashes,
+                        start=1,
+                    )
+                }
+            ),
+        )
+        object.__setattr__(
+            self,
+            "_decision_position_by_id",
+            MappingProxyType(
+                {
+                    decision_id: index
+                    for index, decision_id in enumerate(
+                        ordered_decision_ids,
+                        start=1,
+                    )
+                }
+            ),
+        )
+
+    @property
+    def read_model_id(self) -> str:
+        return (
+            "umd:query-session-read-model-admission-ledger-read-model:"
+            + deterministic_sha256(
+                {
+                    "source_ledger_hash": self.source_ledger_hash,
+                    "ordered_entry_ids": self.ordered_entry_ids,
+                    "ordered_read_model_hashes": self.ordered_read_model_hashes,
+                    "ordered_decision_ids": self.ordered_decision_ids,
+                }
+            )
+        )
+
+    def entry_position(self, entry_id: str) -> int | None:
+        return self._entry_position_by_id.get(
+            _text(entry_id, "entry_id")
+        )
+
+    def read_model_position(
+        self,
+        read_model_hash: str,
+    ) -> int | None:
+        return self._read_model_position_by_hash.get(
+            _sha256(
+                read_model_hash,
+                "read_model_hash",
+            )
+        )
+
+    def decision_position(
+        self,
+        decision_id: str,
+    ) -> int | None:
+        return self._decision_position_by_id.get(
+            _text(decision_id, "decision_id")
+        )
+
+    def is_admitted_entry(self, entry_id: str) -> bool:
+        return (
+            _text(entry_id, "entry_id")
+            in self.admitted_entry_ids
+        )
+
+    def is_rejected_entry(self, entry_id: str) -> bool:
+        return (
+            _text(entry_id, "entry_id")
+            in self.rejected_entry_ids
+        )
+
+    def to_canonical_dict(self) -> Mapping[str, Any]:
+        return {
+            "read_model_id": self.read_model_id,
+            "source_ledger_hash": self.source_ledger_hash,
+            "total_entry_count": self.total_entry_count,
+            "admitted_entry_count": self.admitted_entry_count,
+            "rejected_entry_count": self.rejected_entry_count,
+            "ordered_entry_ids": self.ordered_entry_ids,
+            "ordered_read_model_hashes": self.ordered_read_model_hashes,
+            "ordered_decision_ids": self.ordered_decision_ids,
+            "admitted_entry_ids": self.admitted_entry_ids,
+            "rejected_entry_ids": self.rejected_entry_ids,
+            "latest_entry_id": self.latest_entry_id,
+            "latest_admitted_entry_id": self.latest_admitted_entry_id,
+            "metadata": self.metadata,
+            "lineage": self.lineage,
+        }
+
+    @property
+    def read_model_hash(self) -> str:
+        return deterministic_sha256(
+            self.to_canonical_dict()
+        )
+
+
+def build_active_market_query_session_read_model_admission_ledger_read_model(
+    ledger: ReadOnlyActiveMarketQuerySessionReadModelAdmissionLedger,
+    *,
+    metadata: Mapping[str, Any] | None = None,
+    lineage: ImmutableLineage,
+) -> CertifiedActiveMarketQuerySessionReadModelAdmissionLedgerReadModel:
+    if not isinstance(
+        ledger,
+        ReadOnlyActiveMarketQuerySessionReadModelAdmissionLedger,
+    ):
+        raise TypeError(
+            "ledger must be a certified UMD-033 admission ledger"
+        )
+
+    entries = ledger.entries
+    admitted = ledger.admitted_entries()
+    rejected = ledger.rejected_entries()
+
+    return CertifiedActiveMarketQuerySessionReadModelAdmissionLedgerReadModel(
+        source_ledger_hash=ledger.ledger_hash,
+        total_entry_count=len(entries),
+        admitted_entry_count=len(admitted),
+        rejected_entry_count=len(rejected),
+        ordered_entry_ids=tuple(
+            entry.entry_id
+            for entry in entries
+        ),
+        ordered_read_model_hashes=tuple(
+            entry.decision.read_model_hash
+            for entry in entries
+        ),
+        ordered_decision_ids=tuple(
+            entry.decision.decision_id
+            for entry in entries
+        ),
+        admitted_entry_ids=tuple(
+            entry.entry_id
+            for entry in admitted
+        ),
+        rejected_entry_ids=tuple(
+            entry.entry_id
+            for entry in rejected
+        ),
+        latest_entry_id=(
+            None
+            if not entries
+            else entries[-1].entry_id
+        ),
+        latest_admitted_entry_id=(
+            None
+            if not admitted
+            else admitted[-1].entry_id
+        ),
+        metadata=(
+            {}
+            if metadata is None
+            else metadata
+        ),
+        lineage=lineage,
+    )
+
+
+@dataclass(frozen=True, slots=True)
+class UMD034CertificationManifest:
+    subsystem_id: str
+    build_id: str
+    build_name: str
+    revision: str
+    schema_version: str
+    upstream_builds: Tuple[str, ...]
+    read_model_mode: str
+    prohibited_capabilities: Tuple[str, ...]
+    network_enabled: bool
+    persistence_enabled: bool
+    mutation_enabled: bool
+    publication_enabled: bool
+    execution_enabled: bool
+
+    def to_canonical_dict(self) -> Mapping[str, Any]:
+        return {
+            "subsystem_id": self.subsystem_id,
+            "build_id": self.build_id,
+            "build_name": self.build_name,
+            "revision": self.revision,
+            "schema_version": self.schema_version,
+            "upstream_builds": self.upstream_builds,
+            "read_model_mode": self.read_model_mode,
+            "prohibited_capabilities": self.prohibited_capabilities,
+            "network_enabled": self.network_enabled,
+            "persistence_enabled": self.persistence_enabled,
+            "mutation_enabled": self.mutation_enabled,
+            "publication_enabled": self.publication_enabled,
+            "execution_enabled": self.execution_enabled,
+        }
+
+    @property
+    def manifest_hash(self) -> str:
+        return deterministic_sha256(
+            self.to_canonical_dict()
+        )
+
+
+def build_umd_034_certification_manifest() -> UMD034CertificationManifest:
+    return UMD034CertificationManifest(
+        subsystem_id="UMD",
+        build_id=UMD_034_BUILD_ID,
+        build_name=UMD_034_BUILD_NAME,
+        revision=UMD_034_REVISION,
+        schema_version=UMD_034_SCHEMA_VERSION,
+        upstream_builds=tuple(
+            f"UMD-{number:03d}"
+            for number in range(1, 34)
+        ),
+        read_model_mode="deterministic_read_only_projection",
+        prohibited_capabilities=PROHIBITED_CAPABILITIES,
+        network_enabled=False,
+        persistence_enabled=False,
+        mutation_enabled=False,
+        publication_enabled=False,
+        execution_enabled=False,
+    )
+
+
+def certify_active_market_query_session_read_model_admission_ledger_read_model(
+    read_model: CertifiedActiveMarketQuerySessionReadModelAdmissionLedgerReadModel,
+) -> Mapping[str, Any]:
+    checks = {
+        "count_partition_valid": (
+            read_model.admitted_entry_count
+            + read_model.rejected_entry_count
+            == read_model.total_entry_count
+        ),
+        "ordered_entry_count_valid": (
+            len(read_model.ordered_entry_ids)
+            == read_model.total_entry_count
+        ),
+        "ordered_read_model_count_valid": (
+            len(read_model.ordered_read_model_hashes)
+            == read_model.total_entry_count
+        ),
+        "ordered_decision_count_valid": (
+            len(read_model.ordered_decision_ids)
+            == read_model.total_entry_count
+        ),
+        "entry_ids_unique": (
+            len(set(read_model.ordered_entry_ids))
+            == len(read_model.ordered_entry_ids)
+        ),
+        "read_model_hashes_unique": (
+            len(set(read_model.ordered_read_model_hashes))
+            == len(read_model.ordered_read_model_hashes)
+        ),
+        "decision_ids_unique": (
+            len(set(read_model.ordered_decision_ids))
+            == len(read_model.ordered_decision_ids)
+        ),
+        "partition_disjoint": (
+            not set(read_model.admitted_entry_ids).intersection(
+                read_model.rejected_entry_ids
+            )
+        ),
+        "partition_complete": (
+            set(read_model.admitted_entry_ids).union(
+                read_model.rejected_entry_ids
+            )
+            == set(read_model.ordered_entry_ids)
+        ),
+        "latest_entry_valid": (
+            (
+                read_model.latest_entry_id is None
+                and not read_model.ordered_entry_ids
+            )
+            or (
+                bool(read_model.ordered_entry_ids)
+                and read_model.latest_entry_id
+                == read_model.ordered_entry_ids[-1]
+            )
+        ),
+        "latest_admitted_valid": (
+            (
+                read_model.latest_admitted_entry_id is None
+                and not read_model.admitted_entry_ids
+            )
+            or (
+                bool(read_model.admitted_entry_ids)
+                and read_model.latest_admitted_entry_id
+                == read_model.admitted_entry_ids[-1]
+            )
+        ),
+        "lineage_bound": (
+            read_model.source_ledger_hash
+            in read_model.lineage.parent_hashes
+        ),
+        "deterministic_replay": (
+            read_model.read_model_hash
+            == deterministic_sha256(
+                read_model.to_canonical_dict()
+            )
+        ),
+        "read_only_indexes": (
+            isinstance(
+                read_model._entry_position_by_id,
+                MappingProxyType,
+            )
+            and isinstance(
+                read_model._read_model_position_by_hash,
+                MappingProxyType,
+            )
+            and isinstance(
+                read_model._decision_position_by_id,
+                MappingProxyType,
+            )
+        ),
+    }
+
+    failed = tuple(
+        name
+        for name, passed in checks.items()
+        if not passed
+    )
+
+    return MappingProxyType(
+        {
+            "certified": not failed,
+            "read_model_id": read_model.read_model_id,
+            "read_model_hash": read_model.read_model_hash,
+            "source_ledger_hash": read_model.source_ledger_hash,
+            "total_entry_count": read_model.total_entry_count,
+            "admitted_entry_count": read_model.admitted_entry_count,
+            "rejected_entry_count": read_model.rejected_entry_count,
+            "checks": MappingProxyType(checks),
+            "failed_checks": failed,
+        }
+    )
+
+
+def certify_umd_034_foundation() -> Mapping[str, Any]:
+    manifest = build_umd_034_certification_manifest()
+
+    checks = {
+        "subsystem_identity": manifest.subsystem_id == "UMD",
+        "build_identity": manifest.build_id == "UMD-034",
+        "upstreams_frozen": (
+            manifest.upstream_builds
+            == tuple(
+                f"UMD-{number:03d}"
+                for number in range(1, 34)
+            )
+        ),
+        "read_only_projection": (
+            manifest.read_model_mode
+            == "deterministic_read_only_projection"
+        ),
+        "network_disabled": manifest.network_enabled is False,
+        "persistence_disabled": manifest.persistence_enabled is False,
+        "mutation_disabled": manifest.mutation_enabled is False,
+        "publication_disabled": manifest.publication_enabled is False,
+        "execution_disabled": manifest.execution_enabled is False,
+        "deterministic_manifest_hash": (
+            manifest.manifest_hash
+            == deterministic_sha256(
+                manifest.to_canonical_dict()
+            )
+        ),
+    }
+
+    failed = tuple(
+        name
+        for name, passed in checks.items()
+        if not passed
+    )
+
+    return MappingProxyType(
+        {
+            "certified": not failed,
+            "build_id": manifest.build_id,
+            "revision": manifest.revision,
+            "manifest_hash": manifest.manifest_hash,
+            "checks": MappingProxyType(checks),
+            "failed_checks": failed,
+        }
+    )
+
+
+def verify_umd_034_certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model() -> bool:
+    certification = certify_umd_034_foundation()
+    if not certification["certified"]:
+        raise RuntimeError(
+            "UMD-034 foundation certification failed: "
+            + ", ".join(certification["failed_checks"])
+        )
+    return True

@@ -1,0 +1,48 @@
+from __future__ import annotations
+from dataclasses import dataclass
+from pathlib import Path
+import os,shutil,subprocess
+READ_ONLY=True; PROBABILITY_ENABLED=False; DIRECTION_ENABLED=False; PUBLICATION_ALLOWED=False; EXECUTION_AUTHORITY=False
+@dataclass(frozen=True,slots=True)
+class GMGNProviderAdmission:
+ cli_path:str|None; config_ok:bool; version_ok:bool; admitted:bool; version_text:str|None=None; execution_authority:bool=False
+class GMGNProviderError(RuntimeError): pass
+class GMGNRateLimitError(GMGNProviderError):
+ def __init__(self,message,retry_after_seconds=300.0): super().__init__(str(message)); self.retry_after_seconds=float(retry_after_seconds)
+def _candidates():
+ a=[]
+ for n in ("gmgn-cli","gmgn-cli.cmd"):
+  x=shutil.which(n)
+  if x:a.append(Path(x))
+ for base in (os.environ.get("APPDATA"),os.path.join(os.environ.get("USERPROFILE",""),"AppData","Roaming")):
+  if base:a.extend((Path(base)/"npm"/"gmgn-cli.cmd",Path(base)/"npm"/"gmgn-cli"))
+ seen=set()
+ for p in a:
+  q=os.path.normcase(os.path.normpath(str(p.expanduser().resolve())))
+  if q not in seen: seen.add(q); yield Path(q)
+def locate_gmgn_cli():
+ for p in _candidates():
+  if p.is_file():return str(p)
+ return None
+def _command(cli,args):
+ cli=str(cli)
+ if os.name=="nt" and Path(cli).suffix.lower() in (".cmd",".bat"):
+  c=os.environ.get("COMSPEC") or os.path.join(os.environ.get("SystemRoot",r"C:\Windows"),"System32","cmd.exe")
+  return [c,"/d","/s","/c",subprocess.list2cmdline([cli,*map(str,args)])]
+ return [cli,*map(str,args)]
+def run_gmgn_cli(cli,args,timeout_seconds=30.0,text=True): return subprocess.run(_command(cli,args),capture_output=True,text=text,timeout=float(timeout_seconds),check=False)
+def evaluate_gmgn_provider(timeout_seconds=10.0):
+ cli=locate_gmgn_cli()
+ if not cli:return GMGNProviderAdmission(None,False,False,False,None,False)
+ try:
+  v=run_gmgn_cli(cli,["--version"],timeout_seconds,True); vt=(v.stdout or v.stderr or "").strip(); vok=v.returncode==0 and bool(vt)
+ except Exception:vt=None;vok=False
+ try:c=run_gmgn_cli(cli,["config","--check"],timeout_seconds,True);cok=c.returncode==0
+ except Exception:cok=False
+ return GMGNProviderAdmission(cli,cok,vok,bool(cli and cok and vok),vt,False)
+def require_gmgn_provider(timeout_seconds=10.0):
+ a=evaluate_gmgn_provider(timeout_seconds)
+ if not a.cli_path:raise GMGNProviderError("GMGN_NOT_ADMITTED: cli not found")
+ if not a.version_ok:raise GMGNProviderError("GMGN_NOT_ADMITTED: version check failed")
+ if not a.config_ok:raise GMGNProviderError("GMGN_NOT_ADMITTED: config check failed")
+ return a

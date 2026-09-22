@@ -1,0 +1,22 @@
+{
+  "build_id": "OLR-050",
+  "frozen_capability": {
+    "execution_authority": false,
+    "live_learning_metrics_contract": true,
+    "missing_evidence_abstains": true,
+    "oracle_live_learning_child_evidence_enabled": true,
+    "postgresql_metrics_read_model": true,
+    "production_health_verification": true
+  },
+  "manifest_sha256": "708c66490736ded9730c45bb65913c2a4b38821c410038062161676c7c10806f",
+  "production_health": {
+    "evidence_coverage": 0.0,
+    "evidence_matched": 0,
+    "evidence_missing": 0,
+    "healthy": true,
+    "launcher_active": true,
+    "learning_yield": 0.0,
+    "settled": 0
+  },
+  "revision": "OLR_050_PRODUCTION_EVIDENCE_LEARNING_ACTIVATION_FREEZE_V1"
+}

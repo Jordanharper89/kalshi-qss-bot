@@ -1,0 +1,24 @@
+{
+  "build_id": "ORH-001",
+  "children_preserved": {
+    "canonical_writer": "run_opr_003_persistent_single_writer_runtime.py",
+    "continuity": "run_oir_001_continuity_checkpoint_daemon.py",
+    "coverage": "run_opr_004_coverage_persistent_ingress.py",
+    "fast_lane": "run_opr_004_fast_lane_persistent_ingress.py",
+    "inventory": "run_opr_004_inventory_persistent_ingress.py",
+    "learning": "run_opr_004_learning_persistent_ingress.py",
+    "reasoning": "run_olf_030_breadth_aware_reasoning_runtime.py"
+  },
+  "degraded_window_seconds": 60.0,
+  "execution_authority": false,
+  "failed_restarts_in_window": 3,
+  "launcher": "run_oracle_LIVE.py",
+  "launcher_sha256_after": "ad722dd930acd145b4b8c70e280f9cc17a1ef50e8e7882e2f3c4830789e19b54",
+  "launcher_sha256_cleaned_baseline": "caad12ad14c0693bfad85896187b60e28d5896e4c790826bd072f71987034e9d",
+  "launcher_sha256_original": "74ed5767b90bc39b03e5176da8b566a6f9cd2288bc8cb4ec051f9eb6ad54b4f2",
+  "max_restart_backoff_seconds": 30.0,
+  "retired_oir004_calls_removed": 0,
+  "retired_oir004_imports_removed": 1,
+  "revision": "ORH_001_TRUTHFUL_ORACLE_RUNTIME_HEALTH_CORRECTION_V2",
+  "stable_seconds_before_healthy": 15.0
+}

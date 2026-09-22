@@ -1,0 +1,12 @@
+{
+  "exact_live_retrieval": true,
+  "proposition_context": true,
+  "explicit_osn_binding_status": true,
+  "durable_cycle": true,
+  "exact_bound_count": 0,
+  "ambiguous_count": 0,
+  "source_gap_count": 1,
+  "production_launcher_change_allowed": false,
+  "ready_for_24x7_activation": false,
+  "execution_authority": false
+}

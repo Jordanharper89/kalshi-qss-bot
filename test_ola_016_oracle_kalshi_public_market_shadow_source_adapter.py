@@ -714,7 +714,119 @@ def run_timestamp_fail_closed_test():
     assert len(fetcher.calls) == 0
 
 
+
+def _stable_cohort_filter_regression():
+    class StableCohortFetcher:
+        def __init__(self):
+            self.calls = []
+
+        def __call__(
+            self,
+            *,
+            url,
+            timeout_seconds,
+        ):
+            self.calls.append(
+                {
+                    "url": url,
+                    "timeout_seconds": timeout_seconds,
+                }
+            )
+
+            query = parse_qs(
+                urlparse(url).query
+            )
+
+            assert query["status"] == ["open"]
+            assert query["limit"] == ["5"]
+            assert query["tickers"] == [
+                (
+                    "KXBTC-26JUL12-117000,"
+                    "KXBTC-26JUL12-116000"
+                )
+            ]
+
+            return (
+                200,
+                json.dumps(
+                    {
+                        "markets": [
+                            FIRST_MARKET,
+                            SECOND_MARKET,
+                        ],
+                        "cursor": "",
+                    }
+                ),
+            )
+
+    fetcher = StableCohortFetcher()
+
+    adapter = OracleKalshiPublicMarketShadowSourceAdapter(
+        market_status="open",
+        market_tickers=(
+            "KXBTC-26JUL12-117000",
+            "KXBTC-26JUL12-116000",
+        ),
+        page_limit=5,
+        max_pages=1,
+        timeout_seconds=7,
+        http_fetcher=fetcher,
+    )
+
+    observations = adapter.acquire(
+        acquired_at=ACQUIRED_AT,
+    )
+
+    assert adapter.market_tickers == (
+        "KXBTC-26JUL12-117000",
+        "KXBTC-26JUL12-116000",
+    )
+    assert adapter.stable_cohort_filter_active is True
+    assert len(fetcher.calls) == 1
+    assert tuple(
+        dict(observation.payload)["source_market_id"]
+        for observation in observations
+    ) == adapter.market_tickers
+
+    evidence = adapter.last_acquisition_evidence
+
+    assert evidence is not None
+    assert evidence.market_tickers_filter == (
+        "KXBTC-26JUL12-117000",
+        "KXBTC-26JUL12-116000",
+    )
+    assert evidence.stable_cohort_filter_active is True
+
+    canonical_evidence = evidence.to_canonical_dict()
+
+    assert canonical_evidence["market_tickers_filter"] == [
+        "KXBTC-26JUL12-117000",
+        "KXBTC-26JUL12-116000",
+    ]
+    assert (
+        canonical_evidence["stable_cohort_filter_active"]
+        is True
+    )
+
+    duplicate_blocked = False
+
+    try:
+        OracleKalshiPublicMarketShadowSourceAdapter(
+            market_tickers=(
+                "KXBTC-26JUL12-116000",
+                "KXBTC-26JUL12-116000",
+            ),
+            http_fetcher=fetcher,
+        )
+
+    except KalshiShadowAdapterContractError:
+        duplicate_blocked = True
+
+    assert duplicate_blocked is True
+
+
 def main():
+    _stable_cohort_filter_regression()
     health = run_health_test()
 
     (
@@ -741,6 +853,11 @@ def main():
         "schema_version": evidence.schema_version,
         "engine_id": evidence.engine_id,
         "status": "passed",
+        "stable_market_cohort_filter_supported": True,
+        "kalshi_tickers_filter_used": True,
+        "requested_cohort_order_preserved": True,
+        "stable_cohort_filter_evidence_preserved": True,
+        "duplicate_cohort_ticker_rejected": True,
         "adapter_id": adapter.adapter_id,
         "source_id": adapter.source_id,
         "source_environment": "production",

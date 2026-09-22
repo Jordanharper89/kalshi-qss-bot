@@ -1,0 +1,64 @@
+{
+  "rows": [
+    {
+      "league": "NFL",
+      "provider_event_id": "10403200",
+      "observation_id": "8d0c2160dff9a1777bf8e08436e40af932a85b2f5f49a9391b2b040bc1594807",
+      "request_id": "b91e90e4ac84475387aebd2d49c054a3",
+      "write_action": "SUBMITTED_COMMITTED_READBACK_VERIFIED",
+      "readback_count": 1,
+      "execution_authority": false
+    },
+    {
+      "league": "NCAAF",
+      "provider_event_id": "6604316",
+      "observation_id": "8a9a49a1a342255e73a33d7b9912beb6fe69258474e42b3acdec798c5806e0b2",
+      "request_id": "c9ae5fdaac3843e1a6c222b8457ba692",
+      "write_action": "SUBMITTED_COMMITTED_READBACK_VERIFIED",
+      "readback_count": 1,
+      "execution_authority": false
+    },
+    {
+      "league": "NBA",
+      "provider_event_id": "0012600009",
+      "observation_id": "e0cbd21ecdd494e0990d2b24eb46e66d7456aedc80b0addf6047d0395667eb70",
+      "request_id": "96dd35d9622144498b5d9445bada4fce",
+      "write_action": "SUBMITTED_COMMITTED_READBACK_VERIFIED",
+      "readback_count": 1,
+      "execution_authority": false
+    },
+    {
+      "league": "NHL",
+      "provider_event_id": "2026020001",
+      "observation_id": "93f5bb7e53113fd65d48399ab6cc644b18c0e72bef6dc1314d06869d95d2da7c",
+      "request_id": "53f134366b0d4d8c8a5139d7d1c3e2c9",
+      "write_action": "SUBMITTED_COMMITTED_READBACK_VERIFIED",
+      "readback_count": 1,
+      "execution_authority": false
+    },
+    {
+      "league": "MLS",
+      "provider_event_id": "MLS-MAT-0009KA",
+      "observation_id": "e48b328e5505be36e1b84d68a52d9d06b3f487222268a2a571003a5507bacb8e",
+      "request_id": "33e3deeb667b4cc8b710bbfc5c8df489",
+      "write_action": "SUBMITTED_COMMITTED_READBACK_VERIFIED",
+      "readback_count": 1,
+      "execution_authority": false
+    },
+    {
+      "league": "EPL",
+      "provider_event_id": "1",
+      "observation_id": "3240655e954b2820efbcaaf5e5a3a90080c5fff7086cb9df97b36ce961fc1c22",
+      "request_id": "fce23aea8d8043feb0142e4c56c0e180",
+      "write_action": "SUBMITTED_COMMITTED_READBACK_VERIFIED",
+      "readback_count": 1,
+      "execution_authority": false
+    }
+  ],
+  "single_writer": "OPH-019",
+  "writer_id": "oracle.osn.sports",
+  "canonicalizer": "OAD-261 via sports_single_writer_boundary",
+  "exact_readback": "OAD-068 via sports_single_writer_boundary",
+  "request_lifecycle": "submit -> submission.request_id -> await_request -> exact_readback",
+  "execution_authority": false
+}

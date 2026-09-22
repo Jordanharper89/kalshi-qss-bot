@@ -1,0 +1,38 @@
+
+from datetime import datetime,timezone,timedelta
+from collections import Counter
+from qseries_v2.oracle_intelligence.live_acquisition.oracle_canonical_persistence_backend_contract import CanonicalPersistenceQueryRequest
+from qseries_v2.oracle_adapters.independent.oad_068_exact_postgresql_independent_readback import _backend
+from qseries_v2.oracle_adapters.independent.oad_274_solana_multi_horizon_condition_windows import read_pinned_pool_history
+from qseries_v2.oracle_adapters.independent.oad_313_solana_outcome_pending_temporal_cases import build_outcome_pending_solana_cases
+from qseries_v2.oracle_strategy_intelligence.solana.ssi_002_physical_exact_future_price_path_materialization import materialize_exact_future_price_paths
+PREFIX="source.dex.solana.token_pools."
+def certify(root=None,lookback_hours=336,scan_limit=10000,history_limit=4096):
+ backend=_backend(root); end=datetime.now(timezone.utc); start=end-timedelta(hours=float(lookback_hours))
+ req=CanonicalPersistenceQueryRequest.by_observed_time_range(
+  query_id="query.ssi002g.solana.token_pool.discovery",backend_id=backend.backend_id,
+  observed_at_start=start,observed_at_end=end,limit=int(scan_limit),
+  query_metadata={"read_only":True,"purpose":"ssi002g_bounded_existing_history_discovery"})
+ scanned=tuple(backend.query(request=req))
+ pool_rows=tuple(r for r in scanned if str(r.source_id).startswith(PREFIX))
+ counts=Counter(str(r.source_id)[len(PREFIX):] for r in pool_rows)
+ ranked=tuple(sorted(counts.items(),key=lambda x:(-x[1],x[0])))
+ print("[SCAN]",{"all_rows":len(scanned),"token_pool_rows":len(pool_rows),"tokens":len(ranked),"range":(start.isoformat(),end.isoformat())})
+ print("[RANKED_TOKENS]",ranked[:20])
+ attempts=[]
+ for token,n in ranked:
+  rows=tuple(read_pinned_pool_history(token,root=root,limit=history_limit))
+  cases=tuple(build_outcome_pending_solana_cases(rows,horizons=(5,15,30,60,300,900,3600)))
+  paths=materialize_exact_future_price_paths(cases,rows,(5,15,30,60,300,900,3600),8.0)
+  attempts.append((token,n,len(rows),len(cases),len(paths)))
+  if paths:
+   pairs=tuple(sorted({p.pair_address for p in paths})); horizons=tuple(sorted({p.horizon_seconds for p in paths}))
+   r={"token_address":token,"discovery_rows":n,"history_rows":len(rows),"cases":len(cases),"paths":len(paths),
+      "pairs":pairs,"supported_horizons":horizons,"first_observed_at":str(rows[0].observed_at),
+      "last_observed_at":str(rows[-1].observed_at),"mfe_min":min(p.mfe for p in paths),"mfe_max":max(p.mfe for p in paths),
+      "mae_min":min(p.mae for p in paths),"mae_max":max(p.mae for p in paths),
+      "sample_observation_ids":paths[0].evidence_observation_ids[:12],"attempts":tuple(attempts),
+      "read_only":True,"execution_authority":False}
+   print("[CERTIFIED]",r);return r
+ print("[ATTEMPTS]",tuple(attempts))
+ raise AssertionError("no persisted token-pool source in bounded canonical history produced an exact future price path")

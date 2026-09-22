@@ -1,0 +1,9 @@
+{
+  "sample_size": 50,
+  "resolved": 2,
+  "not_found": 48,
+  "resolution_rate": 0.04,
+  "resolved_with_league_context": 2,
+  "decision": "PARTIAL_POSTGRESQL_COVERAGE_REQUIRES_MISSING_TICKER_CLASSIFICATION",
+  "execution_authority": false
+}

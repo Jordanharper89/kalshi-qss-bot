@@ -1,0 +1,15 @@
+{
+  "brier_scored": true,
+  "build_id": "OLF-020",
+  "contradiction_guard": true,
+  "cross_series_transfer": false,
+  "execution_authority": false,
+  "learner_state_hash": "1094ee2d1e378ce2e64792d14ee154d8b6e22ae26b479fd927d88bcea548e70b",
+  "manifest_sha256": "b4bafa4fb249f4575be67faa26c35f7eedfe43d72e606a47444f2825fb6f9b7f",
+  "outcome_attributed": true,
+  "proven_learning_child_unchanged": true,
+  "recent_markets_reasoned": 100,
+  "rejected_contexts": 0,
+  "reliable_contexts": 84,
+  "revision": "OLF_020_PATTERN_RELIABILITY_FREEZE_V1"
+}

@@ -1,0 +1,7 @@
+{
+  "wrapper": "run_oracle_live_WITH_OSN_SPORTS.py",
+  "active": false,
+  "retired_path": "qseries_v2\\oracle_source_network\\retired\\run_oracle_live_WITH_OSN_SPORTS_retired_ed271f8fb25fc06c.py",
+  "production_launcher": "run_oracle_LIVE.py",
+  "execution_authority": false
+}

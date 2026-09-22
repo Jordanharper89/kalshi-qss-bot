@@ -1,0 +1,12 @@
+{
+  "architecture": "ASYNCHRONOUS_BACKGROUND_RECOVERY",
+  "execution_authority": false,
+  "freeze": "OBR-002 through OBR-009",
+  "launcher_sha256": "b4d7ce056ef8de68059c0428780e7286bb173e2a621f5a5408add873d1af59dd",
+  "live_startup_blocking_recovery": false,
+  "missing_live_evidence_lineage": "EXPLICIT",
+  "oir_001_continuity_preserved": true,
+  "recovery_checkpoint_resume": true,
+  "recovery_child": "run_oracle_background_recovery.py",
+  "worker_sha256": "e0c6b088ab7e4e033777ef3d4574981d9ddd4e0755fa697d66b1e5379ed2164d"
+}

@@ -1,0 +1,23 @@
+{
+  "admitted": [
+    "NFL",
+    "NCAAF",
+    "NBA",
+    "NHL",
+    "MLS",
+    "EPL"
+  ],
+  "held": [
+    "NCAAB",
+    "MLB_CANONICAL_EVENT_EXTRACTION_CERT_REQUIRED"
+  ],
+  "blocked": [
+    "UCL"
+  ],
+  "base_launcher_unchanged": true,
+  "production_extension_launcher": "run_oracle_live_WITH_OSN_SPORTS.py",
+  "bounded_dual_runtime_certified": true,
+  "activation_ready": true,
+  "terminal_dependency": "NONE",
+  "execution_authority": false
+}

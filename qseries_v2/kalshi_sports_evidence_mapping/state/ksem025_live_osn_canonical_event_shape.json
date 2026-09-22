@@ -1,0 +1,447 @@
+{
+  "NFL": {
+    "event_count": 32,
+    "authority": "EXACT_DIRECT_SOURCE_EXTRACTOR",
+    "sample": {
+      "type": "CanonicalSportsEvent",
+      "fields": {
+        "league": {
+          "type": "str",
+          "repr": "'NFL'"
+        },
+        "season": {
+          "type": "str",
+          "repr": "'2026'"
+        },
+        "provider": {
+          "type": "str",
+          "repr": "'nfl_official'"
+        },
+        "home_team": {
+          "type": "str",
+          "repr": "'SEA'"
+        },
+        "away_team": {
+          "type": "str",
+          "repr": "'NE'"
+        },
+        "scheduled_start": {
+          "type": "str",
+          "repr": "'2026-09-10T00:20:00Z'"
+        },
+        "source_observed_at": {
+          "type": "str",
+          "repr": "'2026-09-06T21:57:18.075212+00:00'"
+        },
+        "source_authority": {
+          "type": "str",
+          "repr": "'official_league'"
+        },
+        "provider_event_id": {
+          "type": "str",
+          "repr": "'10403200'"
+        },
+        "event_discriminator": {
+          "type": "str",
+          "repr": "'10403200'"
+        },
+        "status": {
+          "type": "str",
+          "repr": "''"
+        },
+        "home_score": {
+          "type": "NoneType",
+          "repr": "None"
+        },
+        "away_score": {
+          "type": "NoneType",
+          "repr": "None"
+        },
+        "schedule_revision": {
+          "type": "int",
+          "repr": "0"
+        },
+        "read_only": {
+          "type": "bool",
+          "repr": "True"
+        },
+        "execution_authority": {
+          "type": "bool",
+          "repr": "False"
+        }
+      },
+      "repr": "CanonicalSportsEvent(league='NFL', season='2026', provider='nfl_official', home_team='SEA', away_team='NE', scheduled_start='2026-09-10T00:20:00Z', source_observed_at='2026-09-06T21:57:18.075212+00:00', source_authority='official_league', provider_event_id='10403200', event_discriminator='10403200', status='', home_score=None, away_score=None, schedule_revision=0, read_only=True, execution_authority=False)"
+    }
+  },
+  "NCAAF": {
+    "event_count": 99,
+    "authority": "EXACT_DIRECT_SOURCE_EXTRACTOR",
+    "sample": {
+      "type": "CanonicalSportsEvent",
+      "fields": {
+        "league": {
+          "type": "str",
+          "repr": "'NCAAF'"
+        },
+        "season": {
+          "type": "str",
+          "repr": "'2026'"
+        },
+        "provider": {
+          "type": "str",
+          "repr": "'ncaa_official'"
+        },
+        "home_team": {
+          "type": "str",
+          "repr": "'TCU'"
+        },
+        "away_team": {
+          "type": "str",
+          "repr": "'North Carolina'"
+        },
+        "scheduled_start": {
+          "type": "str",
+          "repr": "'2026-08-29T16:00:00+00:00'"
+        },
+        "source_observed_at": {
+          "type": "str",
+          "repr": "'2026-09-06T21:57:18.333856+00:00'"
+        },
+        "source_authority": {
+          "type": "str",
+          "repr": "'official_governing_body'"
+        },
+        "provider_event_id": {
+          "type": "str",
+          "repr": "'6604316'"
+        },
+        "event_discriminator": {
+          "type": "str",
+          "repr": "'6604316'"
+        },
+        "status": {
+          "type": "str",
+          "repr": "'final'"
+        },
+        "home_score": {
+          "type": "int",
+          "repr": "10"
+        },
+        "away_score": {
+          "type": "int",
+          "repr": "15"
+        },
+        "schedule_revision": {
+          "type": "int",
+          "repr": "0"
+        },
+        "read_only": {
+          "type": "bool",
+          "repr": "True"
+        },
+        "execution_authority": {
+          "type": "bool",
+          "repr": "False"
+        }
+      },
+      "repr": "CanonicalSportsEvent(league='NCAAF', season='2026', provider='ncaa_official', home_team='TCU', away_team='North Carolina', scheduled_start='2026-08-29T16:00:00+00:00', source_observed_at='2026-09-06T21:57:18.333856+00:00', source_authority='official_governing_body', provider_event_id='6604316', event_discriminator='6604316', status='final', home_score=10, away_score=15, schedule_revision=0, read_only=True, execution_authority=False)"
+    }
+  },
+  "NBA": {
+    "event_count": 1,
+    "authority": "EXACT_DIRECT_SOURCE_EXTRACTOR",
+    "sample": {
+      "type": "CanonicalSportsEvent",
+      "fields": {
+        "league": {
+          "type": "str",
+          "repr": "'NBA'"
+        },
+        "season": {
+          "type": "str",
+          "repr": "'2026-27'"
+        },
+        "provider": {
+          "type": "str",
+          "repr": "'nba_official'"
+        },
+        "home_team": {
+          "type": "str",
+          "repr": "'Raptors'"
+        },
+        "away_team": {
+          "type": "str",
+          "repr": "'Heat'"
+        },
+        "scheduled_start": {
+          "type": "NoneType",
+          "repr": "None"
+        },
+        "source_observed_at": {
+          "type": "str",
+          "repr": "'2026-09-06T21:57:18.801872Z'"
+        },
+        "source_authority": {
+          "type": "str",
+          "repr": "'official_league'"
+        },
+        "provider_event_id": {
+          "type": "str",
+          "repr": "'0012600009'"
+        },
+        "event_discriminator": {
+          "type": "str",
+          "repr": "''"
+        },
+        "status": {
+          "type": "str",
+          "repr": "'SCHEDULED'"
+        },
+        "home_score": {
+          "type": "NoneType",
+          "repr": "None"
+        },
+        "away_score": {
+          "type": "NoneType",
+          "repr": "None"
+        },
+        "schedule_revision": {
+          "type": "int",
+          "repr": "0"
+        },
+        "read_only": {
+          "type": "bool",
+          "repr": "True"
+        },
+        "execution_authority": {
+          "type": "bool",
+          "repr": "False"
+        }
+      },
+      "repr": "CanonicalSportsEvent(league='NBA', season='2026-27', provider='nba_official', home_team='Raptors', away_team='Heat', scheduled_start=None, source_observed_at='2026-09-06T21:57:18.801872Z', source_authority='official_league', provider_event_id='0012600009', event_discriminator='', status='SCHEDULED', home_score=None, away_score=None, schedule_revision=0, read_only=True, execution_authority=False)"
+    }
+  },
+  "NHL": {
+    "event_count": 43,
+    "authority": "PROMOTED_EXECUTABLE_CANONICAL_ENTRYPOINT",
+    "sample": {
+      "type": "CanonicalSportsEvent",
+      "fields": {
+        "league": {
+          "type": "str",
+          "repr": "'NHL'"
+        },
+        "season": {
+          "type": "str",
+          "repr": "'2026-27'"
+        },
+        "provider": {
+          "type": "str",
+          "repr": "'nhl_official_json'"
+        },
+        "home_team": {
+          "type": "str",
+          "repr": "'CAR'"
+        },
+        "away_team": {
+          "type": "str",
+          "repr": "'FLA'"
+        },
+        "scheduled_start": {
+          "type": "str",
+          "repr": "'2026-09-29T21:00:00Z'"
+        },
+        "source_observed_at": {
+          "type": "str",
+          "repr": "'2026-09-06T21:57:18.817225+00:00'"
+        },
+        "source_authority": {
+          "type": "str",
+          "repr": "'official_league'"
+        },
+        "provider_event_id": {
+          "type": "str",
+          "repr": "'2026020001'"
+        },
+        "event_discriminator": {
+          "type": "str",
+          "repr": "'2026020001'"
+        },
+        "status": {
+          "type": "str",
+          "repr": "'FUT'"
+        },
+        "home_score": {
+          "type": "NoneType",
+          "repr": "None"
+        },
+        "away_score": {
+          "type": "NoneType",
+          "repr": "None"
+        },
+        "schedule_revision": {
+          "type": "int",
+          "repr": "0"
+        },
+        "read_only": {
+          "type": "bool",
+          "repr": "True"
+        },
+        "execution_authority": {
+          "type": "bool",
+          "repr": "False"
+        }
+      },
+      "repr": "CanonicalSportsEvent(league='NHL', season='2026-27', provider='nhl_official_json', home_team='CAR', away_team='FLA', scheduled_start='2026-09-29T21:00:00Z', source_observed_at='2026-09-06T21:57:18.817225+00:00', source_authority='official_league', provider_event_id='2026020001', event_discriminator='2026020001', status='FUT', home_score=None, away_score=None, schedule_revision=0, read_only=True, execution_authority=False)"
+    }
+  },
+  "MLS": {
+    "event_count": 43,
+    "authority": "PROMOTED_EXECUTABLE_CANONICAL_ENTRYPOINT",
+    "sample": {
+      "type": "CanonicalSportsEvent",
+      "fields": {
+        "league": {
+          "type": "str",
+          "repr": "'MLS'"
+        },
+        "season": {
+          "type": "str",
+          "repr": "'2026'"
+        },
+        "provider": {
+          "type": "str",
+          "repr": "'mls_official_stats_api'"
+        },
+        "home_team": {
+          "type": "str",
+          "repr": "'New York City'"
+        },
+        "away_team": {
+          "type": "str",
+          "repr": "'Nashville'"
+        },
+        "scheduled_start": {
+          "type": "str",
+          "repr": "'2026-09-04T23:30:00Z'"
+        },
+        "source_observed_at": {
+          "type": "str",
+          "repr": "'2026-09-06T21:57:18.934705+00:00'"
+        },
+        "source_authority": {
+          "type": "str",
+          "repr": "'official_league'"
+        },
+        "provider_event_id": {
+          "type": "str",
+          "repr": "'MLS-MAT-0009KA'"
+        },
+        "event_discriminator": {
+          "type": "str",
+          "repr": "'MLS-MAT-0009KA'"
+        },
+        "status": {
+          "type": "str",
+          "repr": "'finalWhistle'"
+        },
+        "home_score": {
+          "type": "NoneType",
+          "repr": "None"
+        },
+        "away_score": {
+          "type": "NoneType",
+          "repr": "None"
+        },
+        "schedule_revision": {
+          "type": "int",
+          "repr": "0"
+        },
+        "read_only": {
+          "type": "bool",
+          "repr": "True"
+        },
+        "execution_authority": {
+          "type": "bool",
+          "repr": "False"
+        }
+      },
+      "repr": "CanonicalSportsEvent(league='MLS', season='2026', provider='mls_official_stats_api', home_team='New York City', away_team='Nashville', scheduled_start='2026-09-04T23:30:00Z', source_observed_at='2026-09-06T21:57:18.934705+00:00', source_authority='official_league', provider_event_id='MLS-MAT-0009KA', event_discriminator='MLS-MAT-0009KA', status='finalWhistle', home_score=None, away_score=None, schedule_revision=0, read_only=True, execution_authority=False)"
+    }
+  },
+  "EPL": {
+    "event_count": 380,
+    "authority": "PROMOTED_EXECUTABLE_CANONICAL_ENTRYPOINT",
+    "sample": {
+      "type": "CanonicalSportsEvent",
+      "fields": {
+        "league": {
+          "type": "str",
+          "repr": "'EPL'"
+        },
+        "season": {
+          "type": "str",
+          "repr": "'2026-27'"
+        },
+        "provider": {
+          "type": "str",
+          "repr": "'premier_league_fpl_official'"
+        },
+        "home_team": {
+          "type": "str",
+          "repr": "'Arsenal'"
+        },
+        "away_team": {
+          "type": "str",
+          "repr": "'Coventry City'"
+        },
+        "scheduled_start": {
+          "type": "str",
+          "repr": "'2026-08-21T19:00:00Z'"
+        },
+        "source_observed_at": {
+          "type": "str",
+          "repr": "'2026-09-06T21:57:19.474852+00:00'"
+        },
+        "source_authority": {
+          "type": "str",
+          "repr": "'official_league'"
+        },
+        "provider_event_id": {
+          "type": "str",
+          "repr": "'1'"
+        },
+        "event_discriminator": {
+          "type": "str",
+          "repr": "'1'"
+        },
+        "status": {
+          "type": "str",
+          "repr": "'finished'"
+        },
+        "home_score": {
+          "type": "int",
+          "repr": "3"
+        },
+        "away_score": {
+          "type": "int",
+          "repr": "0"
+        },
+        "schedule_revision": {
+          "type": "int",
+          "repr": "0"
+        },
+        "read_only": {
+          "type": "bool",
+          "repr": "True"
+        },
+        "execution_authority": {
+          "type": "bool",
+          "repr": "False"
+        }
+      },
+      "repr": "CanonicalSportsEvent(league='EPL', season='2026-27', provider='premier_league_fpl_official', home_team='Arsenal', away_team='Coventry City', scheduled_start='2026-08-21T19:00:00Z', source_observed_at='2026-09-06T21:57:19.474852+00:00', source_authority='official_league', provider_event_id='1', event_discriminator='1', status='finished', home_score=3, away_score=0, schedule_revision=0, read_only=True, execution_authority=False)"
+    }
+  },
+  "execution_authority": false
+}

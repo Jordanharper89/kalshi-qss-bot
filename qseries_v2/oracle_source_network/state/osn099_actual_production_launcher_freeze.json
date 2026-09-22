@@ -1,0 +1,11 @@
+{
+  "production_launcher": "run_oracle_LIVE.py",
+  "sha256": "a1d51f0fa79f9115044a5f78fab9695753cff5f11013eb053984d2f92e570088",
+  "sports_native_child": true,
+  "six_league_physical_cycle_certified": true,
+  "restart_recovery_physical_certified": false,
+  "restart_recovery_status": "DEFERRED_TO_ORACLE_RUNTIME_HARDENING",
+  "temporary_wrapper_retired": true,
+  "terminal_dependency": "NONE",
+  "execution_authority": false
+}

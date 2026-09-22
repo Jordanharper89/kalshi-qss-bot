@@ -1,0 +1,19 @@
+{
+  "build_id": "OLR-045",
+  "frozen_capability": {
+    "continuous_learning_evidence_wrapper": true,
+    "durable_linkage_reuse": true,
+    "evidence_admission_gate": true,
+    "execution_authority": false,
+    "live_postgresql_evidence_lookup": true,
+    "missing_evidence_abstains": true
+  },
+  "manifest_sha256": "d93d2df0b0ab78e9de280c20bebf7629b4466a07fcc4711afa7ed8c1632a2072",
+  "revision": "OLR_045_LIVE_EVIDENCE_GROUNDED_LEARNING_FREEZE_V1",
+  "verified": {
+    "olr_041": true,
+    "olr_042": true,
+    "olr_043": true,
+    "olr_044": true
+  }
+}

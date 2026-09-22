@@ -5,6 +5,7 @@ from decimal import Decimal
 from qseries_v2.oracle_intelligence.live_acquisition.oracle_live_read_only_acquisition_runtime import (
     AcquisitionContractError,
     CanonicalObservation,
+    CanonicalObservationRouterFailure,
     DeduplicationEvidence,
     ObservationRoutingEvidence,
     OracleLiveReadOnlyAcquisitionRuntime,
@@ -552,12 +553,87 @@ def run_fail_closed_tests():
         pass
 
 
+
+def run_batch_router_failure_lineage_regression():
+    seen_content_hashes = {}
+
+    def deduplication_hook(
+        observation: CanonicalObservation,
+        checked_at,
+    ):
+        existing_observation_id = seen_content_hashes.get(
+            observation.content_hash
+        )
+        duplicate = existing_observation_id is not None
+        canonical_observation_id = (
+            existing_observation_id
+            if duplicate
+            else observation.observation_id
+        )
+        if not duplicate:
+            seen_content_hashes[
+                observation.content_hash
+            ] = observation.observation_id
+        return DeduplicationEvidence.create(
+            observation=observation,
+            duplicate=duplicate,
+            canonical_observation_id=canonical_observation_id,
+            checked_at=checked_at,
+            deduplication_policy_id="dedup.content_hash.v1",
+        )
+
+    def single_router(observation, routed_at):
+        raise AssertionError(
+            "single router must not be used when batch router exists"
+        )
+
+    def failing_batch_router(observations, routed_at):
+        raise RuntimeError(
+            "PostgreSQL canonical batch append failed closed"
+        )
+
+    runtime = OracleLiveReadOnlyAcquisitionRuntime(
+        approved_adapters=(
+            TestReadOnlyAdapter(),
+        ),
+        deduplication_hook=deduplication_hook,
+        canonical_observation_router=single_router,
+        canonical_observation_batch_router=failing_batch_router,
+    )
+
+    try:
+        runtime.acquire(
+            adapter_id="adapter.oracle.test.market",
+            acquired_at=ACQUIRED_AT,
+            health_evidence=build_health_evidence(),
+            rate_control_evidence=build_rate_evidence(),
+            replay_metadata={},
+            audit_metadata={},
+        )
+        raise AssertionError(
+            "batch router failure must fail closed"
+        )
+    except CanonicalObservationRouterFailure as exc:
+        message = str(exc)
+        assert (
+            "upstream_failure_type=RuntimeError"
+            in message
+        )
+        assert (
+            "upstream_failure_message=PostgreSQL canonical batch append failed closed"
+            in message
+        )
+        assert exc.__cause__ is not None
+
+    return True
+
 def main():
     record = run_primary_contract_test()
     batch_record, batch_calls = (
         run_atomic_batch_routing_regression()
     )
     run_fail_closed_tests()
+    failure_lineage_preserved = run_batch_router_failure_lineage_regression()
 
     result = {
         "schema_version": record.schema_version,
@@ -585,6 +661,11 @@ def main():
         "batch_routed_count_preserved": (
             batch_record.routed_count
         ),
+        "batch_router_failure_lineage_preserved": (
+            failure_lineage_preserved
+        ),
+        "upstream_failure_type_preserved": True,
+        "upstream_failure_message_preserved": True,
         "read_only": record.read_only,
         "execution_allowed": record.execution_allowed,
         "trade_authorization_allowed": (

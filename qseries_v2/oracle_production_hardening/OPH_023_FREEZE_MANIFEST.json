@@ -1,0 +1,20 @@
+{
+  "build_id": "OPH-023",
+  "manifest_sha256": "82bbbd4fce38a0af0fe9ae88764de6ffd924561cb969fd1bb1aa938373001605",
+  "permanent_architecture": {
+    "canonical_writer_count": 1,
+    "execution_authority": false,
+    "ingestion_backend": "PostgreSQL",
+    "producer_direct_canonical_write_authority": false,
+    "sqlite_active_ingestion": false
+  },
+  "report": {
+    "canonical_writer": "run_oph_021_exclusive_postgresql_canonical_writer.py",
+    "execution_authority": false,
+    "launcher_verified": true,
+    "postgresql_ingress_wrappers": 5,
+    "producer_children": 5,
+    "sqlite_active_path": false
+  },
+  "revision": "OPH_023_POSTGRESQL_SINGLE_WRITER_PRODUCTION_FREEZE_V1"
+}

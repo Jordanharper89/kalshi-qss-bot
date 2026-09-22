@@ -1,0 +1,12 @@
+{
+  "build_id": "OLF-015",
+  "condition_contexts": 33,
+  "cross_series_transfer": false,
+  "evidence_grounded": true,
+  "execution_authority": false,
+  "learner_state_hash": "1094ee2d1e378ce2e64792d14ee154d8b6e22ae26b479fd927d88bcea548e70b",
+  "manifest_sha256": "6f2909d0af3260be2e376b7f567e777b5e29a866a690b33379774d50af9189db",
+  "proven_learning_child_unchanged": true,
+  "recent_markets_reasoned": 100,
+  "revision": "OLF_015_CONDITION_AWARE_REASONING_FREEZE_V1"
+}

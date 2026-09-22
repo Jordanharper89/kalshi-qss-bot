@@ -241,6 +241,17 @@ WHERE observation_id = %s
 LIMIT 1
 """
 
+SELECT_DUPLICATE_BULK_SQL = """
+/* ola012:select_duplicate_bulk */
+SELECT
+    observation_id,
+    content_hash
+FROM oracle_canonical_observations
+WHERE observation_id = ANY(%s)
+   OR content_hash = ANY(%s)
+LIMIT 1
+"""
+
 INSERT_OBSERVATION_SQL = """
 /* ola012:insert_observation */
 INSERT INTO oracle_canonical_observations (
@@ -676,75 +687,112 @@ class OraclePostgreSQLCanonicalObservationPersistenceBackend:
                     },
                 )
 
-            for observation in request.observations:
+            if len(request.observations) >= 64:
                 cursor.execute(
-                    SELECT_DUPLICATE_SQL,
+                    SELECT_DUPLICATE_BULK_SQL,
                     (
-                        observation.observation_id,
-                        observation.content_hash,
+                        [o.observation_id for o in request.observations],
+                        [o.content_hash for o in request.observations],
                     ),
                 )
-
                 duplicate = cursor.fetchone()
-
                 if duplicate is not None:
                     connection.rollback()
-
-                    duplicate_observation_id = str(
-                        duplicate[0]
-                    )
-
-                    duplicate_content_hash = str(
-                        duplicate[1]
-                    )
-
-                    if (
-                        duplicate_observation_id
-                        == observation.observation_id
-                    ):
-                        reason = (
-                            "duplicate_observation_identity"
-                        )
-                    elif (
-                        duplicate_content_hash
-                        == observation.content_hash
-                    ):
-                        reason = (
-                            "duplicate_content_identity"
-                        )
+                    duplicate_observation_id = str(duplicate[0])
+                    duplicate_content_hash = str(duplicate[1])
+                    request_ids = {o.observation_id for o in request.observations}
+                    request_hashes = {o.content_hash for o in request.observations}
+                    if duplicate_observation_id in request_ids:
+                        reason = "duplicate_observation_identity"
+                    elif duplicate_content_hash in request_hashes:
+                        reason = "duplicate_content_identity"
                     else:
-                        reason = (
-                            "canonical_identity_conflict"
+                        reason = "canonical_identity_conflict"
+                    return CanonicalPersistenceAppendResult.create(
+                        request=request,
+                        append_status="rejected",
+                        appended_count=0,
+                        first_sequence_number=None,
+                        last_sequence_number=None,
+                        prior_terminal_chain_hash=prior_terminal_chain_hash,
+                        terminal_chain_hash=prior_terminal_chain_hash,
+                        persisted_observation_ids=(),
+                        completed_at=completed_at,
+                        atomic=True,
+                        committed=False,
+                        reason_codes=(reason,"append_rejected"),
+                        backend_receipt_metadata={"implementation_engine_id":ENGINE_ID},
+                    )
+            else:
+                for observation in request.observations:
+                    cursor.execute(
+                        SELECT_DUPLICATE_SQL,
+                        (
+                            observation.observation_id,
+                            observation.content_hash,
+                        ),
+                    )
+
+                    duplicate = cursor.fetchone()
+
+                    if duplicate is not None:
+                        connection.rollback()
+
+                        duplicate_observation_id = str(
+                            duplicate[0]
                         )
 
-                    return (
-                        CanonicalPersistenceAppendResult.create(
-                            request=request,
-                            append_status="rejected",
-                            appended_count=0,
-                            first_sequence_number=None,
-                            last_sequence_number=None,
-                            prior_terminal_chain_hash=(
-                                prior_terminal_chain_hash
-                            ),
-                            terminal_chain_hash=(
-                                prior_terminal_chain_hash
-                            ),
-                            persisted_observation_ids=(),
-                            completed_at=completed_at,
-                            atomic=True,
-                            committed=False,
-                            reason_codes=(
-                                reason,
-                                "append_rejected",
-                            ),
-                            backend_receipt_metadata={
-                                "implementation_engine_id": (
-                                    ENGINE_ID
-                                ),
-                            },
+                        duplicate_content_hash = str(
+                            duplicate[1]
                         )
-                    )
+
+                        if (
+                            duplicate_observation_id
+                            == observation.observation_id
+                        ):
+                            reason = (
+                                "duplicate_observation_identity"
+                            )
+                        elif (
+                            duplicate_content_hash
+                            == observation.content_hash
+                        ):
+                            reason = (
+                                "duplicate_content_identity"
+                            )
+                        else:
+                            reason = (
+                                "canonical_identity_conflict"
+                            )
+
+                        return (
+                            CanonicalPersistenceAppendResult.create(
+                                request=request,
+                                append_status="rejected",
+                                appended_count=0,
+                                first_sequence_number=None,
+                                last_sequence_number=None,
+                                prior_terminal_chain_hash=(
+                                    prior_terminal_chain_hash
+                                ),
+                                terminal_chain_hash=(
+                                    prior_terminal_chain_hash
+                                ),
+                                persisted_observation_ids=(),
+                                completed_at=completed_at,
+                                atomic=True,
+                                committed=False,
+                                reason_codes=(
+                                    reason,
+                                    "append_rejected",
+                                ),
+                                backend_receipt_metadata={
+                                    "implementation_engine_id": (
+                                        ENGINE_ID
+                                    ),
+                                },
+                            )
+                        )
 
             sequence_number = prior_sequence_number
 
@@ -758,70 +806,54 @@ class OraclePostgreSQLCanonicalObservationPersistenceBackend:
                 prior_sequence_number + 1
             )
 
+            bulk_insert_rows = [] if len(request.observations) >= 64 else None
+
             for observation in request.observations:
                 sequence_number += 1
 
-                observation_json = (
-                    observation.to_canonical_dict()
-                )
+                observation_json = observation.to_canonical_dict()
 
                 chain_hash = stable_hash(
                     {
                         "schema_version": SCHEMA_VERSION,
-                        "record_type": (
-                            "postgresql_canonical_chain_link"
-                        ),
+                        "record_type": "postgresql_canonical_chain_link",
                         "sequence_number": sequence_number,
-                        "previous_chain_hash": (
-                            previous_chain_hash
-                        ),
-                        "observation_id": (
-                            observation.observation_id
-                        ),
-                        "content_hash": (
-                            observation.content_hash
-                        ),
-                        "observation_replay_hash": (
-                            observation.replay_hash
-                        ),
-                        "canonical_observation": (
-                            observation_json
-                        ),
+                        "previous_chain_hash": previous_chain_hash,
+                        "observation_id": observation.observation_id,
+                        "content_hash": observation.content_hash,
+                        "observation_replay_hash": observation.replay_hash,
+                        "canonical_observation": observation_json,
                         "persisted_at": completed_at.isoformat(),
                     }
                 )
 
-                cursor.execute(
-                    INSERT_OBSERVATION_SQL,
-                    (
-                        sequence_number,
-                        observation.observation_id,
-                        observation.content_hash,
-                        observation.source_id,
-                        observation.source_observation_id,
-                        observation.observation_type,
-                        observation.acquisition_batch_id,
-                        observation.observed_at,
-                        observation.acquired_at,
-                        completed_at,
-                        observation.replay_hash,
-                        json.dumps(
-                            observation_json,
-                            sort_keys=True,
-                            separators=(",", ":"),
-                            ensure_ascii=False,
-                            allow_nan=False,
-                        ),
-                        previous_chain_hash,
-                        chain_hash,
-                    ),
+                row = (
+                    sequence_number,
+                    observation.observation_id,
+                    observation.content_hash,
+                    observation.source_id,
+                    observation.source_observation_id,
+                    observation.observation_type,
+                    observation.acquisition_batch_id,
+                    observation.observed_at,
+                    observation.acquired_at,
+                    completed_at,
+                    observation.replay_hash,
+                    json.dumps(observation_json,sort_keys=True,separators=(",", ":"),ensure_ascii=False,allow_nan=False),
+                    previous_chain_hash,
+                    chain_hash,
                 )
 
-                persisted_observation_ids.append(
-                    observation.observation_id
-                )
+                if bulk_insert_rows is None:
+                    cursor.execute(INSERT_OBSERVATION_SQL,row)
+                else:
+                    bulk_insert_rows.append(row)
 
+                persisted_observation_ids.append(observation.observation_id)
                 previous_chain_hash = chain_hash
+
+            if bulk_insert_rows:
+                cursor.executemany(INSERT_OBSERVATION_SQL,bulk_insert_rows)
 
             cursor.execute(
                 UPDATE_STATE_SQL,

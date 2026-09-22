@@ -1,0 +1,9 @@
+{
+  "league": "NHL",
+  "observation_id": "107f5845be9e7d9fc308a6ee3206843203752ac6d849c07a2ccc15f5113c9e98",
+  "first_action": "SUBMITTED_COMMITTED_READBACK_VERIFIED",
+  "replay_action": "READ_BEFORE_WRITE_HIT",
+  "replay_resubmitted": false,
+  "exact_readback": 1,
+  "execution_authority": false
+}

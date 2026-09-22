@@ -1,0 +1,225 @@
+{
+  "columns": [
+    {
+      "name": "sequence_number",
+      "data_type": "bigint",
+      "udt_name": "int8",
+      "nullable": "NO",
+      "default": null
+    },
+    {
+      "name": "observation_id",
+      "data_type": "text",
+      "udt_name": "text",
+      "nullable": "NO",
+      "default": null
+    },
+    {
+      "name": "content_hash",
+      "data_type": "text",
+      "udt_name": "text",
+      "nullable": "NO",
+      "default": null
+    },
+    {
+      "name": "source_id",
+      "data_type": "text",
+      "udt_name": "text",
+      "nullable": "NO",
+      "default": null
+    },
+    {
+      "name": "source_observation_id",
+      "data_type": "text",
+      "udt_name": "text",
+      "nullable": "NO",
+      "default": null
+    },
+    {
+      "name": "observation_type",
+      "data_type": "text",
+      "udt_name": "text",
+      "nullable": "NO",
+      "default": null
+    },
+    {
+      "name": "acquisition_batch_id",
+      "data_type": "text",
+      "udt_name": "text",
+      "nullable": "NO",
+      "default": null
+    },
+    {
+      "name": "observed_at",
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "nullable": "NO",
+      "default": null
+    },
+    {
+      "name": "acquired_at",
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "nullable": "NO",
+      "default": null
+    },
+    {
+      "name": "persisted_at",
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "nullable": "NO",
+      "default": null
+    },
+    {
+      "name": "observation_replay_hash",
+      "data_type": "text",
+      "udt_name": "text",
+      "nullable": "NO",
+      "default": null
+    },
+    {
+      "name": "canonical_observation_json",
+      "data_type": "jsonb",
+      "udt_name": "jsonb",
+      "nullable": "NO",
+      "default": null
+    },
+    {
+      "name": "previous_chain_hash",
+      "data_type": "text",
+      "udt_name": "text",
+      "nullable": "NO",
+      "default": null
+    },
+    {
+      "name": "chain_hash",
+      "data_type": "text",
+      "udt_name": "text",
+      "nullable": "NO",
+      "default": null
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_oracle_canonical_market_snapshot_market_seq",
+      "definition": "CREATE INDEX idx_oracle_canonical_market_snapshot_market_seq ON public.oracle_canonical_observations USING btree (COALESCE(NULLIF((COALESCE(((canonical_observation_json -> 'raw_observation'::text) -> 'payload'::text), (canonical_observation_json -> 'payload'::text), '{}'::jsonb) ->> 'source_market_id'::text), ''::text), NULLIF((COALESCE(((canonical_observation_json -> 'raw_observation'::text) -> 'payload'::text), (canonical_observation_json -> 'payload'::text), '{}'::jsonb) ->> 'market_id'::text), ''::text), NULLIF((COALESCE(((canonical_observation_json -> 'raw_observation'::text) -> 'payload'::text), (canonical_observation_json -> 'payload'::text), '{}'::jsonb) ->> 'source_symbol'::text), ''::text)), sequence_number DESC) WHERE (observation_type = 'market_snapshot'::text)"
+    },
+    {
+      "name": "idx_oracle_canonical_observations_observed",
+      "definition": "CREATE INDEX idx_oracle_canonical_observations_observed ON public.oracle_canonical_observations USING btree (observed_at, sequence_number)"
+    },
+    {
+      "name": "idx_oracle_canonical_observations_source",
+      "definition": "CREATE INDEX idx_oracle_canonical_observations_source ON public.oracle_canonical_observations USING btree (source_id, sequence_number)"
+    },
+    {
+      "name": "oracle_canonical_observations_chain_hash_key",
+      "definition": "CREATE UNIQUE INDEX oracle_canonical_observations_chain_hash_key ON public.oracle_canonical_observations USING btree (chain_hash)"
+    },
+    {
+      "name": "oracle_canonical_observations_content_hash_key",
+      "definition": "CREATE UNIQUE INDEX oracle_canonical_observations_content_hash_key ON public.oracle_canonical_observations USING btree (content_hash)"
+    },
+    {
+      "name": "oracle_canonical_observations_observation_id_key",
+      "definition": "CREATE UNIQUE INDEX oracle_canonical_observations_observation_id_key ON public.oracle_canonical_observations USING btree (observation_id)"
+    },
+    {
+      "name": "oracle_canonical_observations_pkey",
+      "definition": "CREATE UNIQUE INDEX oracle_canonical_observations_pkey ON public.oracle_canonical_observations USING btree (sequence_number)"
+    }
+  ],
+  "constraints": [
+    {
+      "name": "oracle_canonical_observatio_canonical_observation_json_not_null",
+      "type": "CHECK",
+      "column": null
+    },
+    {
+      "name": "oracle_canonical_observations_acquired_at_not_null",
+      "type": "CHECK",
+      "column": null
+    },
+    {
+      "name": "oracle_canonical_observations_acquisition_batch_id_not_null",
+      "type": "CHECK",
+      "column": null
+    },
+    {
+      "name": "oracle_canonical_observations_chain_hash_key",
+      "type": "UNIQUE",
+      "column": "chain_hash"
+    },
+    {
+      "name": "oracle_canonical_observations_chain_hash_not_null",
+      "type": "CHECK",
+      "column": null
+    },
+    {
+      "name": "oracle_canonical_observations_content_hash_key",
+      "type": "UNIQUE",
+      "column": "content_hash"
+    },
+    {
+      "name": "oracle_canonical_observations_content_hash_not_null",
+      "type": "CHECK",
+      "column": null
+    },
+    {
+      "name": "oracle_canonical_observations_observation_id_key",
+      "type": "UNIQUE",
+      "column": "observation_id"
+    },
+    {
+      "name": "oracle_canonical_observations_observation_id_not_null",
+      "type": "CHECK",
+      "column": null
+    },
+    {
+      "name": "oracle_canonical_observations_observation_replay_hash_not_null",
+      "type": "CHECK",
+      "column": null
+    },
+    {
+      "name": "oracle_canonical_observations_observation_type_not_null",
+      "type": "CHECK",
+      "column": null
+    },
+    {
+      "name": "oracle_canonical_observations_observed_at_not_null",
+      "type": "CHECK",
+      "column": null
+    },
+    {
+      "name": "oracle_canonical_observations_persisted_at_not_null",
+      "type": "CHECK",
+      "column": null
+    },
+    {
+      "name": "oracle_canonical_observations_pkey",
+      "type": "PRIMARY KEY",
+      "column": "sequence_number"
+    },
+    {
+      "name": "oracle_canonical_observations_previous_chain_hash_not_null",
+      "type": "CHECK",
+      "column": null
+    },
+    {
+      "name": "oracle_canonical_observations_sequence_number_not_null",
+      "type": "CHECK",
+      "column": null
+    },
+    {
+      "name": "oracle_canonical_observations_source_id_not_null",
+      "type": "CHECK",
+      "column": null
+    },
+    {
+      "name": "oracle_canonical_observations_source_observation_id_not_null",
+      "type": "CHECK",
+      "column": null
+    }
+  ],
+  "execution_authority": false
+}

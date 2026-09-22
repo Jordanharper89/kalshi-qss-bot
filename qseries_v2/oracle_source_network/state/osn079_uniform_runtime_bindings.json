@@ -1,0 +1,81 @@
+{
+  "bindings": [
+    {
+      "league": "NFL",
+      "module": "qseries_v2.oracle_source_network.providers.uniform_sports_provider",
+      "function": "acquire_canonical_events",
+      "signature": "(league, timeout=15, root=None)",
+      "direct_runtime_callable_bound": true,
+      "physical_gate_certified": true,
+      "terminal_dependency": "NONE",
+      "execution_authority": false
+    },
+    {
+      "league": "NCAAF",
+      "module": "qseries_v2.oracle_source_network.providers.uniform_sports_provider",
+      "function": "acquire_canonical_events",
+      "signature": "(league, timeout=15, root=None)",
+      "direct_runtime_callable_bound": true,
+      "physical_gate_certified": true,
+      "terminal_dependency": "NONE",
+      "execution_authority": false
+    },
+    {
+      "league": "NBA",
+      "module": "qseries_v2.oracle_source_network.providers.uniform_sports_provider",
+      "function": "acquire_canonical_events",
+      "signature": "(league, timeout=15, root=None)",
+      "direct_runtime_callable_bound": true,
+      "physical_gate_certified": true,
+      "terminal_dependency": "NONE",
+      "execution_authority": false
+    },
+    {
+      "league": "NHL",
+      "module": "qseries_v2.oracle_source_network.providers.uniform_sports_provider",
+      "function": "acquire_canonical_events",
+      "signature": "(league, timeout=15, root=None)",
+      "direct_runtime_callable_bound": true,
+      "physical_gate_certified": true,
+      "terminal_dependency": "NONE",
+      "execution_authority": false
+    },
+    {
+      "league": "MLS",
+      "module": "qseries_v2.oracle_source_network.providers.uniform_sports_provider",
+      "function": "acquire_canonical_events",
+      "signature": "(league, timeout=15, root=None)",
+      "direct_runtime_callable_bound": true,
+      "physical_gate_certified": true,
+      "terminal_dependency": "NONE",
+      "execution_authority": false
+    },
+    {
+      "league": "EPL",
+      "module": "qseries_v2.oracle_source_network.providers.uniform_sports_provider",
+      "function": "acquire_canonical_events",
+      "signature": "(league, timeout=15, root=None)",
+      "direct_runtime_callable_bound": true,
+      "physical_gate_certified": true,
+      "terminal_dependency": "NONE",
+      "execution_authority": false
+    }
+  ],
+  "admitted": [
+    "NFL",
+    "NCAAF",
+    "NBA",
+    "NHL",
+    "MLS",
+    "EPL"
+  ],
+  "held": [
+    "NCAAB",
+    "MLB_CANONICAL_EVENT_EXTRACTION_CERT_REQUIRED"
+  ],
+  "blocked": [
+    "UCL"
+  ],
+  "terminal_dependency": "NONE",
+  "execution_authority": false
+}

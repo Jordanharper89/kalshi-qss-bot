@@ -1,0 +1,14 @@
+{
+  "ask_command_present": true,
+  "ask_entry_callable": false,
+  "ask_entry_type": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry.OracleTerminalCommandDefinition",
+  "ask_resolution_mode": "iterable_descriptor",
+  "ask_resolution_path": "registry.commands[2].command",
+  "builder_name": "build_default_command_registry",
+  "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+  "read_only": true,
+  "registry_kind": "iterable_descriptor",
+  "registry_type": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry.OracleTerminalCommandRegistryReport",
+  "revision": "OLC_008_COMMAND_REGISTRY_CONTRACT_MANIFEST_V1",
+  "source_mutation_required": false
+}

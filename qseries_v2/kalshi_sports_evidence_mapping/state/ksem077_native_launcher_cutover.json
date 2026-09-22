@@ -1,0 +1,10 @@
+{
+  "schema_version": "KSEM-077",
+  "before_sha256": "48f80399b8706ca54ce4062544ba69dda09675e01e477392254dd4cab1da4694",
+  "after_sha256": "f6d5305c81c5f790fb73dae5fe57866fe1b4a6e18c792d6749b89780f3ffc9b1",
+  "backup": "run_oracle_LIVE.pre_ksem077.py",
+  "child_key": "ksem_mapping",
+  "child_runner": "run_ksem_live_mapping.py",
+  "children_count": 12,
+  "execution_authority": false
+}

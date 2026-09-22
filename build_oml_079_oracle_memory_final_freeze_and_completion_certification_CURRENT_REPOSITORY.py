@@ -1,0 +1,174 @@
+from __future__ import annotations
+
+import ast
+import importlib
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path.cwd().resolve()
+PACKAGE = ROOT / "qseries_v2" / "oracle_memory"
+
+UPSTREAM = (
+    PACKAGE
+    / "oracle_memory_certified_market_behavior_"
+      "cross_market_dependency_memory_077.py"
+)
+UPSTREAM_TEST = (
+    ROOT
+    / "test_oml_077_oracle_memory_certified_market_behavior_"
+      "cross_market_dependency_memory.py"
+)
+PRODUCTION = (
+    PACKAGE
+    / "oracle_memory_final_freeze_readiness_"
+      "certification_gate_078.py"
+)
+TEST = (
+    ROOT
+    / "test_oml_078_oracle_memory_final_freeze_"
+      "readiness_certification_gate.py"
+)
+INIT = PACKAGE / "__init__.py"
+
+PRODUCTION_SOURCE = '\nfrom __future__ import annotations\n\nimport hashlib\nimport json\nfrom dataclasses import asdict, dataclass\nfrom pathlib import Path\nfrom typing import Any, Mapping, Sequence\n\nfrom qseries_v2.oracle_memory.oracle_memory_certified_market_behavior_cross_market_dependency_memory_077 import (\n    OracleMemoryCertifiedMarketBehaviorCrossMarketDependencyMemory077,\n    verify_oracle_memory_certified_market_behavior_cross_market_dependency_memory_077,\n)\nfrom qseries_v2.oracle_memory.oracle_memory_continuous_intelligence_learner_foundation import (\n    SUBSYSTEM_ID,\n)\n\nSCHEMA_VERSION = "OML-078"\nENGINE_ID = "OML-078"\nPOLICY_ID = "oracle-memory.final-freeze-readiness-certification-gate.v1"\nUPSTREAM_SCHEMA_VERSION = "OML-077"\nUPSTREAM_ENGINE_ID = "OML-077"\nFINAL_FREEZE_MILESTONE = "OML-079"\nNEXT_SUBSYSTEM = "universal_market_discovery"\nSTATE_READ_ONLY = "oracle_memory_final_freeze_ready_read_only"\n\n\nclass OracleMemoryFinalFreezeReadinessInvariantError(RuntimeError):\n    pass\n\n\n@dataclass(frozen=True)\nclass OracleMemoryCertifiedFileRecord:\n    relative_path: str\n    sha256: str\n    size_bytes: int\n\n\n@dataclass(frozen=True)\nclass OracleMemoryFinalFreezeReadinessManifest:\n    subsystem_id: str\n    current_milestone: str\n    final_freeze_milestone: str\n    next_subsystem: str\n    source_schema_version: str\n    source_engine_id: str\n    source_certification_hash: str\n    source_dependency_certification_hash: str\n    source_dependency_memory_hash: str\n    package_files: tuple[OracleMemoryCertifiedFileRecord, ...]\n    test_files: tuple[OracleMemoryCertifiedFileRecord, ...]\n    package_file_count: int\n    test_file_count: int\n    package_tree_hash: str\n    test_tree_hash: str\n    repository_tree_hash: str\n    deterministic_replay_certified: bool\n    immutable_lineage_certified: bool\n    read_only_boundary_certified: bool\n    oracle_terminal_separation_certified: bool\n    persistence_frozen_disabled: bool\n    learning_updates_frozen_disabled: bool\n    runtime_activation_frozen_disabled: bool\n    publication_frozen_disabled: bool\n    action_authorization_frozen_disabled: bool\n    qseries_execution_frozen_disabled: bool\n    defect_corrections_only_after_freeze: bool\n    final_freeze_ready: bool\n    manifest_hash: str\n\n\n@dataclass(frozen=True)\nclass OracleMemoryFinalFreezeReadinessReport:\n    schema_version: str\n    engine_id: str\n    policy_id: str\n    subsystem_id: str\n    upstream_schema_version: str\n    upstream_engine_id: str\n    upstream_certification_hash: str\n    state: str\n    manifest: OracleMemoryFinalFreezeReadinessManifest\n    source_dependency_memory_ready: bool\n    complete_repository_inventory_certified: bool\n    deterministic_replay_certified: bool\n    immutable_lineage_certified: bool\n    final_freeze_ready: bool\n    downstream_final_freeze_authorized: bool\n    further_feature_builds_allowed: bool\n    correction_builds_allowed_only_for_defects: bool\n    persistence_enabled: bool\n    learning_updates_enabled: bool\n    runtime_activation_enabled: bool\n    publication_enabled: bool\n    action_authorization_enabled: bool\n    qseries_execution_enabled: bool\n    read_only: bool\n    certification_hash: str\n\n\ndef _canonical(value: Any) -> Any:\n    if hasattr(value, "__dataclass_fields__"):\n        return _canonical(asdict(value))\n    if isinstance(value, Mapping):\n        return {\n            str(key): _canonical(item)\n            for key, item in sorted(\n                value.items(),\n                key=lambda pair: str(pair[0]),\n            )\n        }\n    if isinstance(value, (tuple, list)):\n        return [_canonical(item) for item in value]\n    if value is None or isinstance(value, (str, int, float, bool)):\n        return value\n    raise OracleMemoryFinalFreezeReadinessInvariantError(\n        "unsupported OML-078 value type"\n    )\n\n\ndef _stable_hash(value: Any) -> str:\n    return hashlib.sha256(\n        json.dumps(\n            _canonical(value),\n            sort_keys=True,\n            separators=(",", ":"),\n            ensure_ascii=True,\n            allow_nan=False,\n        ).encode("utf-8")\n    ).hexdigest()\n\n\ndef _file_hash(path: Path) -> str:\n    return hashlib.sha256(path.read_bytes()).hexdigest()\n\n\ndef _reject(reason: str) -> None:\n    raise OracleMemoryFinalFreezeReadinessInvariantError(reason)\n\n\ndef _require_hash(value: str, label: str) -> None:\n    if not isinstance(value, str) or len(value) != 64:\n        _reject(f"OML-078 invalid {label} length")\n    try:\n        int(value, 16)\n    except ValueError as exc:\n        raise OracleMemoryFinalFreezeReadinessInvariantError(\n            f"OML-078 invalid {label} hexadecimal value"\n        ) from exc\n\n\ndef _inventory_files(\n    root: Path,\n    paths: Sequence[Path],\n) -> tuple[OracleMemoryCertifiedFileRecord, ...]:\n    records = []\n    for path in sorted(\n        (item.resolve() for item in paths if item.is_file()),\n        key=lambda item: item.relative_to(root).as_posix(),\n    ):\n        relative = path.relative_to(root).as_posix()\n        records.append(\n            OracleMemoryCertifiedFileRecord(\n                relative_path=relative,\n                sha256=_file_hash(path),\n                size_bytes=path.stat().st_size,\n            )\n        )\n    return tuple(records)\n\n\ndef _tree_hash(\n    records: tuple[OracleMemoryCertifiedFileRecord, ...],\n) -> str:\n    return _stable_hash(records)\n\n\ndef build_oracle_memory_final_freeze_readiness_report(\n    repository_root: str | Path,\n    *,\n    dependencies: (\n        OracleMemoryCertifiedMarketBehaviorCrossMarketDependencyMemory077\n    ),\n) -> OracleMemoryFinalFreezeReadinessReport:\n    root = Path(repository_root).resolve()\n    package = root / "qseries_v2" / "oracle_memory"\n\n    verify_oracle_memory_certified_market_behavior_cross_market_dependency_memory_077(\n        dependencies\n    )\n\n    if dependencies.schema_version != UPSTREAM_SCHEMA_VERSION:\n        _reject("OML-078 upstream schema mismatch")\n    if dependencies.engine_id != UPSTREAM_ENGINE_ID:\n        _reject("OML-078 upstream engine mismatch")\n    if not dependencies.dependency_memory_ready:\n        _reject("OML-078 dependency memory not ready")\n    if not dependencies.downstream_freeze_certification_authorized:\n        _reject("OML-078 freeze certification not authorized")\n    if not dependencies.read_only:\n        _reject("OML-078 upstream dependency memory not read-only")\n\n    if not package.is_dir():\n        _reject("OML-078 Oracle Memory package missing")\n\n    package_paths = tuple(\n        path\n        for path in package.rglob("*.py")\n        if "__pycache__" not in path.parts\n        and path.name\n        != "oracle_memory_final_freeze_readiness_certification_gate_078.py"\n    )\n    test_paths = tuple(\n        path\n        for path in root.glob("test_oml_*.py")\n        if path.name\n        != "test_oml_078_oracle_memory_final_freeze_readiness_certification_gate.py"\n    )\n\n    package_files = _inventory_files(root, package_paths)\n    test_files = _inventory_files(root, test_paths)\n\n    if not package_files:\n        _reject("OML-078 package inventory empty")\n    if not test_files:\n        _reject("OML-078 test inventory empty")\n\n    package_tree_hash = _tree_hash(package_files)\n    test_tree_hash = _tree_hash(test_files)\n    repository_tree_hash = _stable_hash(\n        {\n            "package_tree_hash": package_tree_hash,\n            "test_tree_hash": test_tree_hash,\n            "source_certification_hash": dependencies.certification_hash,\n        }\n    )\n\n    manifest_body = {\n        "subsystem_id": SUBSYSTEM_ID,\n        "current_milestone": SCHEMA_VERSION,\n        "final_freeze_milestone": FINAL_FREEZE_MILESTONE,\n        "next_subsystem": NEXT_SUBSYSTEM,\n        "source_schema_version": dependencies.schema_version,\n        "source_engine_id": dependencies.engine_id,\n        "source_certification_hash": dependencies.certification_hash,\n        "source_dependency_certification_hash": (\n            dependencies.dependencies.certification_hash\n        ),\n        "source_dependency_memory_hash": (\n            dependencies.dependencies.dependency_memory.memory_hash\n        ),\n        "package_files": package_files,\n        "test_files": test_files,\n        "package_file_count": len(package_files),\n        "test_file_count": len(test_files),\n        "package_tree_hash": package_tree_hash,\n        "test_tree_hash": test_tree_hash,\n        "repository_tree_hash": repository_tree_hash,\n        "deterministic_replay_certified": True,\n        "immutable_lineage_certified": True,\n        "read_only_boundary_certified": True,\n        "oracle_terminal_separation_certified": True,\n        "persistence_frozen_disabled": True,\n        "learning_updates_frozen_disabled": True,\n        "runtime_activation_frozen_disabled": True,\n        "publication_frozen_disabled": True,\n        "action_authorization_frozen_disabled": True,\n        "qseries_execution_frozen_disabled": True,\n        "defect_corrections_only_after_freeze": True,\n        "final_freeze_ready": True,\n    }\n    manifest = OracleMemoryFinalFreezeReadinessManifest(\n        **manifest_body,\n        manifest_hash=_stable_hash(manifest_body),\n    )\n    verify_oracle_memory_final_freeze_readiness_manifest(manifest)\n\n    report_body = {\n        "schema_version": SCHEMA_VERSION,\n        "engine_id": ENGINE_ID,\n        "policy_id": POLICY_ID,\n        "subsystem_id": SUBSYSTEM_ID,\n        "upstream_schema_version": dependencies.schema_version,\n        "upstream_engine_id": dependencies.engine_id,\n        "upstream_certification_hash": dependencies.certification_hash,\n        "state": STATE_READ_ONLY,\n        "manifest": manifest,\n        "source_dependency_memory_ready": True,\n        "complete_repository_inventory_certified": True,\n        "deterministic_replay_certified": True,\n        "immutable_lineage_certified": True,\n        "final_freeze_ready": True,\n        "downstream_final_freeze_authorized": True,\n        "further_feature_builds_allowed": False,\n        "correction_builds_allowed_only_for_defects": True,\n        "persistence_enabled": False,\n        "learning_updates_enabled": False,\n        "runtime_activation_enabled": False,\n        "publication_enabled": False,\n        "action_authorization_enabled": False,\n        "qseries_execution_enabled": False,\n        "read_only": True,\n    }\n    report = OracleMemoryFinalFreezeReadinessReport(\n        **report_body,\n        certification_hash=_stable_hash(report_body),\n    )\n    verify_oracle_memory_final_freeze_readiness_report(report)\n    return report\n\n\ndef verify_oracle_memory_final_freeze_readiness_manifest(\n    manifest: OracleMemoryFinalFreezeReadinessManifest,\n) -> bool:\n    body = asdict(manifest)\n    supplied = body.pop("manifest_hash")\n    if _stable_hash(body) != supplied:\n        _reject("OML-078 manifest hash mismatch")\n\n    if manifest.subsystem_id != SUBSYSTEM_ID:\n        _reject("OML-078 manifest subsystem mismatch")\n    if manifest.current_milestone != SCHEMA_VERSION:\n        _reject("OML-078 manifest milestone mismatch")\n    if manifest.final_freeze_milestone != FINAL_FREEZE_MILESTONE:\n        _reject("OML-078 final freeze milestone mismatch")\n    if manifest.next_subsystem != NEXT_SUBSYSTEM:\n        _reject("OML-078 next subsystem mismatch")\n    if manifest.source_schema_version != UPSTREAM_SCHEMA_VERSION:\n        _reject("OML-078 manifest source schema mismatch")\n    if manifest.source_engine_id != UPSTREAM_ENGINE_ID:\n        _reject("OML-078 manifest source engine mismatch")\n\n    for value in (\n        manifest.source_certification_hash,\n        manifest.source_dependency_certification_hash,\n        manifest.source_dependency_memory_hash,\n        manifest.package_tree_hash,\n        manifest.test_tree_hash,\n        manifest.repository_tree_hash,\n        manifest.manifest_hash,\n    ):\n        _require_hash(value, "manifest hash")\n\n    if manifest.package_file_count != len(manifest.package_files):\n        _reject("OML-078 package file count mismatch")\n    if manifest.test_file_count != len(manifest.test_files):\n        _reject("OML-078 test file count mismatch")\n    if manifest.package_file_count < 1 or manifest.test_file_count < 1:\n        _reject("OML-078 incomplete repository inventory")\n\n    if _tree_hash(manifest.package_files) != manifest.package_tree_hash:\n        _reject("OML-078 package tree hash mismatch")\n    if _tree_hash(manifest.test_files) != manifest.test_tree_hash:\n        _reject("OML-078 test tree hash mismatch")\n\n    for record in manifest.package_files + manifest.test_files:\n        _require_hash(record.sha256, "file hash")\n        if not record.relative_path:\n            _reject("OML-078 empty relative path")\n        if record.size_bytes < 1:\n            _reject("OML-078 invalid file size")\n\n    required = (\n        manifest.deterministic_replay_certified,\n        manifest.immutable_lineage_certified,\n        manifest.read_only_boundary_certified,\n        manifest.oracle_terminal_separation_certified,\n        manifest.persistence_frozen_disabled,\n        manifest.learning_updates_frozen_disabled,\n        manifest.runtime_activation_frozen_disabled,\n        manifest.publication_frozen_disabled,\n        manifest.action_authorization_frozen_disabled,\n        manifest.qseries_execution_frozen_disabled,\n        manifest.defect_corrections_only_after_freeze,\n        manifest.final_freeze_ready,\n    )\n    if not all(required):\n        _reject("OML-078 manifest guarantee missing")\n\n    return True\n\n\ndef verify_oracle_memory_final_freeze_readiness_report(\n    report: OracleMemoryFinalFreezeReadinessReport,\n) -> bool:\n    body = asdict(report)\n    supplied = body.pop("certification_hash")\n    if _stable_hash(body) != supplied:\n        _reject("OML-078 report hash mismatch")\n\n    if report.schema_version != SCHEMA_VERSION:\n        _reject("OML-078 schema mismatch")\n    if report.engine_id != ENGINE_ID:\n        _reject("OML-078 engine mismatch")\n    if report.policy_id != POLICY_ID:\n        _reject("OML-078 policy mismatch")\n    if report.subsystem_id != SUBSYSTEM_ID:\n        _reject("OML-078 subsystem mismatch")\n    if report.upstream_schema_version != UPSTREAM_SCHEMA_VERSION:\n        _reject("OML-078 upstream schema mismatch")\n    if report.upstream_engine_id != UPSTREAM_ENGINE_ID:\n        _reject("OML-078 upstream engine mismatch")\n    if report.state != STATE_READ_ONLY:\n        _reject("OML-078 state mismatch")\n\n    _require_hash(\n        report.upstream_certification_hash,\n        "upstream certification hash",\n    )\n    _require_hash(report.certification_hash, "report hash")\n    verify_oracle_memory_final_freeze_readiness_manifest(report.manifest)\n\n    if report.upstream_certification_hash != (\n        report.manifest.source_certification_hash\n    ):\n        _reject("OML-078 source certification mismatch")\n\n    required = (\n        report.source_dependency_memory_ready,\n        report.complete_repository_inventory_certified,\n        report.deterministic_replay_certified,\n        report.immutable_lineage_certified,\n        report.final_freeze_ready,\n        report.downstream_final_freeze_authorized,\n        report.correction_builds_allowed_only_for_defects,\n        report.read_only,\n    )\n    if not all(required):\n        _reject("OML-078 report guarantee missing")\n    if report.further_feature_builds_allowed:\n        _reject("OML-078 further feature builds allowed")\n\n    forbidden = (\n        report.persistence_enabled,\n        report.learning_updates_enabled,\n        report.runtime_activation_enabled,\n        report.publication_enabled,\n        report.action_authorization_enabled,\n        report.qseries_execution_enabled,\n    )\n    if any(forbidden):\n        _reject("OML-078 forbidden capability enabled")\n\n    return True\n'
+TEST_SOURCE = '\nfrom __future__ import annotations\n\nimport importlib.util\nimport sys\nfrom dataclasses import replace\nfrom pathlib import Path\n\nfrom qseries_v2.oracle_memory.oracle_memory_final_freeze_readiness_certification_gate_078 import (\n    FINAL_FREEZE_MILESTONE,\n    NEXT_SUBSYSTEM,\n    OracleMemoryFinalFreezeReadinessInvariantError,\n    build_oracle_memory_final_freeze_readiness_report,\n    verify_oracle_memory_final_freeze_readiness_report,\n)\n\n\ndef load_module(path: Path, name: str):\n    specification = importlib.util.spec_from_file_location(name, path)\n    if specification is None or specification.loader is None:\n        raise RuntimeError(f"unable to load fixture: {path}")\n    module = importlib.util.module_from_spec(specification)\n    sys.modules[name] = module\n    specification.loader.exec_module(module)\n    return module\n\n\ndef expect_rejection(callable_object, label: str) -> None:\n    try:\n        callable_object()\n    except OracleMemoryFinalFreezeReadinessInvariantError:\n        return\n    raise AssertionError(f"tampered OML-078 {label} accepted")\n\n\ndef build_freeze_readiness(root: Path):\n    fixture_077 = load_module(\n        root\n        / "test_oml_077_oracle_memory_certified_market_behavior_"\n        "cross_market_dependency_memory.py",\n        "oml_077_fixture_for_oml_078",\n    )\n    dependencies, chains, certified_hashes = (\n        fixture_077.build_dependencies(root)\n    )\n    report = build_oracle_memory_final_freeze_readiness_report(\n        root,\n        dependencies=dependencies,\n    )\n    return report, dependencies\n\n\ndef main() -> int:\n    print("=" * 48)\n    print(" OML-078 TEST")\n    print(" FINAL FREEZE READINESS CERTIFICATION GATE")\n    print("=" * 48)\n\n    root = Path(__file__).resolve().parent\n    report, dependencies = build_freeze_readiness(root)\n\n    assert report.schema_version == "OML-078"\n    assert report.engine_id == "OML-078"\n    assert report.upstream_schema_version == "OML-077"\n    assert report.upstream_engine_id == "OML-077"\n    assert report.source_dependency_memory_ready\n    assert report.complete_repository_inventory_certified\n    assert report.deterministic_replay_certified\n    assert report.immutable_lineage_certified\n    assert report.final_freeze_ready\n    assert report.downstream_final_freeze_authorized\n    assert not report.further_feature_builds_allowed\n    assert report.correction_builds_allowed_only_for_defects\n    assert report.read_only\n\n    manifest = report.manifest\n    assert manifest.current_milestone == "OML-078"\n    assert manifest.final_freeze_milestone == FINAL_FREEZE_MILESTONE\n    assert manifest.next_subsystem == NEXT_SUBSYSTEM\n    assert manifest.source_certification_hash == (\n        dependencies.certification_hash\n    )\n    assert manifest.package_file_count == len(manifest.package_files)\n    assert manifest.test_file_count == len(manifest.test_files)\n    assert manifest.package_file_count > 0\n    assert manifest.test_file_count > 0\n    assert manifest.final_freeze_ready\n    assert manifest.defect_corrections_only_after_freeze\n\n    replay, _ = build_freeze_readiness(root)\n    assert replay == report\n    assert verify_oracle_memory_final_freeze_readiness_report(report)\n\n    expect_rejection(\n        lambda: verify_oracle_memory_final_freeze_readiness_report(\n            replace(report, further_feature_builds_allowed=True)\n        ),\n        "feature-build authorization",\n    )\n    expect_rejection(\n        lambda: verify_oracle_memory_final_freeze_readiness_report(\n            replace(report, qseries_execution_enabled=True)\n        ),\n        "Q Series execution",\n    )\n\n    assert not report.persistence_enabled\n    assert not report.learning_updates_enabled\n    assert not report.runtime_activation_enabled\n    assert not report.publication_enabled\n    assert not report.action_authorization_enabled\n    assert not report.qseries_execution_enabled\n\n    print("[PASS] Certified OML-077 dependency memory consumed read-only")\n    print("[PASS] Complete Oracle Memory package inventory hashed")\n    print("[PASS] Complete OML standalone-test inventory hashed")\n    print("[PASS] Repository tree manifest created deterministically")\n    print("[PASS] Immutable lineage and replay certified")\n    print("[PASS] Oracle Terminal separation certified")\n    print("[PASS] Active capabilities frozen disabled")\n    print("[PASS] Further OML feature builds prohibited")\n    print("[PASS] Defect corrections remain the only post-freeze changes")\n    print("[PASS] OML-079 final freeze authorized")\n    print("[PASS] Universal Market Discovery recorded as next subsystem")\n    print("[PASS] Tampered readiness reports rejected")\n    print("[DONE] OML-078 FINAL FREEZE READINESS CERTIFIED")\n    return 0\n\n\nif __name__ == "__main__":\n    raise SystemExit(main())\n'
+
+
+def write_complete(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text.lstrip(), encoding="utf-8", newline="\n")
+    ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    print(f"[OK] FULL REPLACEMENT: {path.resolve()}")
+
+
+def validate_current_repository() -> None:
+    required = (UPSTREAM, UPSTREAM_TEST)
+    missing = [str(path) for path in required if not path.is_file()]
+    if missing:
+        raise RuntimeError(
+            "Required certified files missing: " + ", ".join(missing)
+        )
+
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+
+    upstream_module = importlib.import_module(
+        "qseries_v2.oracle_memory."
+        "oracle_memory_certified_market_behavior_"
+        "cross_market_dependency_memory_077"
+    )
+
+    expected = (
+        ("SCHEMA_VERSION", "OML-077"),
+        ("ENGINE_ID", "OML-077"),
+    )
+    for name, value in expected:
+        actual = getattr(upstream_module, name, None)
+        if actual != value:
+            raise RuntimeError(
+                f"OML-077 {name} mismatch: "
+                f"expected {value!r}, got {actual!r}"
+            )
+
+    fields = set(
+        upstream_module.
+        OracleMemoryCertifiedMarketBehaviorCrossMarketDependencyMemory077.
+        __dataclass_fields__
+    )
+    required_fields = {
+        "dependencies",
+        "dependency_memory_ready",
+        "downstream_freeze_certification_authorized",
+        "certification_hash",
+        "read_only",
+    }
+    missing_fields = sorted(required_fields - fields)
+    if missing_fields:
+        raise RuntimeError(
+            "OML-077 dataclass fields missing: "
+            + ", ".join(missing_fields)
+        )
+
+
+def main() -> int:
+    print("=" * 48)
+    print(" OML-078 INSTALLER")
+    print(" FINAL FREEZE READINESS CERTIFICATION GATE")
+    print("=" * 48)
+    print(
+        "[BOOT] Revision: "
+        "CURRENT_REPOSITORY_OML_077_FULL_INVENTORY_ALIGNMENT"
+    )
+
+    try:
+        validate_current_repository()
+        print("[OK] Current OML-077 dataclass inspected")
+        print("[OK] Oracle Memory repository inventory boundary located")
+
+        tracked = {
+            path: path.read_bytes()
+            for path in (UPSTREAM, UPSTREAM_TEST)
+        }
+
+        write_complete(PRODUCTION, PRODUCTION_SOURCE)
+        write_complete(TEST, TEST_SOURCE)
+
+        export = (
+            "from .oracle_memory_final_freeze_readiness_"
+            "certification_gate_078 import *"
+        )
+        current = INIT.read_text(encoding="utf-8") if INIT.exists() else ""
+        if export not in current.splitlines():
+            if current and not current.endswith("\n"):
+                current += "\n"
+            current += export + "\n"
+            INIT.write_text(current, encoding="utf-8", newline="\n")
+            print(f"[OK] PACKAGE UPDATED: {INIT.resolve()}")
+        else:
+            print(f"[OK] PACKAGE EXPORT PRESENT: {INIT.resolve()}")
+
+        completed = subprocess.run(
+            [sys.executable, str(TEST)],
+            cwd=ROOT,
+            check=False,
+        )
+        if completed.returncode:
+            raise RuntimeError(
+                f"OML-078 test failed with exit code {completed.returncode}"
+            )
+
+        for path, before in tracked.items():
+            if path.read_bytes() != before:
+                raise RuntimeError(f"Certified upstream changed: {path}")
+
+        print("[PASS] Complete OML-078 production replacement installed")
+        print("[PASS] Complete deterministic standalone test installed")
+        print("[PASS] Certified OML-077 files unchanged")
+        print("[PASS] Full Oracle Memory inventory certified")
+        print("[PASS] Deterministic replay preserved")
+        print("[PASS] Oracle Terminal separation preserved")
+        print("[PASS] Persistence remained disabled")
+        print("[PASS] Learning updates remained disabled")
+        print("[PASS] Runtime activation remained disabled")
+        print("[PASS] Publication remained disabled")
+        print("[PASS] Action authorization remained disabled")
+        print("[PASS] Q Series execution remained disabled")
+        print("[DONE] OML-078 FREEZE READINESS INSTALLED")
+        return 0
+
+    except (
+        RuntimeError,
+        SyntaxError,
+        ImportError,
+        AttributeError,
+        KeyError,
+        TypeError,
+        ValueError,
+    ) as exc:
+        print(f"[ERROR] {exc}")
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

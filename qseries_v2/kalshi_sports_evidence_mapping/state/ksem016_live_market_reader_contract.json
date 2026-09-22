@@ -1,0 +1,67 @@
+{
+  "targets": {
+    "oiar_047": {
+      "args": [
+        "root",
+        "max_pages",
+        "timeout_seconds",
+        "now"
+      ],
+      "required": [],
+      "returns": [
+        "(rows, {'pages': pages, 'pagination_complete': not bool(cursor), 'statuses': statuses})"
+      ],
+      "calls": [
+        "CurrentKalshiMarket",
+        "Path",
+        "RuntimeError",
+        "_dt",
+        "_s",
+        "astimezone",
+        "bool",
+        "cwd",
+        "get",
+        "int",
+        "isinstance",
+        "kalshi_rest_get",
+        "load_kalshi_credentials",
+        "lower",
+        "now",
+        "resolve",
+        "sorted",
+        "str",
+        "strip",
+        "tuple",
+        "upper",
+        "values"
+      ],
+      "line": 18,
+      "module": "qseries_v2/oracle_intelligence_analytics_runtime/oiar_047_production_kalshi_current_eligibility_boundary.py",
+      "sha256": "8410e80143bdfcac0c4e0a9d833464151be4a3934c9e3044b5577e8847d650a1",
+      "function": "read_current_kalshi_markets"
+    },
+    "oad_120": {
+      "args": [
+        "descriptors",
+        "limit",
+        "timeout_seconds"
+      ],
+      "required": [
+        "descriptors"
+      ],
+      "returns": [
+        "(tuple(markets), groups)"
+      ],
+      "calls": [
+        "candidate_markets_for_sports_descriptor",
+        "fetch_current_open_kalshi_market_index",
+        "tuple"
+      ],
+      "line": 52,
+      "module": "qseries_v2/oracle_adapters/independent/oad_120_current_market_sports_team_pair_index.py",
+      "sha256": "4179522de6712c4c6da568fdc215b8ba4a3b40a378c2adc0e5d95f0df7b8ea85",
+      "function": "fetch_current_market_sports_candidates"
+    }
+  },
+  "execution_authority": false
+}

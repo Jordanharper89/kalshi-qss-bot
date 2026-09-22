@@ -1,0 +1,21 @@
+{
+  "certified_range": "KSEM-001..KSEM-080",
+  "change_policy": "DEFECT_CORRECTIONS_ONLY",
+  "execution_authority": false,
+  "latest_counts": {
+    "AMBIGUOUS": 0,
+    "EXACT_BOUND": 1,
+    "PARTIAL": 39,
+    "SOURCE_GAP": 0,
+    "UNSUPPORTED": 0
+  },
+  "latest_mapping_content_hash": "0ef9f0091b7c2a53c8716062ee1a67aafe51f43e0879bb396e23d5d563bc0751",
+  "latest_total_rows": 40,
+  "launcher_sha256": "f6d5305c81c5f790fb73dae5fe57866fe1b4a6e18c792d6749b89780f3ffc9b1",
+  "native_child_key": "ksem_mapping",
+  "native_child_runner": "run_ksem_live_mapping.py",
+  "probability_enabled": false,
+  "schema_version": "KSEM-080",
+  "status": "FROZEN",
+  "terminal_dependency": "NONE"
+}

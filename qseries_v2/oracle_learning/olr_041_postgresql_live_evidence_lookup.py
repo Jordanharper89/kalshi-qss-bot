@@ -1,0 +1,10 @@
+from __future__ import annotations
+
+OLR_041_BUILD_ID="OLR-041"
+OLR_041_REVISION="OLR_041_POSTGRESQL_LIVE_EVIDENCE_LOOKUP_CORRECTED_BY_OLR_052_V2"
+
+from .olr_052_canonical_json_evidence_lookup_correction import lookup_market_evidence
+
+def verify_olr_041_postgresql_live_evidence_lookup(root=None):
+    from .olr_040_outcome_evidence_linkage_freeze import verify_olr_040_outcome_evidence_linkage_freeze
+    return verify_olr_040_outcome_evidence_linkage_freeze(root) and callable(lookup_market_evidence)

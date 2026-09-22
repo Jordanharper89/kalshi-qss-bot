@@ -1,0 +1,489 @@
+{
+  "candidates": [
+    {
+      "evidence": [
+        "contains_literal_/ask"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "build_default_command_registry"
+    },
+    {
+      "evidence": [
+        "contains_natural_language",
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_query_planning_and_execution",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "build_natural_language_query_plan"
+    },
+    {
+      "evidence": [
+        "contains_natural_language",
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_query_planning_and_execution",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "execute_natural_language_query"
+    },
+    {
+      "evidence": [
+        "contains_natural_language",
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_query_planning_and_execution",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "natural_language_query_plan_lines"
+    },
+    {
+      "evidence": [
+        "contains_natural_language",
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_query_planning_and_execution",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "natural_language_query_result_lines"
+    },
+    {
+      "evidence": [
+        "contains_natural_language",
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_query_planning_and_execution",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_natural_language_query_match"
+    },
+    {
+      "evidence": [
+        "contains_natural_language",
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_query_planning_and_execution",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_natural_language_query_plan"
+    },
+    {
+      "evidence": [
+        "contains_natural_language",
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_query_planning_and_execution",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_natural_language_query_result"
+    },
+    {
+      "evidence": [
+        "contains_natural_language"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_grounded_intelligence_answer_composition",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_build_evidence_item"
+    },
+    {
+      "evidence": [
+        "contains_natural_language"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_grounded_intelligence_answer_composition",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "compose_grounded_intelligence_answer"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_query_asset"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "is_live_factual_price_query"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_multi_turn_follow_up_query_context_resolution",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleFollowUpQueryReference"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_multi_turn_follow_up_query_context_resolution",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleFollowUpQueryResolutionInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_multi_turn_follow_up_query_context_resolution",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleFollowUpQueryResolutionReport"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_multi_turn_follow_up_query_context_resolution",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleResolvedFollowUpQuery"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_multi_turn_follow_up_query_context_resolution",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_normalize_query"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_multi_turn_follow_up_query_context_resolution",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "resolve_multi_turn_follow_up_query"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_multi_turn_follow_up_query_context_resolution",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_follow_up_query_resolution_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_multi_turn_follow_up_query_context_resolution",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_resolved_follow_up_query"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_intelligence_response_projection",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleIntelligenceQueryIntent"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_intelligence_response_projection",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_build_query_intent"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_intelligence_response_projection",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_normalize_query"
+    },
+    {
+      "evidence": [
+        "contains_natural_language"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_intelligence_response_projection",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "build_natural_language_intelligence_projection_report"
+    },
+    {
+      "evidence": [
+        "contains_natural_language"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_intelligence_response_projection",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_natural_language_intelligence_projection_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_intelligence_response_projection",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_query_intent"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_query_planning_and_execution",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleNaturalLanguageQueryInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_query_planning_and_execution",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleNaturalLanguageQueryMatch"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_query_planning_and_execution",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleNaturalLanguageQueryPlan"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_query_planning_and_execution",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleNaturalLanguageQueryResult"
+    },
+    {
+      "evidence": [
+        "contains_natural_language"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_query_planning_and_execution",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_build_match"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_natural_language_query_planning_and_execution",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_normalize_query"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleQueryableIntelligenceInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleQueryableIntelligenceReadModel"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "QueryableIntelligenceArtifact"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "QueryableIntelligenceRecord"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "build_queryable_intelligence_read_model"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "queryable_intelligence_status_lines"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "queryable_record_inventory_lines"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "queryable_record_lines"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "queryable_schema_lines"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "search_queryable_records"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "select_queryable_record"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_queryable_artifact"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_queryable_intelligence_read_model"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_query"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_queryable_intelligence_read_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_queryable_record"
+    },
+    {
+      "evidence": [
+        "contains_natural_language"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_resolved_follow_up_projection_reentry_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "build_resolved_follow_up_projection_reentry_report"
+    },
+    {
+      "evidence": [
+        "contains_natural_language"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_resolved_follow_up_projection_reentry_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_resolved_follow_up_projection_reentry_report"
+    },
+    {
+      "evidence": [
+        "contains_natural_language"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "build_terminal_intelligence_answer_generation_report"
+    },
+    {
+      "evidence": [
+        "contains_natural_language"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_display_integration_certification",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalLiveRunnerIntegrationCertification"
+    },
+    {
+      "evidence": [
+        "contains_natural_language"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_display_integration_certification",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "certify_live_runner_integration"
+    },
+    {
+      "evidence": [
+        "contains_natural_language"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_display_integration_certification",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_live_runner_integration_certification"
+    }
+  ],
+  "revision": "OAR_025_OIT_ASK_DISPATCH_MANIFEST_V1",
+  "top_candidate": {
+    "evidence": [
+      "contains_literal_/ask"
+    ],
+    "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+    "score": 6,
+    "symbol_kind": "function",
+    "symbol_name": "build_default_command_registry"
+  }
+}

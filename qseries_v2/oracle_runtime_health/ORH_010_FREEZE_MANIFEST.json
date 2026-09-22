@@ -1,0 +1,16 @@
+{
+  "attestation_collision_safe": true,
+  "cursor_collision_safe": true,
+  "execution_authority": false,
+  "fast_lane_transport_persistence_separated": true,
+  "freeze": "ORH-001 through ORH-010",
+  "obr_async_recovery_preserved": true,
+  "postgresql_resilience": true,
+  "sha256": {
+    "qseries_v2\\oracle_continuous_reasoning\\ocr_011_reasoning_cursor_state.py": "0d5088c9a4a9775f30c6e04a34ceca511114ba3e2a6c69d30118e97eea5cc19c",
+    "qseries_v2\\oracle_learning_feedback\\olf_030_breadth_aware_reasoning_runtime.py": "21e91e6a4486bc4e2ccda57eb399dc0506da85621359a166abc4c792e271e818",
+    "run_oad_054_kalshi_global_fast_lane.py": "bbe22086a9e6fe3e43654197f29379be50490b12dd658e04031adfc2bb987f64",
+    "run_oracle_LIVE.py": "b4d7ce056ef8de68059c0428780e7286bb173e2a621f5a5408add873d1af59dd"
+  },
+  "truthful_health": true
+}

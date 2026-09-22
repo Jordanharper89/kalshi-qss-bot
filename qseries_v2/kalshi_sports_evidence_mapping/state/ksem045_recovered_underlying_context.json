@@ -1,0 +1,307 @@
+{
+  "rows": [
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ALAUK-ALA",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12ALAUK",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ALBYLIU-ALBY",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12ALBYLIU",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ALSTTROY-TROY",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12ALSTTROY",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12APPECU-ECU",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12APPECU",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ARIZBYU-BYU",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12ARIZBYU",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ARPBALCN-ALCN",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12ARPBALCN",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ASUTXAM-TXAM",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12ASUTXAM",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12BGSUNEB-NEB",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12BGSUNEB",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CALSYR-SYR",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12CALSYR",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CAMPFLA-FLA",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12CAMPFLA",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CCSUTOL-TOL",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12CCSUTOL",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CHATEKY-CHAT",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12CHATEKY",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CHSOCIT-CIT",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12CHSOCIT",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12COLGCMU-CMU",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12COLGCMU",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12DELVAN-VAN",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12DELVAN",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12DRKEUNI-UNI",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12DRKEUNI",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12DUKEILL-ILL",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12DUKEILL",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12DUQYSU-YSU",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12DUQYSU",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12EMUMSU-MSU",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12EMUMSU",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ETSUUNC-UNC",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12ETSUUNC",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12EWUSDAK-SDAK",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12EWUSDAK",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12FORCCAR-CCAR",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12FORCCAR",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12FURMER-MER",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12FURMER",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12GASOCLEM-CLEM",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12GASOCLEM",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12HCMOH-MOH",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12HCMOH",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12HOWIND-IND",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12HOWIND",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ISUIOWA-IOWA",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12ISUIOWA",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12LINWMOSU-MOSU",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12LINWMOSU",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12LTLSU-LSU",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12LTLSU",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MDCONN-MD",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12MDCONN",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MEMBSU-BSU",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12MEMBSU",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MHUUNM-UNM",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12MHUUNM",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MONMWMU-WMU",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12MONMWMU",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MOREPEAY-PEAY",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12MOREPEAY",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MRSTLAF-LAF",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12MRSTLAF",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MSSTMINN-MSST",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12MSSTMINN",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MTUMRSH-MRSH",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12MTUMRSH",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12NHCSDST-SDST",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12NHCSDST",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12NWSTETAM-ETAM",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12NWSTETAM",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ODUVT-VT",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12ODUVT",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12OKLAMICH-OKLA",
+      "retrieval_status": "RESOLVED_PAIR",
+      "event_ticker": "KXNCAAFGAME-26SEP12OKLAMICH",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12OREOKST-ORE",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12OREOKST",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12PSUTEM-PSU",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12PSUTEM",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12RICEND-ND",
+      "retrieval_status": "RESOLVED_PAIR",
+      "event_ticker": "KXNCAAFGAME-26SEP12RICEND",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12RMUAKR-AKR",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12RMUAKR",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SAMTNTC-TNTC",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12SAMTNTC",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SDSUUCLA-UCLA",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12SDSUUCLA",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SEMOSIU-SIU",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12SEMOSIU",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SHUMASS-MASS",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12SHUMASS",
+      "league_from_exact_ticker": "NCAAF"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SOUHOU-HOU",
+      "retrieval_status": "NOT_FOUND",
+      "event_ticker": "KXNCAAFGAME-26SEP12SOUHOU",
+      "league_from_exact_ticker": "NCAAF"
+    }
+  ],
+  "resolved": 2,
+  "resolved_with_league_context": 2,
+  "execution_authority": false
+}

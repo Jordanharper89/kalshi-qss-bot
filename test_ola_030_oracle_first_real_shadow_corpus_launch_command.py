@@ -28,10 +28,13 @@ import qseries_v2.oracle_intelligence.live_acquisition_model.oracle_first_real_s
 
 from qseries_v2.oracle_intelligence.live_acquisition_model.oracle_first_real_shadow_corpus_launch_command import (
     ENGINE_ID,
+    FIRST_REAL_CORPUS_COHORT_SIZE,
     FIRST_REAL_CORPUS_MAX_PAGES,
     FIRST_REAL_CORPUS_PAGE_LIMIT,
     SOURCE_ID,
     _build_production_acquisition_runtime,
+    _discover_stable_market_cohort,
+    _normalize_stable_market_cohort,
     _run_canonical_scheduler_cycle_bridge,
     _runtime_log_snapshot,
     _summarize_new_cycle_evidence,
@@ -316,7 +319,94 @@ def _bridge_regression() -> None:
     assert result["execution_allowed"] is False
 
 
+
+def _stable_market_cohort_regression() -> None:
+    class FakeObservation:
+        def __init__(self, ticker: str):
+            self.payload = (
+                ("source_market_id", ticker),
+            )
+
+    class FakeDiscoveryAdapter:
+        def __init__(self, tickers):
+            self._tickers = tuple(tickers)
+            self.calls = 0
+            self.last_acquired_at = None
+
+        def acquire(self, *, acquired_at):
+            self.calls += 1
+            self.last_acquired_at = acquired_at
+            return tuple(
+                FakeObservation(ticker)
+                for ticker in self._tickers
+            )
+
+    discovered_at = datetime(
+        2026,
+        7,
+        14,
+        0,
+        0,
+        0,
+        tzinfo=timezone.utc,
+    )
+
+    expected = (
+        "KX.TEST.001",
+        "KX.TEST.002",
+        "KX.TEST.003",
+        "KX.TEST.004",
+        "KX.TEST.005",
+    )
+
+    adapter = FakeDiscoveryAdapter(
+        expected
+    )
+
+    cohort = _discover_stable_market_cohort(
+        discovery_adapter=adapter,
+        discovered_at=discovered_at,
+    )
+
+    assert cohort == expected
+    assert adapter.calls == 1
+    assert adapter.last_acquired_at == discovered_at
+    assert len(cohort) == FIRST_REAL_CORPUS_COHORT_SIZE
+    assert _normalize_stable_market_cohort(
+        cohort
+    ) == expected
+
+    duplicate_blocked = False
+
+    try:
+        _normalize_stable_market_cohort(
+            (
+                "KX.TEST.001",
+                "KX.TEST.002",
+                "KX.TEST.003",
+                "KX.TEST.004",
+                "KX.TEST.001",
+            )
+        )
+    except Exception:
+        duplicate_blocked = True
+
+    assert duplicate_blocked is True
+
+    incomplete_blocked = False
+
+    try:
+        _normalize_stable_market_cohort(
+            expected[:4]
+        )
+    except Exception:
+        incomplete_blocked = True
+
+    assert incomplete_blocked is True
+
+
 def main() -> None:
+    _stable_market_cohort_regression()
     _production_batch_router_wiring_regression()
     _bridge_regression()
 
@@ -446,6 +536,12 @@ def main() -> None:
         "status": "passed",
         "production_launch_success_boundary_correction": True,
         "bounded_first_real_corpus_canary": True,
+        "stable_five_market_cohort_discovered_once": True,
+        "stable_market_cohort_size": FIRST_REAL_CORPUS_COHORT_SIZE,
+        "stable_market_cohort_order_preserved": True,
+        "duplicate_stable_cohort_ticker_rejected": True,
+        "incomplete_stable_cohort_rejected": True,
+        "ola_016_stable_cohort_filter_wired": True,
         "ola_015_route_batch_wired_into_ola_001": True,
         "production_batch_router_required": True,
         "single_observation_router_preserved_as_fallback_contract": True,

@@ -1,0 +1,98 @@
+from pathlib import Path
+import ast,os,subprocess,sys
+ROOT=Path.cwd().resolve()
+RUN=ROOT/"run_oad_054_kalshi_global_fast_lane.py"
+TEST=ROOT/"test_orh_008_fast_lane_persistence_transport_separation.py"
+RUN_SOURCE=r"""from __future__ import annotations
+from datetime import datetime,timezone
+from pathlib import Path
+import asyncio,json
+from qseries_v2.oracle_adapters.kalshi.oad_021_credentials import load_kalshi_credentials
+from qseries_v2.oracle_adapters.kalshi.oad_022_rest_transport import build_auth_headers
+from qseries_v2.oracle_adapters.kalshi.oad_036_websocket_canonical_bridge import build_ola_canonical_observation_from_websocket
+from qseries_v2.oracle_adapters.kalshi.oad_037_ola_postgres_router_binding import build_ola_production_persistence_router,persist_canonical_observation
+from qseries_v2.oracle_adapters.kalshi.oad_048_multi_partition_runtime import build_kalshi_subscription_command
+from qseries_v2.oracle_production_hardening.oph_029_postgresql_routing_failure_classification import classify_persistence_failure
+ORH_008_BUILD_ID="ORH-008"
+async def _persist_without_transport_reconnect(router,observation,now,ticker,typ,max_attempts=8):
+    for attempt in range(1,max_attempts+1):
+        try:
+            persist_canonical_observation(router,observation,routed_at=now);return
+        except Exception as exc:
+            c=classify_persistence_failure(exc)
+            if c.terminal or not c.retryable:raise
+            delay=min(5.0,0.1*(2**min(attempt-1,6)))
+            print(f"[FAST PERSIST RETRY] type={typ} ticker={ticker} category={c.category} attempt={attempt} retry_in={delay:.2f}s transport_reconnect=FALSE",flush=True)
+            if attempt>=max_attempts:raise
+            await asyncio.sleep(delay)
+async def run_forever(root):
+    import websockets
+    from qseries_v2.oracle_adapters.kalshi.oad_006_kalshi_foundation import build_kalshi_adapter_foundation
+    credentials=load_kalshi_credentials(root=root);router=build_ola_production_persistence_router(root);foundation=build_kalshi_adapter_foundation()
+    reconnects=0;persisted=0
+    while True:
+        headers=build_auth_headers(credentials,"GET","/trade-api/ws/v2")
+        kwargs={"open_timeout":15.0,"ping_interval":20.0,"ping_timeout":20.0,"close_timeout":10.0}
+        try:
+            try:cm=websockets.connect(foundation.predictions_ws_url,additional_headers=headers,**kwargs)
+            except TypeError:cm=websockets.connect(foundation.predictions_ws_url,extra_headers=headers,**kwargs)
+            async with cm as ws:
+                await ws.send(json.dumps(build_kalshi_subscription_command(1,("ticker","trade"),None),separators=(",",":")))
+                print(f"[FAST LANE] CONNECTED coverage=ALL reconnects={reconnects}",flush=True)
+                async for raw_text in ws:
+                    raw=json.loads(raw_text);typ=str(raw.get("type",""))
+                    if typ in ("subscribed","ok"):
+                        print("[FAST LANE] subscription_ack",flush=True);continue
+                    if typ not in ("ticker","trade"):continue
+                    msg=raw.get("msg") or {};ticker=str(msg.get("market_ticker") or msg.get("ticker") or "").strip()
+                    now=datetime.now(timezone.utc)
+                    observation=build_ola_canonical_observation_from_websocket(raw,received_at=now,acquisition_batch_id=f"batch.oad054.{persisted+1}.{now.strftime('%Y%m%dT%H%M%S%fZ')}")
+                    await _persist_without_transport_reconnect(router,observation,now,ticker,typ)
+                    persisted+=1
+                    print(f"[FAST PERSIST] event={persisted} type={typ} ticker={ticker} observation_id={observation.observation_id}",flush=True)
+        except asyncio.CancelledError:raise
+        except Exception as exc:
+            reconnects+=1;delay=min(30.0,2.0**min(reconnects-1,5))
+            print(f"[FAST LANE] connection_failure={type(exc).__name__} reconnects={reconnects} reconnecting_in={delay:.1f}s",flush=True)
+            await asyncio.sleep(delay)
+def main():
+    root=Path.cwd();print("="*72,flush=True);print(" OAD-054 KALSHI GLOBAL FAST LANE - 24/7 UNBOUNDED — ORH-008",flush=True);print("="*72,flush=True)
+    try:return asyncio.run(run_forever(root))
+    except KeyboardInterrupt:
+        print("\n[STOP] Global fast lane stopped by operator.",flush=True);return 0
+if __name__=="__main__":raise SystemExit(main())
+"""
+TEST_SOURCE=r"""import ast,unittest
+from pathlib import Path
+ROOT=Path.cwd().resolve();RUN=ROOT/"run_oad_054_kalshi_global_fast_lane.py"
+class T(unittest.TestCase):
+    def test_separation(self):
+        s=RUN.read_text(encoding="utf-8");ast.parse(s)
+        self.assertIn("_persist_without_transport_reconnect",s);self.assertIn("transport_reconnect=FALSE",s);self.assertIn("classify_persistence_failure",s);self.assertIn("[FAST LANE] connection_failure=",s)
+if __name__=="__main__":
+    print("="*88);print(" ORH-008 CERTIFICATION TEST");print(" FAST-LANE PERSISTENCE / TRANSPORT FAILURE SEPARATION");print("="*88)
+    r=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(T))
+    if not r.wasSuccessful():raise SystemExit(1)
+    print("[PASS] retryable persistence failures stay inside active WebSocket session");print("[PASS] transport reconnect path remains separate");print("[PASS] execution_authority=FALSE");print("[DONE] ORH-008 CERTIFIED")
+"""
+def write_exact(p,s):
+    t=p.with_suffix(p.suffix+".orh008tmp");t.write_text(s,encoding="utf-8",newline="\n");os.replace(t,p)
+def main():
+    print("="*88);print(" ORH-008 INSTALLER");print(" FAST-LANE PERSISTENCE / TRANSPORT FAILURE SEPARATION");print("="*88);print("[ROOT]",ROOT)
+    if not RUN.is_file():raise RuntimeError("Physical OAD-054 fast-lane runner missing")
+    current=RUN.read_text(encoding="utf-8")
+    for token in ("persist_canonical_observation","websockets.connect","build_kalshi_subscription_command"):
+        if token not in current:raise RuntimeError("Physical fast-lane contract changed: "+token)
+    classifier=ROOT/"qseries_v2"/"oracle_production_hardening"/"oph_029_postgresql_routing_failure_classification.py"
+    if not classifier.is_file():raise RuntimeError("Certified OPH-029 classifier missing")
+    oldr=RUN.read_bytes();oldt=TEST.read_bytes() if TEST.exists() else None
+    try:
+        write_exact(RUN,RUN_SOURCE);write_exact(TEST,TEST_SOURCE);subprocess.run([sys.executable,str(TEST)],cwd=str(ROOT),check=True)
+    except Exception:
+        RUN.write_bytes(oldr)
+        if oldt is None:
+            if TEST.exists():TEST.unlink()
+        else:TEST.write_bytes(oldt)
+        print("[ROLLBACK] ORH-008 failed; fast lane restored");raise
+    print("[PASS] OAD-054 canonical observation + subscription contracts preserved");print("[PASS] transient PostgreSQL persistence no longer forces WebSocket reconnect");print("[PASS] terminal/unknown failures still escape normally");print("[PASS] execution_authority=FALSE");print("[DONE] ORH-008 INSTALLATION COMPLETE")
+if __name__=="__main__":main()

@@ -1,0 +1,13 @@
+{
+  "ask_handler_name": "handle_ask",
+  "binding_mode": "runtime_display_query_overlay",
+  "dispatch_symbol": "dispatch_command",
+  "display_query_definition_count": 2,
+  "injection_symbol": "display_query",
+  "int_oracle_live_001_bound": true,
+  "interactive_symbol": "run_interactive",
+  "launcher_module": "run_oracle_open_intelligence_terminal",
+  "read_only": true,
+  "revision": "OLC_010_EXACT_ASK_DESCRIPTOR_MANIFEST_V1",
+  "source_mutation_required": false
+}

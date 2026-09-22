@@ -1,0 +1,32 @@
+from pathlib import Path
+import importlib,os,subprocess,sys
+ROOT=Path.cwd().resolve();PKG=ROOT/"qseries_v2"/"oracle_learning_feedback";MOD=PKG/"olf_026_learning_coverage_atlas.py";TEST=ROOT/"test_olf_026_learning_coverage_breadth_atlas.py";INIT=PKG/"__init__.py";MAN=PKG/"OLF_025_FREEZE_MANIFEST.json"
+MODULE_SOURCE='from __future__ import annotations\nfrom collections import defaultdict\nfrom pathlib import Path\nimport json,os\nfrom .olf_011_learned_experience_profile import materialize_learned_experience_profiles\nfrom .olf_016_outcome_attributed_experience import materialize_outcome_attributed_experience\n\nOLF_026_BUILD_ID="OLF-026"\nOLF_026_REVISION="OLF_026_LEARNING_COVERAGE_BREADTH_ATLAS_V1"\nOUTPUT_NAME="oracle_learning_coverage_breadth_atlas.json"\n\ndef build_learning_coverage_atlas(root=None):\n    root=Path(root or Path.cwd()).resolve()\n    learned=materialize_learned_experience_profiles(root)\n    scored=materialize_outcome_attributed_experience(root)\n    if learned["learner_state_hash"]!=scored["learner_state_hash"]:\n        raise RuntimeError("Learning coverage inputs have different learner-state hashes")\n\n    by=defaultdict(lambda:{\n        "learned_records":0,"evidence_resolved":0,"outcome_attributed":0,\n        "probability_recovered":0,"scored_records":0,"tickers":set(),\n    })\n    for x in learned.get("profiles",[]):\n        k=str(x.get("series_key") or "UNKNOWN")\n        by[k]["learned_records"]+=1\n        by[k]["evidence_resolved"]+=1 if x.get("evidence_resolved") else 0\n        by[k]["tickers"].add(str(x.get("market_ticker") or ""))\n\n    for x in scored.get("records",[]):\n        k=str(x.get("series_key") or "UNKNOWN")\n        by[k]["outcome_attributed"]+=1 if x.get("settlement_result") else 0\n        by[k]["probability_recovered"]+=1 if x.get("implied_yes_probability") is not None else 0\n        by[k]["scored_records"]+=1 if x.get("scored") else 0\n\n    series=[]\n    for k,v in sorted(by.items()):\n        lr=int(v["learned_records"]); sr=int(v["scored_records"])\n        series.append({\n            "series_key":k,\n            "learned_records":lr,\n            "distinct_tickers":len(v["tickers"]),\n            "evidence_resolved":int(v["evidence_resolved"]),\n            "outcome_attributed":int(v["outcome_attributed"]),\n            "probability_recovered":int(v["probability_recovered"]),\n            "scored_records":sr,\n            "scored_coverage":(sr/lr) if lr else 0.0,\n        })\n    return {\n        "revision":OLF_026_REVISION,\n        "learner_state_hash":learned["learner_state_hash"],\n        "total_learned_records":sum(x["learned_records"] for x in series),\n        "total_scored_records":sum(x["scored_records"] for x in series),\n        "distinct_learned_series":len(series),\n        "distinct_scored_series":sum(1 for x in series if x["scored_records"]>0),\n        "series":series,\n        "execution_authority":False,\n    }\n\ndef materialize_learning_coverage_atlas(root=None):\n    root=Path(root or Path.cwd()).resolve();p=build_learning_coverage_atlas(root)\n    path=root/"runtime_state"/OUTPUT_NAME;tmp=path.with_suffix(path.suffix+".tmp")\n    tmp.write_text(json.dumps(p,sort_keys=True,separators=(",",":")),encoding="utf-8",newline="\\n");os.replace(tmp,path);return p\n\ndef verify_olf_026_learning_coverage_breadth_atlas():\n    return OLF_026_BUILD_ID=="OLF-026" and callable(build_learning_coverage_atlas)\n';TEST_SOURCE='import unittest\nimport qseries_v2.oracle_learning_feedback.olf_026_learning_coverage_atlas as m\nclass T(unittest.TestCase):\n    def test_identity(self):self.assertEqual(m.OLF_026_BUILD_ID,"OLF-026")\n    def test_contract(self):self.assertTrue(callable(m.build_learning_coverage_atlas))\nif __name__=="__main__":\n    print("="*88);print(" OLF-026 CERTIFICATION TEST");print(" LEARNING COVERAGE BREADTH ATLAS");print("="*88)\n    r=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(T))\n    if not r.wasSuccessful():raise SystemExit(1)\n    print("[PASS] Per-series learned/scored coverage atlas certified");print("[PASS] execution_authority=FALSE");print("[DONE] OLF-026 CERTIFIED")\n'
+
+def write_exact(path,text):
+    path.parent.mkdir(parents=True,exist_ok=True)
+    tmp=path.with_suffix(path.suffix+".tmp");tmp.write_text(text,encoding="utf-8",newline="\n");os.replace(tmp,path)
+def restore(path,data):
+    if data is None:
+        if path.exists():path.unlink()
+    else:path.write_bytes(data)
+def update_init(path,line):
+    s=path.read_text(encoding="utf-8") if path.exists() else ""
+    if line not in s.splitlines():write_exact(path,s.rstrip()+"\n"+line+"\n")
+
+def main():
+    print("="*88);print(" OLF-026 INSTALLER");print(" LEARNING COVERAGE BREADTH ATLAS");print("="*88);print("[ROOT]",ROOT)
+    sys.path.insert(0,str(ROOT));up=importlib.import_module("qseries_v2.oracle_learning_feedback.olf_025_regime_aware_reasoning_runtime")
+    if not MAN.is_file() or not up.verify_olf_025_regime_aware_reasoning_runtime():raise RuntimeError("Frozen OLF-025 boundary verification failed")
+    old={p:(p.read_bytes() if p.exists() else None) for p in (MOD,TEST,INIT)}
+    try:
+        write_exact(MOD,MODULE_SOURCE);write_exact(TEST,TEST_SOURCE);update_init(INIT,"from .olf_026_learning_coverage_atlas import *");subprocess.run([sys.executable,str(TEST)],cwd=str(ROOT),check=True)
+        importlib.invalidate_caches();m=importlib.import_module("qseries_v2.oracle_learning_feedback.olf_026_learning_coverage_atlas");p=m.materialize_learning_coverage_atlas(ROOT)
+        print(f"[PHYSICAL BREADTH] learned_records={p['total_learned_records']} scored_records={p['total_scored_records']} learned_series={p['distinct_learned_series']} scored_series={p['distinct_scored_series']} state_hash={p['learner_state_hash']}")
+        for x in p["series"]:print(f"[SERIES COVERAGE] series={x['series_key']} learned={x['learned_records']} scored={x['scored_records']} coverage={x['scored_coverage']:.3f} outcomes={x['outcome_attributed']} prices={x['probability_recovered']}")
+        if p["distinct_learned_series"]<=0:raise RuntimeError("No learned series found")
+    except Exception:
+        for p,b in old.items():restore(p,b)
+        print("[ROLLBACK] OLF-026 failed; files restored");raise
+    print("[PASS] Frozen OLF-001 through OLF-025 untouched");print("[PASS] execution_authority=FALSE");print("[DONE] OLF-026 INSTALLATION COMPLETE")
+if __name__=="__main__":main()

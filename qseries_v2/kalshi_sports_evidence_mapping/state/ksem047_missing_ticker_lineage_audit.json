@@ -1,0 +1,222 @@
+{
+  "canonical_columns": [
+    "sequence_number",
+    "observation_id",
+    "content_hash",
+    "source_id",
+    "source_observation_id",
+    "observation_type",
+    "acquisition_batch_id",
+    "observed_at",
+    "acquired_at",
+    "persisted_at",
+    "observation_replay_hash",
+    "canonical_observation_json",
+    "previous_chain_hash",
+    "chain_hash"
+  ],
+  "learning_index_columns": [
+    "observation_id",
+    "ticker",
+    "evidence_hash",
+    "sequence_number",
+    "observed_at",
+    "observation_type",
+    "indexed_at"
+  ],
+  "rows": [
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ALAUK-ALA",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ALBYLIU-ALBY",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ALSTTROY-TROY",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12APPECU-ECU",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ARIZBYU-BYU",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ARPBALCN-ALCN",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ASUTXAM-TXAM",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12BGSUNEB-NEB",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CALSYR-SYR",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CAMPFLA-FLA",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CCSUTOL-TOL",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CHATEKY-CHAT",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CHSOCIT-CIT",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12COLGCMU-CMU",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12DELVAN-VAN",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12DRKEUNI-UNI",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12DUKEILL-ILL",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12DUQYSU-YSU",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12EMUMSU-MSU",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ETSUUNC-UNC",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12EWUSDAK-SDAK",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12FORCCAR-CCAR",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12FURMER-MER",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12GASOCLEM-CLEM",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12HCMOH-MOH",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12HOWIND-IND",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ISUIOWA-IOWA",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12LINWMOSU-MOSU",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12LTLSU-LSU",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MDCONN-MD",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MEMBSU-BSU",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MHUUNM-UNM",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MONMWMU-WMU",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MOREPEAY-PEAY",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MRSTLAF-LAF",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MSSTMINN-MSST",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MTUMRSH-MRSH",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12NHCSDST-SDST",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12NWSTETAM-ETAM",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ODUVT-VT",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12OREOKST-ORE",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12PSUTEM-PSU",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12RMUAKR-AKR",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SAMTNTC-TNTC",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SDSUUCLA-UCLA",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SEMOSIU-SIU",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SHUMASS-MASS",
+      "learning_index_count": 0
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SOUHOU-HOU",
+      "learning_index_count": 0
+    }
+  ],
+  "execution_authority": false
+}

@@ -1,0 +1,16 @@
+from __future__ import annotations
+from dataclasses import dataclass
+from .oad_233_crypto_prospective_forecast_single_writer_persistence import persist_prospective_forecasts
+from .oad_203_crypto_continuous_learning_repeated_cycle_worker import run_crypto_continuous_learning_worker_cycle
+from .oad_234_crypto_prospective_outcome_calibration_scoring import read_and_score_mature_prospective_cases
+from .oad_249_crypto_prospective_exact_identity_binding_ledger import persist_cycle_bindings
+READ_ONLY=True;PROBABILITY_ENABLED=False;DIRECTION_ENABLED=False;PUBLICATION_ALLOWED=False;EXECUTION_AUTHORITY=False
+@dataclass(frozen=True,slots=True)
+class ProspectiveLearningCycle:
+ forecasts:int;forecasts_committed:int;checkpoint_before:int;checkpoint_after:int;experiences_formed:int;exact_outcomes:int;learned_cases_committed:int;scored_cases:int;physical_ready:bool;execution_authority:bool=False;identity_bindings:int=0;identity_bindings_committed:int=0
+def run_prospective_learning_cycle(root=None,policy=None,worker_cycle=1):
+ f=persist_prospective_forecasts(root)
+ b=run_crypto_continuous_learning_worker_cycle(root,policy,worker_cycle)
+ bind=persist_cycle_bindings(f.observation_ids,tuple(getattr(b,"experience_ids",())),b.checkpoint_after,root)
+ s=read_and_score_mature_prospective_cases(root)
+ return ProspectiveLearningCycle(f.forecasts,f.committed_new,b.checkpoint_before,b.checkpoint_after,b.experiences_formed,b.exact_outcomes,b.learned_cases_committed,len(s),bool(b.physical_ready),False,bind.bindings,bind.committed_new)

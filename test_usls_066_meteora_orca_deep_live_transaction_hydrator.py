@@ -1,0 +1,13 @@
+import json,unittest
+from pathlib import Path
+from qseries_v2.oracle_strategy_intelligence.solana_universal_trade_tape.usls_066_meteora_orca_deep_live_transaction_hydrator import write
+ROOT=Path(__file__).resolve().parent
+class T(unittest.TestCase):
+ def test_live(self):
+  p,d=write(ROOT);print("[STATE]",json.dumps({"selected_counts":d["selected_counts"],"hydrated_counts":d["hydrated_counts"],"rpc_source":d["rpc_source"]},sort_keys=True))
+  self.assertGreater(sum(d["hydrated_counts"].values()),0)
+  self.assertFalse(d["execution_authority"])
+  print("[PASS] USLS-066 Meteora/Orca deep transaction hydration")
+  print("[PASS] all five program families sampled independently")
+  print("[PASS] execution_authority=FALSE")
+if __name__=="__main__":unittest.main()

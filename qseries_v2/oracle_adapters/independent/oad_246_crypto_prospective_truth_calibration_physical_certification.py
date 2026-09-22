@@ -1,0 +1,12 @@
+from dataclasses import dataclass
+from datetime import datetime,timezone
+from .oad_242_crypto_exact_prospective_forecast_outcome_binding import read_exact_prospective_bindings
+from .oad_244_crypto_physical_ocl006_exact_calibration import materialize_exact_prospective_calibration
+from .oad_245_crypto_physical_provider_source_reliability import materialize_exact_provider_source_reliability
+READ_ONLY=True;PROBABILITY_ENABLED=False;DIRECTION_ENABLED=False;PUBLICATION_ALLOWED=False;EXECUTION_AUTHORITY=False
+@dataclass(frozen=True,slots=True)
+class Certification:
+ exact_bindings:int;calibration_cases:int;reliability_cases:int;calibration_hash:str|None;reliability_hash:str|None;state:str;certified_at:str;probability_enabled:bool=False;direction_enabled:bool=False;publication_allowed:bool=False;execution_authority:bool=False
+def certify_prospective_truth_calibration(root=None):
+ b=read_exact_prospective_bindings(root);c=materialize_exact_prospective_calibration(root);s=materialize_exact_provider_source_reliability(root);ready=bool(b and c.calibration_state_hash and s.source_reliability_state_hash)
+ return Certification(len(b),c.scored_cases,s.scored_cases,c.calibration_state_hash,s.source_reliability_state_hash,"CERTIFIED_EXACT_PROSPECTIVE_TRUTH_CALIBRATION" if ready else "HOLD_EXACT_IDENTITY_BOUND_PROSPECTIVE_CASE_REQUIRED",datetime.now(timezone.utc).isoformat())

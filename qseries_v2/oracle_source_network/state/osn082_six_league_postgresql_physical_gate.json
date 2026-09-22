@@ -1,0 +1,15 @@
+{
+  "admitted": [
+    "NFL",
+    "NCAAF",
+    "NBA",
+    "NHL",
+    "MLS",
+    "EPL"
+  ],
+  "committed_or_present": 6,
+  "exact_readback_verified": 6,
+  "single_writer": "OPH-019",
+  "gate_ready": true,
+  "execution_authority": false
+}

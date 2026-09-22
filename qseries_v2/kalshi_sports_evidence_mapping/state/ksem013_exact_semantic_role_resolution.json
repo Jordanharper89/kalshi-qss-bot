@@ -1,0 +1,25 @@
+{
+  "roles": {
+    "market_type": {
+      "module": "qseries_v2.oracle_adapters.independent.oad_088_sports_market_type_resolver",
+      "callable": "resolve_sports_market_type",
+      "line": 19
+    },
+    "entity": {
+      "module": "qseries_v2.oracle_adapters.independent.oad_098_structured_sports_entity_type_recognition",
+      "callable": "recognize_sports_entity_type",
+      "line": 31
+    },
+    "decomposition": {
+      "module": "qseries_v2.oracle_adapters.independent.oad_099_mixed_domain_cross_category_decomposition",
+      "callable": "decompose_mixed_market",
+      "line": 28
+    },
+    "classification": {
+      "module": "qseries_v2.oracle_adapters.independent.oad_101_universal_classification_exhaustive_diagnostic",
+      "callable": "classify_isolated_root_cause",
+      "line": 169
+    }
+  },
+  "execution_authority": false
+}

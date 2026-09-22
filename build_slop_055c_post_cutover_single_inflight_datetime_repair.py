@@ -1,0 +1,33 @@
+from pathlib import Path
+T=Path("test_slop_055c_post_cutover_single_inflight_datetime_repair.py")
+T.write_text("""from pathlib import Path
+from datetime import datetime
+from collections import Counter
+from qseries_v2.oracle_strategy_intelligence.solana_live_opportunity.slop_013b_canonical_durable_prediction_ledger_rebuild import read_predictions
+def dt(x):
+ if isinstance(x,datetime): return x
+ return datetime.fromisoformat(str(x).replace("Z","+00:00"))
+b=dt(Path("runtime_state/solana_live_opportunity/slop_054g_post_cutover_cohort_start.txt").read_text().strip())
+allp=read_predictions(Path.cwd())
+ps=[p for p in allp if dt(p.frozen_at)>=b]
+c=Counter(str(p.token_address) for p in ps)
+dups={k:v for k,v in c.items() if v>1}
+print("[COHORT_START]",b.isoformat())
+print("[TOTAL_PREDICTIONS]",len(allp))
+print("[CLEAN_PREDICTIONS]",len(ps))
+print("[CLEAN_TOKENS]",len(c))
+print("[DUPLICATE_TOKEN_PREDICTIONS]",sum(v-1 for v in c.values()))
+for k,v in sorted(dups.items()): print("[DUPLICATE]",k,v)
+if not ps:
+ print("[WAIT] no post-cutover prediction exists yet")
+ print("[WAIT] leave Oracle running and rerun this same test later")
+ raise SystemExit(2)
+assert not dups,"POST_CUTOVER_SINGLE_INFLIGHT_TOKEN_BOUNDARY_VIOLATED"
+assert len(ps)==len(c)
+print("[PASS] every post-cutover token has exactly one prediction")
+print("[PASS] fresh runtime canonical-pair single-inflight boundary physically holds")
+print("[PASS] execution_authority=FALSE")
+print("[PASS] SLOP-055C CERTIFIED")
+""",encoding="utf-8")
+print("[PASS] SLOP-055C datetime-safe physical gate installed")
+print("[PASS] test installed:",T)

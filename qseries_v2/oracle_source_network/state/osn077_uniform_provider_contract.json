@@ -1,0 +1,41 @@
+{
+  "rows": [
+    {
+      "league": "NFL",
+      "events": 32,
+      "authority": "EXACT_DIRECT_SOURCE_EXTRACTOR",
+      "callable": "acquire_nfl_scores -> extract_nfl_live_events"
+    },
+    {
+      "league": "NCAAF",
+      "events": 99,
+      "authority": "EXACT_DIRECT_SOURCE_EXTRACTOR",
+      "callable": "acquire_ncaa_fbs_scoreboard -> extract_ncaaf_live_events"
+    },
+    {
+      "league": "NBA",
+      "events": 1,
+      "authority": "EXACT_DIRECT_SOURCE_EXTRACTOR",
+      "callable": "acquire_nba_games -> extract_basketball_events"
+    },
+    {
+      "league": "NHL",
+      "events": 43,
+      "authority": "PROMOTED_EXECUTABLE_CANONICAL_ENTRYPOINT",
+      "callable": "extract_nhl_opening_schedule"
+    },
+    {
+      "league": "MLS",
+      "events": 43,
+      "authority": "PROMOTED_EXECUTABLE_CANONICAL_ENTRYPOINT",
+      "callable": "probe_and_extract"
+    },
+    {
+      "league": "EPL",
+      "events": 380,
+      "authority": "PROMOTED_EXECUTABLE_CANONICAL_ENTRYPOINT",
+      "callable": "extract_epl_fixtures"
+    }
+  ],
+  "execution_authority": false
+}

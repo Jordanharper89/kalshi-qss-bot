@@ -1,0 +1,12 @@
+{
+  "build_id": "OLF-010",
+  "execution_authority": false,
+  "learner_state_hash": "1094ee2d1e378ce2e64792d14ee154d8b6e22ae26b479fd927d88bcea548e70b",
+  "manifest_sha256": "2d3596e2ae694374c0c2cdf3e424a3bfb8d037369c2bd99478f6a7c09dee11c0",
+  "physical_generalized_contexts": 47,
+  "physical_learning_contexts": 47,
+  "physical_recent_markets_reasoned": 68,
+  "proven_learning_child_unchanged": true,
+  "relationship_boundary": "SAME_KALSHI_SERIES_ONLY",
+  "revision": "OLF_010_CROSS_MARKET_REASONING_FREEZE_V1"
+}

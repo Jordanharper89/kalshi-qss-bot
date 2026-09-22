@@ -1,0 +1,273 @@
+{
+  "schemas": {
+    "SportsMarketType": {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_088_sports_market_type_resolver.py",
+      "fields": [
+        {
+          "name": "ticker",
+          "annotation": "str"
+        },
+        {
+          "name": "market_type",
+          "annotation": "str"
+        },
+        {
+          "name": "signals",
+          "annotation": "tuple[str, ...]"
+        }
+      ],
+      "line": 7
+    },
+    "SportsEntityType": {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_098_structured_sports_entity_type_recognition.py",
+      "fields": [
+        {
+          "name": "text",
+          "annotation": "str"
+        },
+        {
+          "name": "entity_type",
+          "annotation": "str"
+        },
+        {
+          "name": "structural_class",
+          "annotation": "str"
+        },
+        {
+          "name": "evidence",
+          "annotation": "tuple[str, ...]"
+        }
+      ],
+      "line": 10
+    },
+    "DecomposedLeg": {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_099_mixed_domain_cross_category_decomposition.py",
+      "fields": [
+        {
+          "name": "parent_ticker",
+          "annotation": "str"
+        },
+        {
+          "name": "leg_index",
+          "annotation": "int"
+        },
+        {
+          "name": "polarity",
+          "annotation": "str"
+        },
+        {
+          "name": "text",
+          "annotation": "str"
+        },
+        {
+          "name": "domain",
+          "annotation": "str"
+        },
+        {
+          "name": "subdomain",
+          "annotation": "str"
+        },
+        {
+          "name": "state",
+          "annotation": "str"
+        }
+      ],
+      "line": 13
+    },
+    "EvidenceSignal": {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_101_universal_classification_exhaustive_diagnostic.py",
+      "fields": [
+        {
+          "name": "source_scope",
+          "annotation": "str"
+        },
+        {
+          "name": "domain",
+          "annotation": "str"
+        },
+        {
+          "name": "subdomain",
+          "annotation": "str"
+        },
+        {
+          "name": "matched_terms",
+          "annotation": "tuple[str, ...]"
+        }
+      ],
+      "line": 74
+    },
+    "DiagnosticCluster": {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_101_universal_classification_exhaustive_diagnostic.py",
+      "fields": [
+        {
+          "name": "root_cause",
+          "annotation": "str"
+        },
+        {
+          "name": "likely_domain",
+          "annotation": "str"
+        },
+        {
+          "name": "likely_subdomain",
+          "annotation": "str"
+        },
+        {
+          "name": "count",
+          "annotation": "int"
+        },
+        {
+          "name": "examples",
+          "annotation": "tuple[str, ...]"
+        },
+        {
+          "name": "parent_prefixes",
+          "annotation": "tuple[tuple[str, int], ...]"
+        },
+        {
+          "name": "required_foundational_capability",
+          "annotation": "str"
+        }
+      ],
+      "line": 81
+    },
+    "ExhaustiveDiagnostic": {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_101_universal_classification_exhaustive_diagnostic.py",
+      "fields": [
+        {
+          "name": "snapshot_id",
+          "annotation": "str"
+        },
+        {
+          "name": "market_count",
+          "annotation": "int"
+        },
+        {
+          "name": "total_decomposed_legs",
+          "annotation": "int"
+        },
+        {
+          "name": "resolved_legs",
+          "annotation": "int"
+        },
+        {
+          "name": "intentionally_unresolved_legs",
+          "annotation": "int"
+        },
+        {
+          "name": "rejected_invalid_legs",
+          "annotation": "int"
+        },
+        {
+          "name": "accounted_legs",
+          "annotation": "int"
+        },
+        {
+          "name": "accounting_ok",
+          "annotation": "bool"
+        },
+        {
+          "name": "unresolved_cluster_count",
+          "annotation": "int"
+        },
+        {
+          "name": "unresolved_exactly_once_ok",
+          "annotation": "bool"
+        },
+        {
+          "name": "sports_none",
+          "annotation": "int"
+        },
+        {
+          "name": "parser_failure_markets",
+          "annotation": "int"
+        },
+        {
+          "name": "boundary_collision_count",
+          "annotation": "int"
+        },
+        {
+          "name": "cross_subdomain_cluster_contamination_count",
+          "annotation": "int"
+        },
+        {
+          "name": "clusters",
+          "annotation": "tuple[DiagnosticCluster, ...]"
+        },
+        {
+          "name": "report_hash",
+          "annotation": "str"
+        }
+      ],
+      "line": 91
+    }
+  },
+  "callsites": {
+    "resolve_sports_market_type": [
+      {
+        "module": "qseries_v2\\oracle_adapters\\independent\\oad_089_single_snapshot_structural_sports_reclassification.py",
+        "line": 24,
+        "args": [
+          "m"
+        ]
+      }
+    ],
+    "recognize_sports_entity_type": [
+      {
+        "module": "qseries_v2\\oracle_adapters\\independent\\oad_099_mixed_domain_cross_category_decomposition.py",
+        "line": 36,
+        "args": [
+          "leg.text"
+        ]
+      }
+    ],
+    "decompose_mixed_market": [
+      {
+        "module": "qseries_v2\\oracle_adapters\\independent\\oad_100_final_decomposition_source_demand_certification.py",
+        "line": 64,
+        "args": [
+          "market"
+        ]
+      },
+      {
+        "module": "qseries_v2\\oracle_adapters\\independent\\oad_101_universal_classification_exhaustive_diagnostic.py",
+        "line": 297,
+        "args": [
+          "market"
+        ]
+      },
+      {
+        "module": "qseries_v2\\oracle_adapters\\independent\\oad_106_exact_sports_unknown_record_extractor.py",
+        "line": 181,
+        "args": [
+          "market"
+        ]
+      },
+      {
+        "module": "qseries_v2\\oracle_adapters\\independent\\oad_106_failed_gate_repository_audit.py",
+        "line": 112,
+        "args": [
+          "market"
+        ]
+      },
+      {
+        "module": "qseries_v2\\oracle_adapters\\independent\\oad_106_universal_identity_classification_physical_gate.py",
+        "line": 68,
+        "args": [
+          "market"
+        ]
+      }
+    ],
+    "classify_isolated_root_cause": [
+      {
+        "module": "qseries_v2\\oracle_adapters\\independent\\oad_101_universal_classification_exhaustive_diagnostic.py",
+        "line": 313,
+        "args": [
+          "leg",
+          "market",
+          "legs"
+        ]
+      }
+    ]
+  },
+  "execution_authority": false
+}

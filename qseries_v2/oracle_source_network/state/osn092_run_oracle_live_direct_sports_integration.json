@@ -1,0 +1,13 @@
+{
+  "launcher_path": "run_oracle_LIVE.py",
+  "pre_patch_sha256": "d7f7d2f65ee10e93fd42af3751c25d670cee4eb6d79d037c27f9bb32570bd90f",
+  "post_patch_sha256": "0615296afc570dca5a3ca892a7245fcd848332a7b96a757417d1c9ca1953076c",
+  "rollback_path": "qseries_v2/oracle_source_network/rollback/run_oracle_LIVE_pre_osn092_d7f7d2f65ee10e93.py",
+  "integration_mode": "DIRECT_IN_PRODUCTION_LAUNCHER_MAIN_LIFECYCLE",
+  "existing_run_forever_body_modified": false,
+  "sports_child_module": "qseries_v2.oracle_source_network.runtime.sports_supervised_child",
+  "sports_entrypoint": "run_forever(root=Path.cwd(), cadence_seconds=30.0, timeout=15)",
+  "temporary_wrapper_status": "RETIRE_AFTER_DIRECT_PHYSICAL_RECERTIFICATION",
+  "terminal_dependency": "NONE",
+  "execution_authority": false
+}

@@ -1,0 +1,1010 @@
+from pathlib import Path
+import py_compile
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parent
+ANALYTICS = ROOT / "qseries_v2" / "oracle_intelligence" / "analytics"
+OIA063 = ANALYTICS / "oracle_certified_research_evidence_read_execution_adapter_production_callable_invocation_consumption_authorization_gate.py"
+PRODUCTION = ANALYTICS / "oracle_certified_research_evidence_read_execution_adapter_production_callable_invocation_consumption_activation_gate.py"
+TEST = ROOT / "test_oia_064_oracle_certified_research_evidence_read_execution_adapter_production_callable_invocation_consumption_activation_gate.py"
+INIT = ANALYTICS / "__init__.py"
+
+PRODUCTION_SOURCE = r"""
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import tempfile
+from dataclasses import asdict, dataclass, is_dataclass
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Mapping
+
+SCHEMA_VERSION = "OIA-064"
+ENGINE_ID = "OIA-064"
+POLICY_ID = (
+    "oracle.certified-research-evidence-read-execution-adapter-"
+    "production-callable-invocation-consumption-activation.v1"
+)
+STATUS_CONSUMPTION_ACTIVATED = (
+    "evidence_read_execution_adapter_production_callable_invocation_consumption_activated"
+)
+STATUS_ACTIVATION_ISSUED = (
+    "evidence_read_execution_adapter_production_callable_invocation_consumption_activation_issued"
+)
+
+DEFAULT_AUTHORIZATION_DIRECTORY = Path(
+    "runtime/oracle_intelligence/"
+    "certified_research_evidence_read_execution_adapter_production_callable_invocation_consumption_authorization"
+)
+DEFAULT_ACTIVATION_DIRECTORY = Path(
+    "runtime/oracle_intelligence/"
+    "certified_research_evidence_read_execution_adapter_production_callable_invocation_consumption_activation"
+)
+
+APPROVED = {
+    "oracle_read_only_canonical_observation_adapter.v1": {
+        "read_operation": "read_canonical_observations",
+        "module_path": "qseries_v2.oracle_intelligence.analytics.oracle_live_corpus_inspector",
+        "owner_name": "OracleLiveCorpusInspector",
+        "callable_name": "inspect",
+        "bound_method_module": "qseries_v2.oracle_intelligence.analytics.oracle_live_corpus_inspector",
+        "bound_method_qualname": "OracleLiveCorpusInspector.inspect",
+        "bound_method_signature": (
+            "(*, inspected_at: 'Optional[datetime]' = None) "
+            "-> 'OracleLiveCorpusReport'"
+        ),
+        "invocation_arguments": {"inspected_at": None},
+    },
+    "oracle_read_only_market_state_lineage_adapter.v1": {
+        "read_operation": "read_market_state_lineage",
+        "module_path": (
+            "qseries_v2.oracle_intelligence.live_acquisition."
+            "oracle_canonical_market_lineage_ledger"
+        ),
+        "owner_name": "OracleCanonicalMarketLineageLedger",
+        "callable_name": "records",
+        "bound_method_module": (
+            "qseries_v2.oracle_intelligence.live_acquisition."
+            "oracle_canonical_market_lineage_ledger"
+        ),
+        "bound_method_qualname": "OracleCanonicalMarketLineageLedger.records",
+        "bound_method_signature": (
+            "() -> 'tuple[CanonicalMarketStateDwellChangeLineage, ...]'"
+        ),
+        "invocation_arguments": {},
+    },
+}
+
+
+class ProductionCallableInvocationConsumptionActivationInvariantError(RuntimeError):
+    pass
+
+
+def _canonical(value: Any) -> Any:
+    if is_dataclass(value):
+        return _canonical(asdict(value))
+    if isinstance(value, Mapping):
+        return {str(key): _canonical(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_canonical(item) for item in value]
+    if isinstance(value, datetime):
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                "datetime must be timezone-aware"
+            )
+        return value.astimezone(timezone.utc).isoformat()
+    return value
+
+
+def stable_hash(value: Any) -> str:
+    return hashlib.sha256(
+        json.dumps(
+            _canonical(value),
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+            allow_nan=False,
+        ).encode("utf-8")
+    ).hexdigest()
+
+
+def _valid_hash(value: Any) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(character in "0123456789abcdef" for character in value)
+    )
+
+
+def _aware(value: datetime, name: str) -> datetime:
+    if (
+        not isinstance(value, datetime)
+        or value.tzinfo is None
+        or value.utcoffset() is None
+    ):
+        raise ProductionCallableInvocationConsumptionActivationInvariantError(
+            f"{name} must be timezone-aware"
+        )
+    return value.astimezone(timezone.utc)
+
+
+def _atomic_write(path: Path, payload: Mapping[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    rendered = json.dumps(
+        _canonical(payload),
+        sort_keys=True,
+        indent=2,
+        ensure_ascii=False,
+    ) + "\n"
+    handle = tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        newline="\n",
+        delete=False,
+        dir=str(path.parent),
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+    )
+    temporary = Path(handle.name)
+    try:
+        with handle:
+            handle.write(rendered)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
+
+
+@dataclass(frozen=True)
+class ProductionCallableInvocationConsumptionActivationEntry:
+    sequence: int
+    worker_id: str
+    work_item_id: str
+    adapter_id: str
+    read_operation: str
+    module_path: str
+    owner_name: str
+    callable_name: str
+    bound_method_module: str
+    bound_method_qualname: str
+    bound_method_signature: str
+    invocation_arguments: dict[str, Any]
+    invocation_argument_hash: str
+    activation_nonce: str
+    consumption_attempt_nonce: str
+    source_consumption_authorization_hash: str
+    source_consumption_readiness_hash: str
+    source_invocation_activation_hash: str
+    source_invocation_authorization_hash: str
+    consumption_activation_granted: bool
+    consumption_activation_consumed: bool
+    original_activation_consumed: bool
+    owner_reconstruction_performed: bool
+    method_binding_performed: bool
+    callable_invoked: bool
+    adapter_executed: bool
+    corpus_read_executed: bool
+    activation_checks: tuple[str, ...]
+    activation_status: str
+    callable_invocation_consumption_activation_hash: str
+
+
+@dataclass(frozen=True)
+class ProductionCallableInvocationConsumptionActivationManifest:
+    schema_version: str
+    engine_id: str
+    activated_at: str
+    callable_invocation_consumption_activation_id: str
+    callable_invocation_consumption_activation_status: str
+    callable_invocation_consumption_activation_policy_id: str
+    worker_id: str
+    activation_entry_count: int
+    activation_entries: tuple[ProductionCallableInvocationConsumptionActivationEntry, ...]
+    source_consumption_authorization_id: str
+    source_consumption_authorization_manifest_hash: str
+    source_consumption_readiness_id: str
+    source_consumption_readiness_manifest_hash: str
+    source_invocation_activation_id: str
+    source_invocation_activation_manifest_hash: str
+    source_invocation_authorization_id: str
+    source_invocation_authorization_manifest_hash: str
+    source_lineage: dict[str, Any]
+    callable_invocation_consumption_activation_issued: bool
+    single_execution_attempt_required: bool
+    activation_consumption_allowed: bool
+    activation_consumption_performed: bool
+    owner_reconstruction_allowed: bool
+    owner_reconstruction_performed: bool
+    callable_binding_to_owner_allowed: bool
+    callable_binding_to_owner_performed: bool
+    callable_invocation_allowed: bool
+    callable_invocation_performed: bool
+    adapter_execution_allowed: bool
+    adapter_execution_performed: bool
+    corpus_read_execution_allowed: bool
+    corpus_read_execution_performed: bool
+    research_execution_allowed: bool
+    analytic_conclusion_allowed: bool
+    forecast_creation_allowed: bool
+    signals_allowed: bool
+    alerts_allowed: bool
+    qseries_handoff_allowed: bool
+    execution_allowed: bool
+    trading_recommendations_allowed: bool
+    source_mutation_allowed: bool
+    market_order_creation_allowed: bool
+    funds_movement_allowed: bool
+    portfolio_mutation_allowed: bool
+    activation_artifact_persistence_allowed: bool
+    owner_instances_retained: bool
+    bound_methods_retained: bool
+    callable_invocation_consumption_activation_manifest_hash: str
+
+
+class OracleCertifiedResearchEvidenceReadExecutionAdapterProductionCallableInvocationConsumptionActivationGate:
+    def __init__(
+        self,
+        *,
+        authorization_directory: Path | str = DEFAULT_AUTHORIZATION_DIRECTORY,
+        activation_directory: Path | str = DEFAULT_ACTIVATION_DIRECTORY,
+    ) -> None:
+        self.authorization_directory = Path(authorization_directory)
+        self.activation_directory = Path(activation_directory)
+
+    def _load_authorization(self) -> dict[str, Any]:
+        path = self.authorization_directory / "current.json"
+        if not path.exists():
+            raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                f"OIA-063 current authorization artifact missing: {path}"
+            )
+        try:
+            source = json.loads(path.read_text(encoding="utf-8"))
+        except Exception as error:
+            raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                "OIA-063 authorization artifact could not be decoded"
+            ) from error
+
+        manifest_hash = source.pop(
+            "callable_invocation_consumption_authorization_manifest_hash",
+            None,
+        )
+        if not _valid_hash(manifest_hash) or stable_hash(source) != manifest_hash:
+            raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                "OIA-063 authorization manifest hash verification failed"
+            )
+        source["callable_invocation_consumption_authorization_manifest_hash"] = (
+            manifest_hash
+        )
+
+        expected_manifest = {
+            "schema_version": "OIA-063",
+            "engine_id": "OIA-063",
+            "callable_invocation_consumption_authorization_issued": True,
+            "activation_consumption_allowed": False,
+            "activation_consumption_performed": False,
+            "owner_reconstruction_allowed": False,
+            "owner_reconstruction_performed": False,
+            "callable_binding_to_owner_allowed": False,
+            "callable_binding_to_owner_performed": False,
+            "callable_invocation_allowed": False,
+            "callable_invocation_performed": False,
+            "adapter_execution_allowed": False,
+            "adapter_execution_performed": False,
+            "corpus_read_execution_allowed": False,
+            "corpus_read_execution_performed": False,
+            "qseries_handoff_allowed": False,
+            "execution_allowed": False,
+            "market_order_creation_allowed": False,
+            "funds_movement_allowed": False,
+            "portfolio_mutation_allowed": False,
+            "owner_instances_retained": False,
+            "bound_methods_retained": False,
+        }
+        for field, expected in expected_manifest.items():
+            if source.get(field) != expected:
+                raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                    f"unsafe OIA-063 authorization manifest: {field}"
+                )
+
+        entries = source.get("authorization_entries")
+        if (
+            not isinstance(entries, list)
+            or not entries
+            or source.get("authorization_entry_count") != len(entries)
+        ):
+            raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                "OIA-063 authorization entry count invalid"
+            )
+
+        seen_keys: set[tuple[str, str, str]] = set()
+        seen_nonces: set[str] = set()
+        for expected_sequence, entry in enumerate(entries, start=1):
+            if entry.get("sequence") != expected_sequence:
+                raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                    "OIA-063 authorization sequence invalid"
+                )
+
+            entry_hash = entry.pop(
+                "callable_invocation_consumption_authorization_hash",
+                None,
+            )
+            if not _valid_hash(entry_hash) or stable_hash(entry) != entry_hash:
+                raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                    "OIA-063 authorization entry hash verification failed"
+                )
+            entry["callable_invocation_consumption_authorization_hash"] = entry_hash
+
+            approved = APPROVED.get(entry.get("adapter_id"))
+            if approved is None:
+                raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                    "unapproved OIA-063 adapter identity"
+                )
+            for field in (
+                "read_operation",
+                "module_path",
+                "owner_name",
+                "callable_name",
+                "bound_method_module",
+                "bound_method_qualname",
+                "bound_method_signature",
+                "invocation_arguments",
+            ):
+                if entry.get(field) != approved[field]:
+                    raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                        f"OIA-063 consumption-authorization drift: {field}"
+                    )
+            if entry.get("invocation_argument_hash") != stable_hash(
+                approved["invocation_arguments"]
+            ):
+                raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                    "OIA-063 invocation argument hash drift"
+                )
+
+            key = (
+                str(entry.get("worker_id")),
+                str(entry.get("work_item_id")),
+                str(entry.get("adapter_id")),
+            )
+            if key in seen_keys:
+                raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                    "duplicate OIA-063 authorization entry"
+                )
+            seen_keys.add(key)
+
+            nonce = entry.get("activation_nonce")
+            if not _valid_hash(nonce) or nonce in seen_nonces:
+                raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                    "invalid or duplicate OIA-063 activation nonce"
+                )
+            seen_nonces.add(nonce)
+
+            expected_entry = {
+                "activation_consumption_authorization_granted": True,
+                "activation_consumption_authorized": True,
+                "activation_consumed": False,
+                "owner_reconstruction_authorized": True,
+                "owner_reconstruction_performed": False,
+                "method_binding_authorized": True,
+                "method_binding_performed": False,
+                "callable_invocation_authorized": True,
+                "callable_invoked": False,
+                "adapter_executed": False,
+                "corpus_read_executed": False,
+            }
+            for field, expected in expected_entry.items():
+                if entry.get(field) != expected:
+                    raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                        f"unsafe OIA-063 authorization entry: {field}"
+                    )
+
+            for hash_field in (
+                "source_callable_invocation_consumption_readiness_hash",
+                "source_callable_invocation_activation_hash",
+                "source_callable_invocation_authorization_hash",
+            ):
+                if not _valid_hash(entry.get(hash_field)):
+                    raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                        f"OIA-063 lineage hash invalid: {hash_field}"
+                    )
+
+        if not isinstance(source.get("source_lineage"), dict) or not source["source_lineage"]:
+            raise ProductionCallableInvocationConsumptionActivationInvariantError(
+                "OIA-063 source lineage missing"
+            )
+        return source
+
+    def activate(
+        self,
+        *,
+        activated_at: datetime,
+        persist: bool = True,
+    ) -> ProductionCallableInvocationConsumptionActivationManifest:
+        activated_at = _aware(activated_at, "activated_at")
+        source = self._load_authorization()
+        entries: list[ProductionCallableInvocationConsumptionActivationEntry] = []
+
+        for sequence, authorization in enumerate(
+            source["authorization_entries"],
+            start=1,
+        ):
+            attempt_nonce = stable_hash({
+                "authorization_hash": authorization[
+                    "callable_invocation_consumption_authorization_hash"
+                ],
+                "activation_nonce": authorization["activation_nonce"],
+                "worker_id": authorization["worker_id"],
+                "work_item_id": authorization["work_item_id"],
+                "adapter_id": authorization["adapter_id"],
+                "policy_id": POLICY_ID,
+            })
+            body = {
+                "sequence": sequence,
+                "worker_id": authorization["worker_id"],
+                "work_item_id": authorization["work_item_id"],
+                "adapter_id": authorization["adapter_id"],
+                "read_operation": authorization["read_operation"],
+                "module_path": authorization["module_path"],
+                "owner_name": authorization["owner_name"],
+                "callable_name": authorization["callable_name"],
+                "bound_method_module": authorization["bound_method_module"],
+                "bound_method_qualname": authorization["bound_method_qualname"],
+                "bound_method_signature": authorization["bound_method_signature"],
+                "invocation_arguments": dict(authorization["invocation_arguments"]),
+                "invocation_argument_hash": authorization[
+                    "invocation_argument_hash"
+                ],
+                "activation_nonce": authorization["activation_nonce"],
+                "consumption_attempt_nonce": attempt_nonce,
+                "source_consumption_authorization_hash": authorization[
+                    "callable_invocation_consumption_authorization_hash"
+                ],
+                "source_consumption_readiness_hash": authorization[
+                    "source_callable_invocation_consumption_readiness_hash"
+                ],
+                "source_invocation_activation_hash": authorization[
+                    "source_callable_invocation_activation_hash"
+                ],
+                "source_invocation_authorization_hash": authorization[
+                    "source_callable_invocation_authorization_hash"
+                ],
+                "consumption_activation_granted": True,
+                "consumption_activation_consumed": False,
+                "original_activation_consumed": False,
+                "owner_reconstruction_performed": False,
+                "method_binding_performed": False,
+                "callable_invoked": False,
+                "adapter_executed": False,
+                "corpus_read_executed": False,
+                "activation_checks": (
+                    "oia063_authorization_manifest_hash_verified",
+                    "oia063_authorization_entry_hash_verified",
+                    "approved_adapter_identity_frozen",
+                    "approved_callable_identity_frozen",
+                    "approved_callable_signature_frozen",
+                    "approved_invocation_arguments_frozen",
+                    "original_activation_nonce_verified",
+                    "original_activation_unconsumed_verified",
+                    "single_execution_attempt_nonce_issued",
+                    "consumption_activation_not_consumed",
+                    "owner_not_reconstructed",
+                    "method_not_bound",
+                    "callable_not_invoked",
+                    "adapter_not_executed",
+                    "corpus_not_read",
+                    "oracle_qseries_boundary_verified",
+                ),
+                "activation_status": STATUS_CONSUMPTION_ACTIVATED,
+            }
+            entries.append(
+                ProductionCallableInvocationConsumptionActivationEntry(
+                    **body,
+                    callable_invocation_consumption_activation_hash=stable_hash(
+                        body
+                    ),
+                )
+            )
+
+        source_hash = source[
+            "callable_invocation_consumption_authorization_manifest_hash"
+        ]
+        activation_id = (
+            "oia064-callable-invocation-consumption-activation-"
+            + stable_hash({"source": source_hash, "policy": POLICY_ID})[:32]
+        )
+        body = {
+            "schema_version": SCHEMA_VERSION,
+            "engine_id": ENGINE_ID,
+            "activated_at": activated_at.isoformat(),
+            "callable_invocation_consumption_activation_id": activation_id,
+            "callable_invocation_consumption_activation_status": STATUS_ACTIVATION_ISSUED,
+            "callable_invocation_consumption_activation_policy_id": POLICY_ID,
+            "worker_id": source["worker_id"],
+            "activation_entry_count": len(entries),
+            "activation_entries": tuple(entries),
+            "source_consumption_authorization_id": source[
+                "callable_invocation_consumption_authorization_id"
+            ],
+            "source_consumption_authorization_manifest_hash": source_hash,
+            "source_consumption_readiness_id": source[
+                "source_callable_invocation_consumption_readiness_id"
+            ],
+            "source_consumption_readiness_manifest_hash": source[
+                "source_callable_invocation_consumption_readiness_manifest_hash"
+            ],
+            "source_invocation_activation_id": source[
+                "source_callable_invocation_activation_id"
+            ],
+            "source_invocation_activation_manifest_hash": source[
+                "source_callable_invocation_activation_manifest_hash"
+            ],
+            "source_invocation_authorization_id": source[
+                "source_callable_invocation_authorization_id"
+            ],
+            "source_invocation_authorization_manifest_hash": source[
+                "source_callable_invocation_authorization_manifest_hash"
+            ],
+            "source_lineage": dict(source["source_lineage"]),
+            "callable_invocation_consumption_activation_issued": True,
+            "single_execution_attempt_required": True,
+            "activation_consumption_allowed": False,
+            "activation_consumption_performed": False,
+            "owner_reconstruction_allowed": False,
+            "owner_reconstruction_performed": False,
+            "callable_binding_to_owner_allowed": False,
+            "callable_binding_to_owner_performed": False,
+            "callable_invocation_allowed": False,
+            "callable_invocation_performed": False,
+            "adapter_execution_allowed": False,
+            "adapter_execution_performed": False,
+            "corpus_read_execution_allowed": False,
+            "corpus_read_execution_performed": False,
+            "research_execution_allowed": False,
+            "analytic_conclusion_allowed": False,
+            "forecast_creation_allowed": False,
+            "signals_allowed": False,
+            "alerts_allowed": False,
+            "qseries_handoff_allowed": False,
+            "execution_allowed": False,
+            "trading_recommendations_allowed": False,
+            "source_mutation_allowed": False,
+            "market_order_creation_allowed": False,
+            "funds_movement_allowed": False,
+            "portfolio_mutation_allowed": False,
+            "activation_artifact_persistence_allowed": True,
+            "owner_instances_retained": False,
+            "bound_methods_retained": False,
+        }
+        serial = dict(body)
+        serial["activation_entries"] = [asdict(entry) for entry in entries]
+        result = ProductionCallableInvocationConsumptionActivationManifest(
+            **body,
+            callable_invocation_consumption_activation_manifest_hash=stable_hash(
+                serial
+            ),
+        )
+
+        if persist:
+            payload = asdict(result)
+            _atomic_write(self.activation_directory / "current.json", payload)
+            _atomic_write(
+                self.activation_directory
+                / "activations"
+                / f"{activation_id}.json",
+                payload,
+            )
+            _atomic_write(
+                self.activation_directory
+                / "workers"
+                / result.worker_id
+                / f"{activation_id}.json",
+                payload,
+            )
+        return result
+"""
+
+TEST_SOURCE = r"""
+import json
+import tempfile
+from datetime import datetime, timezone
+from pathlib import Path
+
+from qseries_v2.oracle_intelligence.analytics.oracle_certified_research_evidence_read_execution_adapter_production_callable_invocation_consumption_activation_gate import (
+    OracleCertifiedResearchEvidenceReadExecutionAdapterProductionCallableInvocationConsumptionActivationGate,
+    ProductionCallableInvocationConsumptionActivationInvariantError,
+    stable_hash,
+)
+
+
+SPECS = (
+    (
+        "oracle_read_only_canonical_observation_adapter.v1",
+        "work.observations",
+        "read_canonical_observations",
+        "qseries_v2.oracle_intelligence.analytics.oracle_live_corpus_inspector",
+        "OracleLiveCorpusInspector",
+        "inspect",
+        "OracleLiveCorpusInspector.inspect",
+        "(*, inspected_at: 'Optional[datetime]' = None) -> 'OracleLiveCorpusReport'",
+        {"inspected_at": None},
+    ),
+    (
+        "oracle_read_only_market_state_lineage_adapter.v1",
+        "work.lineage",
+        "read_market_state_lineage",
+        "qseries_v2.oracle_intelligence.live_acquisition.oracle_canonical_market_lineage_ledger",
+        "OracleCanonicalMarketLineageLedger",
+        "records",
+        "OracleCanonicalMarketLineageLedger.records",
+        "() -> 'tuple[CanonicalMarketStateDwellChangeLineage, ...]'",
+        {},
+    ),
+)
+
+
+def seed(path: Path):
+    entries = []
+    for sequence, spec in enumerate(SPECS, start=1):
+        (
+            adapter_id,
+            work_item_id,
+            read_operation,
+            module_path,
+            owner_name,
+            callable_name,
+            qualname,
+            signature,
+            arguments,
+        ) = spec
+        body = {
+            "sequence": sequence,
+            "worker_id": "oracle-worker-test",
+            "work_item_id": work_item_id,
+            "adapter_id": adapter_id,
+            "read_operation": read_operation,
+            "module_path": module_path,
+            "owner_name": owner_name,
+            "callable_name": callable_name,
+            "bound_method_module": module_path,
+            "bound_method_qualname": qualname,
+            "bound_method_signature": signature,
+            "invocation_arguments": arguments,
+            "invocation_argument_hash": stable_hash(arguments),
+            "activation_nonce": stable_hash(
+                {"adapter_id": adapter_id, "work_item_id": work_item_id}
+            ),
+            "source_callable_invocation_consumption_readiness_hash": stable_hash(
+                {"62": owner_name}
+            ),
+            "source_callable_invocation_activation_hash": stable_hash(
+                {"61": owner_name}
+            ),
+            "source_callable_invocation_authorization_hash": stable_hash(
+                {"60": owner_name}
+            ),
+            "source_callable_invocation_readiness_hash": stable_hash(
+                {"59": owner_name}
+            ),
+            "source_owner_method_binding_hash": stable_hash({"58": owner_name}),
+            "activation_consumption_authorization_granted": True,
+            "activation_consumption_authorized": True,
+            "activation_consumed": False,
+            "owner_reconstruction_authorized": True,
+            "owner_reconstruction_performed": False,
+            "method_binding_authorized": True,
+            "method_binding_performed": False,
+            "callable_invocation_authorized": True,
+            "callable_invoked": False,
+            "adapter_executed": False,
+            "corpus_read_executed": False,
+            "authorization_checks": ["verified"],
+            "authorization_status": (
+                "evidence_read_execution_adapter_production_callable_invocation_consumption_authorized"
+            ),
+        }
+        body["callable_invocation_consumption_authorization_hash"] = stable_hash(
+            body
+        )
+        entries.append(body)
+
+    manifest = {
+        "schema_version": "OIA-063",
+        "engine_id": "OIA-063",
+        "authorized_at": "2026-07-22T00:00:00+00:00",
+        "callable_invocation_consumption_authorization_id": "oia063-test",
+        "callable_invocation_consumption_authorization_status": (
+            "evidence_read_execution_adapter_production_callable_invocation_consumption_authorization_issued"
+        ),
+        "callable_invocation_consumption_authorization_policy_id": "test",
+        "worker_id": "oracle-worker-test",
+        "authorization_entry_count": len(entries),
+        "authorization_entries": entries,
+        "source_callable_invocation_consumption_readiness_id": "oia062-test",
+        "source_callable_invocation_consumption_readiness_manifest_hash": stable_hash(
+            {"62m": 1}
+        ),
+        "source_callable_invocation_activation_id": "oia061-test",
+        "source_callable_invocation_activation_manifest_hash": stable_hash(
+            {"61m": 1}
+        ),
+        "source_callable_invocation_authorization_id": "oia060-test",
+        "source_callable_invocation_authorization_manifest_hash": stable_hash(
+            {"60m": 1}
+        ),
+        "source_callable_invocation_readiness_id": "oia059-test",
+        "source_callable_invocation_readiness_manifest_hash": stable_hash(
+            {"59m": 1}
+        ),
+        "source_owner_method_binding_id": "oia058-test",
+        "source_owner_method_binding_manifest_hash": stable_hash({"58m": 1}),
+        "source_lineage": {
+            "dispatch_manifest_id": "oia020-test",
+            "source_claim_id": "oia021-test",
+        },
+        "callable_invocation_consumption_authorization_issued": True,
+        "activation_consumption_allowed": False,
+        "activation_consumption_performed": False,
+        "owner_reconstruction_allowed": False,
+        "owner_reconstruction_performed": False,
+        "callable_binding_to_owner_allowed": False,
+        "callable_binding_to_owner_performed": False,
+        "callable_invocation_allowed": False,
+        "callable_invocation_performed": False,
+        "adapter_execution_allowed": False,
+        "adapter_execution_performed": False,
+        "corpus_read_execution_allowed": False,
+        "corpus_read_execution_performed": False,
+        "research_execution_allowed": False,
+        "analytic_conclusion_allowed": False,
+        "forecast_creation_allowed": False,
+        "signals_allowed": False,
+        "alerts_allowed": False,
+        "qseries_handoff_allowed": False,
+        "execution_allowed": False,
+        "trading_recommendations_allowed": False,
+        "source_mutation_allowed": False,
+        "market_order_creation_allowed": False,
+        "funds_movement_allowed": False,
+        "portfolio_mutation_allowed": False,
+        "authorization_artifact_persistence_allowed": True,
+        "owner_instances_retained": False,
+        "bound_methods_retained": False,
+    }
+    manifest[
+        "callable_invocation_consumption_authorization_manifest_hash"
+    ] = stable_hash(manifest)
+    path.mkdir(parents=True, exist_ok=True)
+    (path / "current.json").write_text(
+        json.dumps(manifest, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return manifest
+
+
+def rehash(payload):
+    for entry in payload["authorization_entries"]:
+        body = dict(entry)
+        body.pop("callable_invocation_consumption_authorization_hash", None)
+        entry["callable_invocation_consumption_authorization_hash"] = stable_hash(
+            body
+        )
+    body = dict(payload)
+    body.pop("callable_invocation_consumption_authorization_manifest_hash", None)
+    payload[
+        "callable_invocation_consumption_authorization_manifest_hash"
+    ] = stable_hash(body)
+
+
+def reject(gate, fixed, message):
+    try:
+        gate.activate(activated_at=fixed, persist=False)
+    except ProductionCallableInvocationConsumptionActivationInvariantError:
+        return
+    raise AssertionError(message)
+
+
+def main():
+    print("=" * 40)
+    print(" OIA-064 TEST")
+    print(" INVOCATION CONSUMPTION ACTIVATION")
+    print("=" * 40)
+
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        authorization = root / "authorization"
+        activation = root / "activation"
+        source = seed(authorization)
+        gate = OracleCertifiedResearchEvidenceReadExecutionAdapterProductionCallableInvocationConsumptionActivationGate(
+            authorization_directory=authorization,
+            activation_directory=activation,
+        )
+        fixed = datetime(2026, 7, 22, tzinfo=timezone.utc)
+
+        first = gate.activate(activated_at=fixed, persist=True)
+        second = gate.activate(activated_at=fixed, persist=False)
+        assert first == second
+        assert first.schema_version == "OIA-064"
+        assert first.engine_id == "OIA-064"
+        assert first.callable_invocation_consumption_activation_issued is True
+        assert first.single_execution_attempt_required is True
+        assert first.activation_entry_count == 2
+        assert first.source_consumption_authorization_manifest_hash == source[
+            "callable_invocation_consumption_authorization_manifest_hash"
+        ]
+        assert first.activation_consumption_performed is False
+        assert first.owner_reconstruction_performed is False
+        assert first.callable_binding_to_owner_performed is False
+        assert first.callable_invocation_performed is False
+        assert first.adapter_execution_performed is False
+        assert first.corpus_read_execution_performed is False
+
+        original_nonces = set()
+        attempt_nonces = set()
+        for entry in first.activation_entries:
+            assert entry.consumption_activation_granted is True
+            assert entry.consumption_activation_consumed is False
+            assert entry.original_activation_consumed is False
+            assert entry.owner_reconstruction_performed is False
+            assert entry.method_binding_performed is False
+            assert entry.callable_invoked is False
+            assert entry.adapter_executed is False
+            assert entry.corpus_read_executed is False
+            original_nonces.add(entry.activation_nonce)
+            attempt_nonces.add(entry.consumption_attempt_nonce)
+        assert len(original_nonces) == 2
+        assert len(attempt_nonces) == 2
+        assert (activation / "current.json").exists()
+
+        payload = json.loads((authorization / "current.json").read_text())
+        payload["authorization_entries"][0]["activation_consumed"] = True
+        rehash(payload)
+        (authorization / "current.json").write_text(json.dumps(payload))
+        reject(gate, fixed, "consumed authorization accepted")
+
+        seed(authorization)
+        payload = json.loads((authorization / "current.json").read_text())
+        payload["authorization_entries"][1]["activation_nonce"] = payload[
+            "authorization_entries"
+        ][0]["activation_nonce"]
+        rehash(payload)
+        (authorization / "current.json").write_text(json.dumps(payload))
+        reject(gate, fixed, "duplicate activation nonce accepted")
+
+        seed(authorization)
+        payload = json.loads((authorization / "current.json").read_text())
+        payload["authorization_entries"][0]["bound_method_signature"] = (
+            "(*args, **kwargs)"
+        )
+        rehash(payload)
+        (authorization / "current.json").write_text(json.dumps(payload))
+        reject(gate, fixed, "signature drift accepted")
+
+        seed(authorization)
+        payload = json.loads((authorization / "current.json").read_text())
+        payload["authorization_entries"][0]["callable_invoked"] = True
+        rehash(payload)
+        (authorization / "current.json").write_text(json.dumps(payload))
+        reject(gate, fixed, "premature invocation accepted")
+
+        seed(authorization)
+        payload = json.loads((authorization / "current.json").read_text())
+        payload["activation_consumption_allowed"] = True
+        rehash(payload)
+        (authorization / "current.json").write_text(json.dumps(payload))
+        reject(gate, fixed, "executable authorization manifest accepted")
+
+    print("[PASS] Actual OIA-063 invocation-consumption-authorization contract consumed")
+    print("[PASS] Exact consumption authorizations activated deterministically")
+    print("[PASS] Unique single-execution-attempt nonces issued")
+    print("[PASS] Activation manifest and entry hashes deterministic")
+    print("[PASS] Complete OIA-020 through OIA-063 lineage preserved")
+    print("[PASS] Original and consumption activations remained unconsumed")
+    print("[PASS] Owners were not reconstructed and methods were not rebound")
+    print("[PASS] No callable was invoked and no adapter executed")
+    print("[PASS] PostgreSQL connections and corpus reads remained disabled")
+    print("[PASS] Consumed, duplicate, tampered, invoked, or executable input rejected")
+    print("[PASS] Atomic invocation-consumption-activation artifacts persisted")
+    print("[PASS] Signals, alerts, Q Series, orders, funds, and portfolio mutation remained disabled")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+"""
+
+EXPORT_BLOCK = r"""
+from .oracle_certified_research_evidence_read_execution_adapter_production_callable_invocation_consumption_activation_gate import (
+    OracleCertifiedResearchEvidenceReadExecutionAdapterProductionCallableInvocationConsumptionActivationGate,
+    ProductionCallableInvocationConsumptionActivationEntry,
+    ProductionCallableInvocationConsumptionActivationInvariantError,
+    ProductionCallableInvocationConsumptionActivationManifest,
+)
+
+__all__ = [
+    "OracleCertifiedResearchEvidenceReadExecutionAdapterProductionCallableInvocationConsumptionActivationGate",
+    "ProductionCallableInvocationConsumptionActivationEntry",
+    "ProductionCallableInvocationConsumptionActivationInvariantError",
+    "ProductionCallableInvocationConsumptionActivationManifest",
+] + __all__
+"""
+
+
+def write_full(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content.rstrip() + "\n", encoding="utf-8")
+
+
+def update_init() -> None:
+    existing = INIT.read_text(encoding="utf-8") if INIT.exists() else "__all__ = []\n"
+    marker = (
+        "oracle_certified_research_evidence_read_execution_adapter_"
+        "production_callable_invocation_consumption_activation_gate"
+    )
+    if marker not in existing:
+        write_full(INIT, existing.rstrip() + "\n\n" + EXPORT_BLOCK.strip() + "\n")
+
+
+def main() -> int:
+    print("=" * 40)
+    print(" OIA-064 INSTALLER")
+    print(" INVOCATION CONSUMPTION ACTIVATION")
+    print(" SINGLE-EXECUTION-ATTEMPT GATE")
+    print("=" * 40)
+
+    if not OIA063.exists():
+        raise SystemExit(
+            f"[FAIL] Required OIA-063 production contract missing: {OIA063}"
+        )
+
+    source = OIA063.read_text(encoding="utf-8")
+    required = (
+        'SCHEMA_VERSION = "OIA-063"',
+        "ProductionCallableInvocationConsumptionAuthorizationManifest",
+        "callable_invocation_consumption_authorization_manifest_hash",
+        "activation_consumption_authorization_granted",
+        "activation_consumption_authorized",
+        "activation_nonce",
+        "activation_consumed",
+        "callable_invocation_allowed",
+        "callable_invocation_performed",
+    )
+    if not all(token in source for token in required):
+        raise SystemExit(
+            "[FAIL] Actual OIA-063 invocation-consumption-authorization contract verification failed"
+        )
+
+    print("[OK] Actual OIA-063 invocation-consumption-authorization contract verified")
+    write_full(PRODUCTION, PRODUCTION_SOURCE)
+    print(f"[OK] FULL REPLACEMENT: {PRODUCTION}")
+    write_full(TEST, TEST_SOURCE)
+    print(f"[OK] FULL REPLACEMENT: {TEST}")
+    update_init()
+    print(f"[OK] PACKAGE UPDATED: {INIT}")
+
+    for target in (PRODUCTION, TEST, INIT):
+        py_compile.compile(str(target), doraise=True)
+    print("[OK] Production, test, and package syntax verified")
+
+    completed = subprocess.run(
+        [sys.executable, str(TEST)],
+        cwd=str(ROOT),
+        check=False,
+    )
+    if completed.returncode != 0:
+        raise SystemExit(completed.returncode)
+
+    print("[OK] OIA-064 test executed automatically")
+    print()
+    print(
+        "[DONE] OIA-064 production callable invocation "
+        "consumption activation gate installed"
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

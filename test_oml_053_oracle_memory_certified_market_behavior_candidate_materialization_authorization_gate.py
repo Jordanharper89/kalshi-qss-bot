@@ -1,0 +1,182 @@
+from __future__ import annotations
+
+import importlib.util
+import sys
+from dataclasses import replace
+from pathlib import Path
+
+from qseries_v2.oracle_memory.oracle_memory_certified_market_behavior_candidate_materialization_authorization_gate import (
+    OracleMemoryMarketBehaviorMaterializationAuthorizationInvariantError,
+    build_oracle_memory_market_behavior_materialization_authorization_decision,
+    verify_oracle_memory_market_behavior_materialization_authorization_decision,
+)
+
+
+def load_module(path: Path, name: str):
+    specification = importlib.util.spec_from_file_location(name, path)
+    if specification is None or specification.loader is None:
+        raise RuntimeError(f"unable to load fixture: {path}")
+    module = importlib.util.module_from_spec(specification)
+    sys.modules[name] = module
+    specification.loader.exec_module(module)
+    return module
+
+
+def expect_rejection(callable_object, label: str) -> None:
+    try:
+        callable_object()
+    except OracleMemoryMarketBehaviorMaterializationAuthorizationInvariantError:
+        return
+    raise AssertionError(f"tampered OML-053 {label} accepted")
+
+
+def build_bridge(root: Path):
+    fixture = load_module(
+        root
+        / "test_oml_052_oracle_memory_certified_cross_market_market_behavior_intake_bridge.py",
+        "oml_052_fixture_for_oml_053",
+    )
+    dependencies = fixture.build_dependencies(root)
+    dependency = dependencies.dependencies.dependency_memory.dependencies[0]
+
+    from qseries_v2.oracle_memory.oracle_memory_certified_cross_market_market_behavior_intake_bridge import (
+        build_oracle_memory_certified_cross_market_market_behavior_intake_request,
+        build_oracle_memory_certified_cross_market_market_behavior_intake_bridge,
+    )
+    from qseries_v2.oracle_memory.oracle_memory_continuous_intelligence_learner_foundation import (
+        MEMORY_DOMAINS,
+    )
+
+    request = (
+        build_oracle_memory_certified_cross_market_market_behavior_intake_request(
+            dependency_id=dependency.dependency_id,
+            domain_id=(
+                "market_behavior_memory"
+                if "market_behavior_memory" in MEMORY_DOMAINS
+                else MEMORY_DOMAINS[0]
+            ),
+            entity_key="Bitcoin cross-market market behavior",
+            source_key="oracle-memory-oml-051",
+            observed_at="2026-08-03T13:30:00-05:00",
+            effective_at="2026-08-03T13:30:00-05:00",
+            payload={
+                "observation": (
+                    "A certified cross-market dependency preceded "
+                    "Bitcoin repricing."
+                ),
+                "observation_type": "market_behavior_dependency",
+            },
+            confidence=0.80,
+            uncertainty=0.20,
+        )
+    )
+
+    return (
+        build_oracle_memory_certified_cross_market_market_behavior_intake_bridge(
+            dependencies=dependencies,
+            requests=(request,),
+        )
+    )
+
+
+def main() -> int:
+    print("=" * 48)
+    print(" OML-053 TEST")
+    print(" MARKET-BEHAVIOR CANDIDATE MATERIALIZATION AUTHORIZATION GATE")
+    print("=" * 48)
+
+    root = Path(__file__).resolve().parent
+    bridge = build_bridge(root)
+
+    result = (
+        build_oracle_memory_market_behavior_materialization_authorization_decision(
+            bridge=bridge,
+        )
+    )
+
+    assert result.schema_version == "OML-053"
+    assert result.engine_id == "OML-053"
+    assert result.upstream_schema_version == "OML-052"
+    assert result.upstream_engine_id == "OML-052"
+    assert result.upstream_certification_hash == bridge.certification_hash
+    assert result.upstream_intake_batch_hash == bridge.intake_batch.batch_hash
+    assert result.upstream_dependency_memory_hash == (
+        bridge.upstream_dependency_memory_hash
+    )
+    assert result.upstream_observation_count == bridge.observation_count
+    assert result.upstream_unique_observation_count == (
+        bridge.unique_observation_count
+    )
+    assert result.upstream_duplicate_observation_count == (
+        bridge.duplicate_observation_count
+    )
+    assert result.candidate_materialization_authorized
+    assert not result.candidate_admission_authorized
+    assert not result.persistence_authorized
+    assert not result.learning_update_authorized
+    assert not result.runtime_activation_authorized
+    assert not result.publication_authorized
+    assert not result.action_authorization_enabled
+    assert not result.qseries_execution_authorized
+    assert result.downstream_materialization_ready
+    assert result.read_only
+
+    replay = (
+        build_oracle_memory_market_behavior_materialization_authorization_decision(
+            bridge=bridge,
+        )
+    )
+    assert replay == result
+    assert (
+        verify_oracle_memory_market_behavior_materialization_authorization_decision(
+            result
+        )
+    )
+
+    expect_rejection(
+        lambda: verify_oracle_memory_market_behavior_materialization_authorization_decision(
+            replace(result, candidate_admission_authorized=True)
+        ),
+        "candidate admission",
+    )
+    expect_rejection(
+        lambda: verify_oracle_memory_market_behavior_materialization_authorization_decision(
+            replace(result, persistence_authorized=True)
+        ),
+        "persistence",
+    )
+    expect_rejection(
+        lambda: verify_oracle_memory_market_behavior_materialization_authorization_decision(
+            replace(result, qseries_execution_authorized=True)
+        ),
+        "Q Series execution",
+    )
+    expect_rejection(
+        lambda: verify_oracle_memory_market_behavior_materialization_authorization_decision(
+            replace(result, decision_hash="f" * 64)
+        ),
+        "decision hash",
+    )
+
+    print("[PASS] Certified OML-052 bridge consumed read-only")
+    print("[PASS] OML-052 certification and intake lineage retained")
+    print("[PASS] Dependency, chain, and observation guarantees verified")
+    print("[PASS] Deterministic candidate materialization authorized")
+    print("[PASS] Candidate admission remained disabled")
+    print("[PASS] Persistence remained disabled")
+    print("[PASS] Learning updates remained disabled")
+    print("[PASS] Runtime activation remained disabled")
+    print("[PASS] Publication remained disabled")
+    print("[PASS] Action authorization remained disabled")
+    print("[PASS] Q Series execution remained disabled")
+    print("[PASS] Deterministic replay equality verified")
+    print("[PASS] Tampered OML-053 decisions rejected")
+    print(
+        "[DONE] OML-053 MARKET-BEHAVIOR CANDIDATE "
+        "MATERIALIZATION AUTHORIZATION GATE PASS"
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

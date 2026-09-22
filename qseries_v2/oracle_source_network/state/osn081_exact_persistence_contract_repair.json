@@ -1,0 +1,23 @@
+{
+  "converter_module": "qseries_v2.oracle_source_network.persistence.sports_persistence_contract",
+  "converter_function": "from_canonical_event",
+  "converter_source": "qseries_v2/oracle_source_network/persistence/sports_persistence_contract.py",
+  "required_contract_fields": [
+    "source_id",
+    "provenance_hash",
+    "observed_at",
+    "observation_type",
+    "source_class",
+    "provider",
+    "subject",
+    "payload"
+  ],
+  "oad261_validation_observation_id": "62c1599c7c2ae4872c2c694fcb1c8dc75bcf3f00554118d7cb1aafe64bb8ecb7",
+  "candidate_count": 1,
+  "boundary": "qseries_v2/oracle_source_network/persistence/sports_single_writer_boundary.py",
+  "writer_id": "oracle.osn.sports",
+  "single_writer": "OPH-019",
+  "canonicalizer": "OAD-261",
+  "exact_readback": "OAD-068",
+  "execution_authority": false
+}

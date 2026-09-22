@@ -1,0 +1,12 @@
+{
+  "current_content_hash": "4840d40ea7254b211eed77d5986ac5cb46f6a39baadf7fc43d736f41999fab0a",
+  "execution_authority": false,
+  "prior_content_hash": "909cd6ce28d61a4b3978907985aec4f07c20f7281206c68d71f1d533e1a7ba83",
+  "probability_enabled": false,
+  "recovered_at": "2026-09-17T19:29:10.792093+00:00",
+  "recovered_prior_heartbeat": true,
+  "recovered_prior_state": true,
+  "resumed_accounted_rows": 40,
+  "resumed_total_rows": 40,
+  "schema_version": "KSEM-072"
+}

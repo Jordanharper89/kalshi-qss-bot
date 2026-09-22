@@ -1,0 +1,46 @@
+{
+  "exact_callable_selection_complete": false,
+  "selected_roles": {
+    "market_type": {
+      "kind": "function",
+      "name": "resolve_sports_market_type",
+      "score": 3,
+      "signature": {
+        "args": [
+          "m"
+        ],
+        "required": [
+          "m"
+        ],
+        "kwonly": [],
+        "async": false
+      },
+      "line": 19
+    },
+    "entity": {
+      "kind": "function",
+      "name": "recognize_sports_entity_type",
+      "score": 2,
+      "signature": {
+        "args": [
+          "text"
+        ],
+        "required": [
+          "text"
+        ],
+        "kwonly": [],
+        "async": false
+      },
+      "line": 31
+    }
+  },
+  "ambiguous_roles": [
+    "classification",
+    "decomposition"
+  ],
+  "canonical_binding_contract_ready": true,
+  "binding_lineage_ready": true,
+  "live_market_binding_executed": false,
+  "next_action": "RESOLVE_AMBIGUOUS_EXISTING_CALLABLES_FROM_EXACT_SOURCE",
+  "execution_authority": false
+}

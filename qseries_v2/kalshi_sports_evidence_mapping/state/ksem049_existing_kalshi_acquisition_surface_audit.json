@@ -1,0 +1,356 @@
+{
+  "candidates": [
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_exact_sports_unknown_cohort_postgresql_identity_recovery_audit.py",
+      "function": "_extract_market_fields",
+      "args": [
+        "market"
+      ],
+      "line": 185,
+      "score": 60
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence_analytics_runtime\\oiar_048_current_market_relevance_cohort_selector.py",
+      "function": "select_current_trader_cohort",
+      "args": [
+        "root",
+        "limit",
+        "now"
+      ],
+      "line": 10,
+      "score": 60
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_011_websocket_foundation.py",
+      "function": "build_subscribe_command",
+      "args": [
+        "command_id",
+        "channels",
+        "market_tickers"
+      ],
+      "line": 24,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_012_subscription_partitioning.py",
+      "function": "partition_subscriptions",
+      "args": [
+        "market_tickers",
+        "channels",
+        "partition_size"
+      ],
+      "line": 22,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_012_subscription_partitioning.py",
+      "function": "build_partition_subscribe_commands",
+      "args": [
+        "plan"
+      ],
+      "line": 33,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_012_subscription_partitioning.py",
+      "function": "verify_oad_012_kalshi_subscription_partitioning_full_universe_coverage",
+      "args": [],
+      "line": 42,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_013_market_data_normalization.py",
+      "function": "normalize_kalshi_market_data",
+      "args": [
+        "raw",
+        "oracle_receive_ns"
+      ],
+      "line": 24,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_013_market_data_normalization.py",
+      "function": "verify_oad_013_kalshi_orderbook_trade_ticker_normalization",
+      "args": [],
+      "line": 44,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_014_sequence_integrity.py",
+      "function": "build_orderbook_resync_command",
+      "args": [
+        "command_id",
+        "sid",
+        "market_tickers"
+      ],
+      "line": 31,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_019_hot_active_routing.py",
+      "function": "route_market",
+      "args": [
+        "market_ticker",
+        "tradable",
+        "activity_score",
+        "liquidity_score",
+        "near_qseries_threshold",
+        "catalyst",
+        "dislocation"
+      ],
+      "line": 18,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_024_physical_websocket.py",
+      "function": "_probe",
+      "args": [
+        "credentials",
+        "market_tickers",
+        "channels",
+        "max_messages",
+        "timeout_seconds"
+      ],
+      "line": 21,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_024_physical_websocket.py",
+      "function": "probe_kalshi_websocket",
+      "args": [
+        "credentials",
+        "market_tickers",
+        "channels",
+        "max_messages",
+        "timeout_seconds"
+      ],
+      "line": 48,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_027_event_intake_pump.py",
+      "function": "verify_oad_027_continuous_real_market_event_intake_pump",
+      "args": [],
+      "line": 34,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_036_websocket_canonical_bridge.py",
+      "function": "build_ola_canonical_observation_from_websocket",
+      "args": [
+        "raw_message"
+      ],
+      "line": 19,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_036_websocket_canonical_bridge.py",
+      "function": "verify_oad_036_kalshi_websocket_to_ola_canonical_observation_bridge",
+      "args": [],
+      "line": 66,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_044_downstream_intelligence_fanout.py",
+      "function": "build_downstream_intelligence_envelope",
+      "args": [
+        "observation",
+        "market_ticker",
+        "event_type",
+        "surveillance_tier",
+        "consumers"
+      ],
+      "line": 17,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_048_multi_partition_runtime.py",
+      "function": "build_kalshi_subscription_command",
+      "args": [
+        "command_id",
+        "channels",
+        "market_tickers"
+      ],
+      "line": 44,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_048_multi_partition_runtime.py",
+      "function": "_run_global_fast_lane",
+      "args": [
+        "root",
+        "max_persisted",
+        "progress"
+      ],
+      "line": 74,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_048_multi_partition_runtime.py",
+      "function": "_run_sampled_orderbook",
+      "args": [
+        "root",
+        "market_tickers",
+        "max_persisted",
+        "partitions_to_activate",
+        "progress"
+      ],
+      "line": 144,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_048_multi_partition_runtime.py",
+      "function": "run_sampled_orderbook_persistence",
+      "args": [
+        "root",
+        "market_tickers",
+        "max_persisted",
+        "partitions_to_activate",
+        "progress"
+      ],
+      "line": 218,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_048_multi_partition_runtime.py",
+      "function": "run_physical_multi_partition_persistence",
+      "args": [
+        "root",
+        "universe",
+        "max_persisted",
+        "orderbook_partitions_to_activate",
+        "progress"
+      ],
+      "line": 234,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_048_multi_partition_runtime.py",
+      "function": "verify_oad_048_physical_multi_partition_persistence_runtime",
+      "args": [],
+      "line": 274,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_pre_settlement_coverage\\opc_006_universal_market_snapshot_canonicalizer.py",
+      "function": "build_universal_market_snapshot",
+      "args": [
+        "market"
+      ],
+      "line": 56,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_069_current_open_kalshi_market_index.py",
+      "function": "_terms",
+      "args": [
+        "m"
+      ],
+      "line": 7,
+      "score": 20
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_073_current_market_umd_dependency_index.py",
+      "function": "market_dependency_facts",
+      "args": [
+        "m"
+      ],
+      "line": 7,
+      "score": 20
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_120_current_market_sports_team_pair_index.py",
+      "function": "_market_text",
+      "args": [
+        "m"
+      ],
+      "line": 14,
+      "score": 20
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_exact_sports_unknown_cohort_postgresql_identity_recovery_audit.py",
+      "function": "_looks_sports_unknown",
+      "args": [
+        "market"
+      ],
+      "line": 231,
+      "score": 20
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_exact_sports_unknown_cohort_postgresql_identity_recovery_audit.py",
+      "function": "_extract_snapshot_identity",
+      "args": [
+        "observation"
+      ],
+      "line": 372,
+      "score": 20
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_exact_sports_unknown_cohort_postgresql_identity_recovery_audit.py",
+      "function": "run_exact_sports_unknown_cohort_postgresql_identity_recovery_audit",
+      "args": [
+        "root"
+      ],
+      "line": 420,
+      "score": 20
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_008_full_universe_discovery.py",
+      "function": "normalize_market",
+      "args": [
+        "raw"
+      ],
+      "line": 32,
+      "score": 20
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_008_full_universe_discovery.py",
+      "function": "verify_oad_008_kalshi_full_universe_discovery",
+      "args": [],
+      "line": 62,
+      "score": 20
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_009_universe_reconciliation.py",
+      "function": "verify_oad_009_kalshi_universe_reconciliation_lifecycle",
+      "args": [],
+      "line": 51,
+      "score": 20
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence_analytics_runtime\\oiar_047_production_kalshi_current_eligibility_boundary.py",
+      "function": "read_current_kalshi_markets",
+      "args": [
+        "root",
+        "max_pages",
+        "timeout_seconds",
+        "now"
+      ],
+      "line": 18,
+      "score": 20
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_069_current_open_kalshi_market_index.py",
+      "function": "fetch_current_open_kalshi_market_index",
+      "args": [
+        "root",
+        "limit",
+        "timeout_seconds"
+      ],
+      "line": 10,
+      "score": 10
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_120_current_market_sports_team_pair_index.py",
+      "function": "fetch_current_market_sports_candidates",
+      "args": [
+        "descriptors",
+        "limit",
+        "timeout_seconds"
+      ],
+      "line": 52,
+      "score": 10
+    }
+  ],
+  "execution_authority": false
+}

@@ -1,0 +1,82 @@
+{
+  "modules": [
+    {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_121_persisted_sports_current_market_association_gate.py",
+      "imports": [
+        "from __future__ import annotations",
+        "from dataclasses import dataclass",
+        "from .oad_118_persisted_authoritative_sports_cohort import load_persisted_authoritative_sports_cohort",
+        "from .oad_119_persisted_sports_structured_descriptor import descriptors_from_persisted_sports_rows",
+        "from .oad_120_current_market_sports_team_pair_index import fetch_current_market_sports_candidates"
+      ],
+      "cohort_usage": [
+        {
+          "line": 30,
+          "expr": "cohort = load_persisted_authoritative_sports_cohort(root=root, timeout_seconds=timeout_seconds, acquisition_timeout_seconds=acquisition_timeout_seconds)"
+        },
+        {
+          "line": 35,
+          "expr": "descriptors = descriptors_from_persisted_sports_rows(cohort.rows)"
+        },
+        {
+          "line": 30,
+          "expr": "load_persisted_authoritative_sports_cohort(root=root, timeout_seconds=timeout_seconds, acquisition_timeout_seconds=acquisition_timeout_seconds)"
+        },
+        {
+          "line": 35,
+          "expr": "descriptors_from_persisted_sports_rows(cohort.rows)"
+        },
+        {
+          "line": 43,
+          "expr": "PersistedSportsAssociationReport(persisted_observations=cohort.cohort_size, structured_descriptors=len(descriptors), current_markets=len(markets), observations_with_candidates=with_candidates, association_candidates=len(flat), associations=flat, ready_for_reasoning_evidence_comparison=bool(flat), execution_authority=False)"
+        }
+      ]
+    },
+    {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_122_authoritative_sports_live_end_to_end_evidence_certification.py",
+      "imports": [
+        "from __future__ import annotations",
+        "from dataclasses import dataclass",
+        "from datetime import datetime, timezone",
+        "from .oad_118_persisted_authoritative_sports_cohort import load_persisted_authoritative_sports_cohort",
+        "from .oad_119_persisted_sports_structured_descriptor import descriptors_from_persisted_sports_rows",
+        "from .oad_120_current_market_sports_team_pair_index import fetch_current_market_sports_candidates"
+      ],
+      "cohort_usage": [
+        {
+          "line": 36,
+          "expr": "cohort = load_persisted_authoritative_sports_cohort(root=root, timeout_seconds=timeout_seconds, acquisition_timeout_seconds=acquisition_timeout_seconds)"
+        },
+        {
+          "line": 41,
+          "expr": "descriptors = descriptors_from_persisted_sports_rows(cohort.rows)"
+        },
+        {
+          "line": 36,
+          "expr": "load_persisted_authoritative_sports_cohort(root=root, timeout_seconds=timeout_seconds, acquisition_timeout_seconds=acquisition_timeout_seconds)"
+        },
+        {
+          "line": 41,
+          "expr": "descriptors_from_persisted_sports_rows(cohort.rows)"
+        },
+        {
+          "line": 51,
+          "expr": "LiveSportsEndToEndEvidenceReport(persisted_observations=int(cohort.cohort_size), committed_new=int(cohort.committed_new), providers=tuple(cohort.providers), structured_descriptors=len(descriptors), current_markets=len(markets), observations_with_candidates=with_candidates, association_candidates=len(flat), descriptors=tuple(descriptors), associations=flat, certified_at=datetime.now(timezone.utc).isoformat(), read_only=True, probability_enabled=False, execution_authority=False)"
+        },
+        {
+          "line": 52,
+          "expr": "int(cohort.cohort_size)"
+        },
+        {
+          "line": 53,
+          "expr": "int(cohort.committed_new)"
+        },
+        {
+          "line": 54,
+          "expr": "tuple(cohort.providers)"
+        }
+      ]
+    }
+  ],
+  "execution_authority": false
+}

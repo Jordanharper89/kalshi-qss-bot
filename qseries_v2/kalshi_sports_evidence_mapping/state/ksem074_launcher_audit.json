@@ -1,0 +1,8 @@
+{
+  "launcher": "run_oracle_LIVE.py",
+  "contains_children": true,
+  "contains_sports": true,
+  "contains_ksem": false,
+  "contains_popen": true,
+  "launcher_lines": 323
+}

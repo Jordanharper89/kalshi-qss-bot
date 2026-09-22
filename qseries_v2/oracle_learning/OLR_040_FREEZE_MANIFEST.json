@@ -1,0 +1,19 @@
+{
+  "build_id": "OLR-040",
+  "frozen_capability": {
+    "candidate_matching": true,
+    "deterministic_outcome_keys": true,
+    "evidence_coverage_recovery": true,
+    "execution_authority": false,
+    "learning_application_authority": false,
+    "postgresql_linkage_ledger": true
+  },
+  "manifest_sha256": "4cf1e214e313a351d306667b4d6e9182b4299d571f503dc895dc0928ad02f85a",
+  "revision": "OLR_040_OUTCOME_EVIDENCE_LINKAGE_FREEZE_V1",
+  "verified": {
+    "olr_036": true,
+    "olr_037": true,
+    "olr_038": true,
+    "olr_039": true
+  }
+}

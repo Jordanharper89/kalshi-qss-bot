@@ -1,0 +1,229 @@
+{
+  "descriptor": {
+    "type": "SportsEvidenceDescriptor",
+    "fields": {
+      "observation_id": {
+        "type": "str",
+        "repr": "'990f1aed0a245481398cb711774fc2caf126dcd0f33b44c1b4c08121f15940a0'"
+      },
+      "source_id": {
+        "type": "str",
+        "repr": "'source.independent.mlb:game:824469'"
+      },
+      "sport_family": {
+        "type": "str",
+        "repr": "'baseball'"
+      },
+      "subject": {
+        "type": "str",
+        "repr": "'Milwaukee Brewers at Cincinnati Reds'"
+      },
+      "away_team": {
+        "type": "str",
+        "repr": "'Milwaukee Brewers'"
+      },
+      "home_team": {
+        "type": "str",
+        "repr": "'Cincinnati Reds'"
+      },
+      "team_pair_key": {
+        "type": "str",
+        "repr": "'cincinnati reds|milwaukee brewers'"
+      },
+      "evidence_type": {
+        "type": "str",
+        "repr": "'official_game_schedule_state'"
+      },
+      "independent_evidence": {
+        "type": "bool",
+        "repr": "True"
+      },
+      "execution_authority": {
+        "type": "bool",
+        "repr": "False"
+      }
+    },
+    "repr": "SportsEvidenceDescriptor(observation_id='990f1aed0a245481398cb711774fc2caf126dcd0f33b44c1b4c08121f15940a0', source_id='source.independent.mlb:game:824469', sport_family='baseball', subject='Milwaukee Brewers at Cincinnati Reds', away_team='Milwaukee Brewers', home_team='Cincinnati Reds', team_pair_key='cincinnati reds|milwaukee brewers', evidence_type='official_game_schedule_state', independent_evidence=True, execution_authority=False)"
+  },
+  "market": {
+    "type": "dict",
+    "fields": {
+      "can_close_early": {
+        "type": "bool",
+        "repr": "True"
+      },
+      "close_time": {
+        "type": "str",
+        "repr": "'2026-09-09T08:00:00Z'"
+      },
+      "created_time": {
+        "type": "str",
+        "repr": "'2026-09-06T21:56:27.524007Z'"
+      },
+      "custom_strike": {
+        "type": "dict",
+        "repr": "{'Associated Events': 'KXARGPREMDIVGAME-26SEP06CCCAI,KXARGPREMDIVGAME-26SEP06RIVIRM,KXBRASILEIROCGAME-26SEP06STCBFC,KXLIGAMXGAME-26SEP06CRASLA,KXNCAAFGAME-26SEP06SCSTFAMU,KXNCAAFGAME-26SEP06WSUWASH,KXNWSLGAME-26SEP06PTHWSP,KXPERLIGA1GAME-26SEP06JUAALI', 'Associated Market Sides': 'yes,yes,yes,yes,ye"
+      },
+      "event_ticker": {
+        "type": "str",
+        "repr": "'KXMVECROSSCATEGORY-SHARD1-S2026BB2FAE33836'"
+      },
+      "exchange_index": {
+        "type": "int",
+        "repr": "1"
+      },
+      "expected_expiration_time": {
+        "type": "str",
+        "repr": "'2026-09-07T05:00:00Z'"
+      },
+      "expiration_time": {
+        "type": "str",
+        "repr": "'2026-09-09T08:00:00Z'"
+      },
+      "expiration_value": {
+        "type": "str",
+        "repr": "''"
+      },
+      "is_provisional": {
+        "type": "bool",
+        "repr": "True"
+      },
+      "last_price_dollars": {
+        "type": "str",
+        "repr": "'0.0000'"
+      },
+      "latest_expiration_time": {
+        "type": "str",
+        "repr": "'2026-09-09T08:00:00Z'"
+      },
+      "liquidity_dollars": {
+        "type": "str",
+        "repr": "'0.0000'"
+      },
+      "market_type": {
+        "type": "str",
+        "repr": "'binary'"
+      },
+      "mve_collection_ticker": {
+        "type": "str",
+        "repr": "'KXMVECROSSCATEGORY-SHARD1-R'"
+      },
+      "mve_selected_legs": {
+        "type": "list",
+        "repr": "[{'event_ticker': 'KXARGPREMDIVGAME-26SEP06CCCAI', 'market_ticker': 'KXARGPREMDIVGAME-26SEP06CCCAI-CAI', 'side': 'yes'}, {'event_ticker': 'KXARGPREMDIVGAME-26SEP06RIVIRM', 'market_ticker': 'KXARGPREMDIVGAME-26SEP06RIVIRM-RIV', 'side': 'yes'}, {'event_ticker': 'KXBRASILEIROCGAME-26SEP06STCBFC', 'mark"
+      },
+      "no_ask_dollars": {
+        "type": "str",
+        "repr": "'1.0000'"
+      },
+      "no_bid_dollars": {
+        "type": "str",
+        "repr": "'1.0000'"
+      },
+      "no_sub_title": {
+        "type": "str",
+        "repr": "'yes Independiente Avellaneda,yes River Plate,yes Santa Cruz FC PE,yes Cruz Azul,yes South Carolina St.,yes Washington,yes Washington,yes Tie'"
+      },
+      "notional_value_dollars": {
+        "type": "str",
+        "repr": "'1.0000'"
+      },
+      "open_interest_fp": {
+        "type": "str",
+        "repr": "'0.00'"
+      },
+      "open_time": {
+        "type": "str",
+        "repr": "'2026-09-06T21:56:27Z'"
+      },
+      "previous_price_dollars": {
+        "type": "str",
+        "repr": "'0.0000'"
+      },
+      "previous_yes_ask_dollars": {
+        "type": "str",
+        "repr": "'0.0000'"
+      },
+      "previous_yes_bid_dollars": {
+        "type": "str",
+        "repr": "'0.0000'"
+      },
+      "price_level_structure": {
+        "type": "str",
+        "repr": "'center_deci_edge_centi_cent'"
+      },
+      "price_ranges": {
+        "type": "list",
+        "repr": "[{'end': '0.0100', 'start': '0.0000', 'step': '0.0001'}, {'end': '0.9900', 'start': '0.0100', 'step': '0.0010'}, {'end': '1.0000', 'start': '0.9900', 'step': '0.0001'}]"
+      },
+      "result": {
+        "type": "str",
+        "repr": "''"
+      },
+      "rules_primary": {
+        "type": "str",
+        "repr": "''"
+      },
+      "rules_secondary": {
+        "type": "str",
+        "repr": "'Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.'"
+      },
+      "settlement_timer_seconds": {
+        "type": "int",
+        "repr": "5"
+      },
+      "status": {
+        "type": "str",
+        "repr": "'active'"
+      },
+      "strike_type": {
+        "type": "str",
+        "repr": "'custom'"
+      },
+      "ticker": {
+        "type": "str",
+        "repr": "'KXMVECROSSCATEGORY-SHARD1-S2026BB2FAE33836-379A356632A'"
+      },
+      "title": {
+        "type": "str",
+        "repr": "'yes Independiente Avellaneda,yes River Plate,yes Santa Cruz FC PE,yes Cruz Azul,yes South Carolina St.,yes Washington,yes Washington,yes Tie'"
+      },
+      "updated_time": {
+        "type": "str",
+        "repr": "'2026-09-06T21:56:27.608133Z'"
+      },
+      "volume_24h_fp": {
+        "type": "str",
+        "repr": "'0.00'"
+      },
+      "volume_fp": {
+        "type": "str",
+        "repr": "'0.00'"
+      },
+      "yes_ask_dollars": {
+        "type": "str",
+        "repr": "'0.0000'"
+      },
+      "yes_ask_size_fp": {
+        "type": "str",
+        "repr": "'0.00'"
+      },
+      "yes_bid_dollars": {
+        "type": "str",
+        "repr": "'0.0000'"
+      },
+      "yes_bid_size_fp": {
+        "type": "str",
+        "repr": "'0.00'"
+      },
+      "yes_sub_title": {
+        "type": "str",
+        "repr": "'yes Independiente Avellaneda,yes River Plate,yes Santa Cruz FC PE,yes Cruz Azul,yes South Carolina St.,yes Washington,yes Washington,yes Tie'"
+      }
+    },
+    "repr": "{'can_close_early': True, 'close_time': '2026-09-09T08:00:00Z', 'created_time': '2026-09-06T21:56:27.524007Z', 'custom_strike': {'Associated Events': 'KXARGPREMDIVGAME-26SEP06CCCAI,KXARGPREMDIVGAME-26SEP06RIVIRM,KXBRASILEIROCGAME-26SEP06STCBFC,KXLIGAMXGAME-26SEP06CRASLA,KXNCAAFGAME-26SEP06SCSTFAMU,KXNCAAFGAME-26SEP06WSUWASH,KXNWSLGAME-26SEP06PTHWSP,KXPERLIGA1GAME-26SEP06JUAALI', 'Associated Market Sides': 'yes,yes,yes,yes,yes,yes,yes,yes', 'Associated Markets': 'KXARGPREMDIVGAME-26SEP06CCCAI-CAI,KXARGPREMDIVGAME-26SEP06RIVIRM-RIV,KXBRASILEIROCGAME-26SEP06STCBFC-STC,KXLIGAMXGAME-26SEP06CRASLA-CRA,KXNCAAFGAME-26SEP06SCSTFAMU-SCST,KXNCAAFGAME-26SEP06WSUWASH-WASH,KXNWSLGAME-26SEP06PTHWSP-WSP,KXPERLIGA1GAME-26SEP06JUAALI-TIE', 'Multivariate Event Ticker': 'KXMVECROSSCATEGORY-SHARD1-S2026BB2FAE33836'}, 'event_ticker': 'KXMVECROSSCATEGORY-SHARD1-S2026BB2FAE33836', 'exchange_index': 1, 'expected_expiration_time': '2026-09-07T05:00:00Z', 'expiration_time': '2026-09-09T08:00:00Z', 'expiration_value': '', 'is_provisional': True, 'last_price_dollars': '0.0000', 'latest_expiration_time': '2026-09-09T08:00:00Z', 'liquidity_dollars': '0.0000', 'market_type': 'binary', 'mve_collection_ticker': 'KX"
+  },
+  "candidate": null,
+  "nonempty_groups": 0,
+  "execution_authority": false
+}

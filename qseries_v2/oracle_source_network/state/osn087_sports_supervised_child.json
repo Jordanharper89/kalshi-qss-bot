@@ -1,0 +1,14 @@
+{
+  "child_module": "qseries_v2.oracle_source_network.runtime.sports_supervised_child",
+  "run_cycle_signature": "(root=None, timeout=15)",
+  "forwarded_parameters": [
+    "root",
+    "timeout"
+  ],
+  "ignored_wrapper_parameters": [
+    "commit_timeout_seconds"
+  ],
+  "cadence_seconds": 30.0,
+  "terminal_dependency": "NONE",
+  "execution_authority": false
+}

@@ -1,0 +1,75 @@
+{
+  "rows": [
+    {
+      "league": "NFL",
+      "events": 32,
+      "unique_provider_ids": 32,
+      "elapsed_seconds": 1.159,
+      "authority": "EXACT_DIRECT_SOURCE_EXTRACTOR",
+      "callable_name": "acquire_nfl_scores -> extract_nfl_live_events",
+      "execution_authority": false
+    },
+    {
+      "league": "NCAAF",
+      "events": 99,
+      "unique_provider_ids": 99,
+      "elapsed_seconds": 0.278,
+      "authority": "EXACT_DIRECT_SOURCE_EXTRACTOR",
+      "callable_name": "acquire_ncaa_fbs_scoreboard -> extract_ncaaf_live_events",
+      "execution_authority": false
+    },
+    {
+      "league": "NBA",
+      "events": 1,
+      "unique_provider_ids": 1,
+      "elapsed_seconds": 0.646,
+      "authority": "EXACT_DIRECT_SOURCE_EXTRACTOR",
+      "callable_name": "acquire_nba_games -> extract_basketball_events",
+      "execution_authority": false
+    },
+    {
+      "league": "NHL",
+      "events": 43,
+      "unique_provider_ids": 43,
+      "elapsed_seconds": 0.159,
+      "authority": "PROMOTED_EXECUTABLE_CANONICAL_ENTRYPOINT",
+      "callable_name": "extract_nhl_opening_schedule",
+      "execution_authority": false
+    },
+    {
+      "league": "MLS",
+      "events": 43,
+      "unique_provider_ids": 43,
+      "elapsed_seconds": 0.462,
+      "authority": "PROMOTED_EXECUTABLE_CANONICAL_ENTRYPOINT",
+      "callable_name": "probe_and_extract",
+      "execution_authority": false
+    },
+    {
+      "league": "EPL",
+      "events": 380,
+      "unique_provider_ids": 380,
+      "elapsed_seconds": 0.333,
+      "authority": "PROMOTED_EXECUTABLE_CANONICAL_ENTRYPOINT",
+      "callable_name": "extract_epl_fixtures",
+      "execution_authority": false
+    }
+  ],
+  "admitted": [
+    "NFL",
+    "NCAAF",
+    "NBA",
+    "NHL",
+    "MLS",
+    "EPL"
+  ],
+  "held": [
+    "NCAAB",
+    "MLB_CANONICAL_EVENT_EXTRACTION_CERT_REQUIRED"
+  ],
+  "blocked": [
+    "UCL"
+  ],
+  "uniform_provider": "qseries_v2.oracle_source_network.providers.uniform_sports_provider:acquire_canonical_events",
+  "execution_authority": false
+}

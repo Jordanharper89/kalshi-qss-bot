@@ -1,0 +1,211 @@
+{
+  "requested": 50,
+  "counts": {
+    "RESOLVED_PAIR": 2,
+    "RESOLVED_DIRECT": 0,
+    "NOT_FOUND": 48
+  },
+  "rows": [
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ALAUK-ALA",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ALBYLIU-ALBY",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ALSTTROY-TROY",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12APPECU-ECU",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ARIZBYU-BYU",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ARPBALCN-ALCN",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ASUTXAM-TXAM",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12BGSUNEB-NEB",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CALSYR-SYR",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CAMPFLA-FLA",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CCSUTOL-TOL",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CHATEKY-CHAT",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12CHSOCIT-CIT",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12COLGCMU-CMU",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12DELVAN-VAN",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12DRKEUNI-UNI",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12DUKEILL-ILL",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12DUQYSU-YSU",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12EMUMSU-MSU",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ETSUUNC-UNC",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12EWUSDAK-SDAK",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12FORCCAR-CCAR",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12FURMER-MER",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12GASOCLEM-CLEM",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12HCMOH-MOH",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12HOWIND-IND",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ISUIOWA-IOWA",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12LINWMOSU-MOSU",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12LTLSU-LSU",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MDCONN-MD",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MEMBSU-BSU",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MHUUNM-UNM",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MONMWMU-WMU",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MOREPEAY-PEAY",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MRSTLAF-LAF",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MSSTMINN-MSST",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12MTUMRSH-MRSH",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12NHCSDST-SDST",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12NWSTETAM-ETAM",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12ODUVT-VT",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12OKLAMICH-OKLA",
+      "status": "RESOLVED_PAIR"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12OREOKST-ORE",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12PSUTEM-PSU",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12RICEND-ND",
+      "status": "RESOLVED_PAIR"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12RMUAKR-AKR",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SAMTNTC-TNTC",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SDSUUCLA-UCLA",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SEMOSIU-SIU",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SHUMASS-MASS",
+      "status": "NOT_FOUND"
+    },
+    {
+      "ticker": "KXNCAAFGAME-26SEP12SOUHOU-HOU",
+      "status": "NOT_FOUND"
+    }
+  ],
+  "execution_authority": false
+}

@@ -1,0 +1,732 @@
+{
+  "candidates": [
+    {
+      "file": "qseries_v2\\oracle_pre_settlement_coverage\\opc_003_canonical_observation_coverage_read_model.py",
+      "function": "read_recent_canonical_tickers",
+      "args": [
+        "root",
+        "lookback_hours",
+        "row_limit"
+      ],
+      "line": 70
+    },
+    {
+      "file": "qseries_v2\\kalshi_sports_evidence_mapping\\live_sports_candidate_boundary.py",
+      "function": "read_current_markets",
+      "args": [],
+      "line": 6
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_069_current_open_kalshi_market_index.py",
+      "function": "fetch_current_open_kalshi_market_index",
+      "args": [
+        "root",
+        "limit",
+        "timeout_seconds"
+      ],
+      "line": 10
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_088_sports_market_type_resolver.py",
+      "function": "resolve_sports_market_type",
+      "args": [
+        "m"
+      ],
+      "line": 19
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_120_current_market_sports_team_pair_index.py",
+      "function": "fetch_current_market_sports_candidates",
+      "args": [
+        "descriptors",
+        "limit",
+        "timeout_seconds"
+      ],
+      "line": 52
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_416_kalshi_market_evidence_requirement_resolver.py",
+      "function": "resolve_market_evidence_requirement",
+      "args": [
+        "market"
+      ],
+      "line": 10
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_416_kalshi_market_evidence_requirement_resolver.py",
+      "function": "resolve_market_cohort",
+      "args": [
+        "markets"
+      ],
+      "line": 15
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_exact_sports_unknown_cohort_postgresql_identity_recovery_audit.py",
+      "function": "_read_market_snapshot_observations",
+      "args": [
+        "backend",
+        "tickers"
+      ],
+      "line": 262
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence\\market_regime_discovery_model\\market_regime_discovery_contract.py",
+      "function": "assert_market_regime_contract_read_only",
+      "args": [
+        "result"
+      ],
+      "line": 402
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence\\market_regime_discovery_model\\market_regime_discovery_engine.py",
+      "function": "assert_market_regime_engine_read_only",
+      "args": [
+        "result"
+      ],
+      "line": 1635
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence\\market_regime_discovery_model\\market_regime_oos_runtime_gate.py",
+      "function": "assert_market_regime_oos_runtime_read_only",
+      "args": [
+        "result"
+      ],
+      "line": 1147
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence\\market_regime_discovery_model\\market_regime_pipeline_bridge.py",
+      "function": "assert_market_regime_pipeline_bridge_read_only",
+      "args": [
+        "result"
+      ],
+      "line": 1303
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence\\market_regime_discovery_model\\market_regime_pipeline_gate.py",
+      "function": "assert_market_regime_pipeline_read_only",
+      "args": [
+        "result"
+      ],
+      "line": 1505
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence\\market_regime_discovery_model\\market_regime_registry_bridge.py",
+      "function": "assert_market_regime_registry_read_only",
+      "args": [
+        "result"
+      ],
+      "line": 968
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence\\market_regime_discovery_model\\market_regime_replay_ledger.py",
+      "function": "assert_market_regime_replay_ledger_read_only",
+      "args": [
+        "result"
+      ],
+      "line": 1066
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence\\market_regime_discovery_model\\market_regime_subsystem_integration_gate.py",
+      "function": "assert_market_regime_subsystem_read_only",
+      "args": [
+        "result"
+      ],
+      "line": 1376
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence_analytics_runtime\\oiar_002_current_reasoning_market_cohort_snapshot.py",
+      "function": "read_latest_reasoning_market_cohort",
+      "args": [
+        "root"
+      ],
+      "line": 82
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence_analytics_runtime\\oiar_016_canonical_market_identity_resolver.py",
+      "function": "resolve_canonical_market_identity",
+      "args": [
+        "root",
+        "market_id"
+      ],
+      "line": 27
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence_analytics_runtime\\oiar_038_event_time_snapshot_materializer.py",
+      "function": "read_latest_event_time_snapshot",
+      "args": [
+        "root"
+      ],
+      "line": 17
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence_analytics_runtime\\oiar_047_production_kalshi_current_eligibility_boundary.py",
+      "function": "read_current_kalshi_markets",
+      "args": [
+        "root",
+        "max_pages",
+        "timeout_seconds",
+        "now"
+      ],
+      "line": 18
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence_analytics_runtime\\oiar_050_recent_time_oracle_live_market_boundary.py",
+      "function": "read_recent_oracle_live_markets",
+      "args": [
+        "root",
+        "window_minutes",
+        "row_limit",
+        "statement_timeout_ms"
+      ],
+      "line": 81
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence_analytics_runtime\\oiar_053_proven_current_market_history.py",
+      "function": "read_latest_current_market_history",
+      "args": [
+        "root"
+      ],
+      "line": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence_analytics_runtime\\oiar_056_current_market_research_ranking.py",
+      "function": "read_latest_current_market_research_ranking",
+      "args": [
+        "root"
+      ],
+      "line": 64
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence_analytics_runtime\\oiar_057_current_market_evidence_vector.py",
+      "function": "read_latest_current_market_evidence_vectors",
+      "args": [
+        "root"
+      ],
+      "line": 54
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence_analytics_runtime\\oiar_058_deterministic_market_thesis_signature.py",
+      "function": "read_latest_deterministic_market_thesis_signatures",
+      "args": [
+        "root"
+      ],
+      "line": 44
+    },
+    {
+      "file": "qseries_v2\\oracle_learning\\olr_052_canonical_json_evidence_lookup_correction.py",
+      "function": "lookup_market_evidence",
+      "args": [
+        "outcome",
+        "root",
+        "limit"
+      ],
+      "line": 105
+    },
+    {
+      "file": "qseries_v2\\oracle_learning_feedback\\olf_002_market_learning_context.py",
+      "function": "verify_olf_002_market_learning_context_read_model",
+      "args": [],
+      "line": 73
+    },
+    {
+      "file": "qseries_v2\\oracle_learning_feedback\\olf_008_related_market_learning_resolver.py",
+      "function": "resolve_related_market_learning",
+      "args": [
+        "root",
+        "market_ticker"
+      ],
+      "line": 24
+    },
+    {
+      "file": "qseries_v2\\oracle_learning_feedback\\olf_008_related_market_learning_resolver.py",
+      "function": "verify_olf_008_related_market_learning_resolver",
+      "args": [],
+      "line": 53
+    },
+    {
+      "file": "qseries_v2\\oracle_learning_runtime\\olr_002_settled_outcome_read_model.py",
+      "function": "fetch_recent_settled_markets",
+      "args": [
+        "root",
+        "limit"
+      ],
+      "line": 31
+    },
+    {
+      "file": "qseries_v2\\oracle_learning_runtime\\olr_017_market_feedback_resolver.py",
+      "function": "resolve_market_feedback",
+      "args": [
+        "snapshot",
+        "market_ticker",
+        "min_records"
+      ],
+      "line": 18
+    },
+    {
+      "file": "qseries_v2\\oracle_learning_runtime\\olr_017_market_feedback_resolver.py",
+      "function": "verify_olr_017_market_feedback_resolver",
+      "args": [],
+      "line": 27
+    },
+    {
+      "file": "qseries_v2\\oracle_pre_settlement_coverage\\opc_003_canonical_observation_coverage_read_model.py",
+      "function": "read_recent_canonical_market_freshness",
+      "args": [
+        "root",
+        "lookback_hours",
+        "row_limit"
+      ],
+      "line": 44
+    },
+    {
+      "file": "qseries_v2\\oracle_pre_settlement_coverage\\opc_009_bounded_universal_snapshot_cycle.py",
+      "function": "fetch_open_market_page",
+      "args": [
+        "limit",
+        "timeout_seconds"
+      ],
+      "line": 40
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_execution_read_model.py",
+      "function": "certify_active_market_query_execution_read_model",
+      "args": [
+        "read_model"
+      ],
+      "line": 346
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_execution_read_model.py",
+      "function": "verify_umd_027_certified_active_canonical_market_registry_query_execution_read_model",
+      "args": [],
+      "line": 495
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model.py",
+      "function": "certify_active_market_query_session_read_model",
+      "args": [
+        "read_model"
+      ],
+      "line": 347
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model.py",
+      "function": "verify_umd_031_certified_active_canonical_market_registry_query_session_read_model",
+      "args": [],
+      "line": 505
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_gate.py",
+      "function": "evaluate_active_market_query_session_read_model",
+      "args": [
+        "read_model"
+      ],
+      "line": 203
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_gate.py",
+      "function": "verify_umd_032_certified_active_canonical_market_registry_query_session_read_model_admission_gate",
+      "args": [],
+      "line": 418
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger.py",
+      "function": "certify_active_market_query_session_read_model_admission_ledger",
+      "args": [
+        "ledger"
+      ],
+      "line": 461
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger.py",
+      "function": "verify_umd_033_certified_active_canonical_market_registry_query_session_read_model_admission_ledger",
+      "args": [],
+      "line": 630
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model.py",
+      "function": "build_active_market_query_session_read_model_admission_ledger_read_model",
+      "args": [
+        "ledger"
+      ],
+      "line": 430
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model.py",
+      "function": "certify_active_market_query_session_read_model_admission_ledger_read_model",
+      "args": [
+        "read_model"
+      ],
+      "line": 553
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model.py",
+      "function": "verify_umd_034_certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 714
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_gate.py",
+      "function": "evaluate_active_market_query_session_read_model_admission_ledger_read_model",
+      "args": [
+        "read_model"
+      ],
+      "line": 135
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_gate.py",
+      "function": "verify_umd_035_certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 336
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger.py",
+      "function": "certify_active_market_query_session_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [
+        "ledger"
+      ],
+      "line": 383
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger.py",
+      "function": "verify_umd_036_certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 483
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model.py",
+      "function": "build_active_market_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [
+        "ledger"
+      ],
+      "line": 452
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model.py",
+      "function": "certify_active_market_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [
+        "read_model"
+      ],
+      "line": 577
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model.py",
+      "function": "verify_umd_037_certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 756
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate.py",
+      "function": "evaluate_active_market_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [
+        "read_model"
+      ],
+      "line": 135
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate.py",
+      "function": "verify_umd_038_certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 336
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger.py",
+      "function": "certify_active_market_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [
+        "ledger"
+      ],
+      "line": 383
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger.py",
+      "function": "verify_umd_039_certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 483
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model.py",
+      "function": "build_active_market_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [
+        "ledger"
+      ],
+      "line": 452
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model.py",
+      "function": "certify_active_market_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [
+        "read_model"
+      ],
+      "line": 577
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model.py",
+      "function": "verify_umd_040_certified_active_canonical_market_registry_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 756
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_read_model.py",
+      "function": "certify_active_canonical_market_registry_read_model",
+      "args": [
+        "read_model"
+      ],
+      "line": 398
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\certified_active_canonical_market_registry_read_model.py",
+      "function": "verify_umd_022_certified_active_canonical_market_registry_read_model",
+      "args": [],
+      "line": 538
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_041_query_session_read_model_admission_gate.py",
+      "function": "evaluate_active_market_query_session_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [
+        "read_model"
+      ],
+      "line": 136
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_054_raw_venue_market_observation_admission_ledger_read_model.py",
+      "function": "verify_umd_054_raw_venue_market_observation_admission_ledger_read_model",
+      "args": [],
+      "line": 881
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_055_raw_venue_market_observation_admission_ledger_read_model_admission_gate.py",
+      "function": "verify_umd_055_raw_venue_market_observation_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 547
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_056_raw_venue_market_observation_admission_ledger_read_model_admission_ledger.py",
+      "function": "verify_umd_056_raw_venue_market_observation_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 659
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_057_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model.py",
+      "function": "verify_umd_057_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 792
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_058_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_gate.py",
+      "function": "verify_umd_058_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 660
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_059_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger.py",
+      "function": "verify_umd_059_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 773
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_060_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model.py",
+      "function": "verify_umd_060_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 793
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_061_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate.py",
+      "function": "verify_umd_061_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 542
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_062_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger.py",
+      "function": "verify_umd_062_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 779
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_063_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model.py",
+      "function": "verify_umd_063_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 878
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_064_read_model_admission_gate.py",
+      "function": "verify_umd_064_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 631
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_065_read_model_admission_ledger.py",
+      "function": "verify_umd_065_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 914
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_066_read_model.py",
+      "function": "verify_umd_066_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 995
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_067_read_model_admission_gate.py",
+      "function": "verify_umd_067_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 632
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_068_read_model_admission_ledger.py",
+      "function": "verify_umd_068_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 915
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_069_read_model.py",
+      "function": "verify_umd_069_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 995
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_070_read_model_admission_gate.py",
+      "function": "verify_umd_070_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 633
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_071_read_model_admission_ledger.py",
+      "function": "verify_umd_071_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 916
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_072_read_model.py",
+      "function": "verify_umd_072_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 997
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_073_read_model_admission_gate.py",
+      "function": "verify_umd_073_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 634
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_074_read_model_admission_ledger.py",
+      "function": "verify_umd_074_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 917
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_075_read_model.py",
+      "function": "verify_umd_075_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 997
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_076_read_model_admission_gate.py",
+      "function": "verify_umd_076_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 635
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_077_read_model_admission_ledger.py",
+      "function": "verify_umd_077_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 918
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_078_read_model.py",
+      "function": "verify_umd_078_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 997
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_079_read_model_admission_gate.py",
+      "function": "verify_umd_079_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 635
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_080_read_model_admission_ledger.py",
+      "function": "verify_umd_080_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 918
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_081_read_model.py",
+      "function": "verify_umd_081_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 997
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_082_read_model_admission_gate.py",
+      "function": "verify_umd_082_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 635
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_083_read_model_admission_ledger.py",
+      "function": "verify_umd_083_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 918
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_084_read_model.py",
+      "function": "verify_umd_084_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 997
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_085_read_model_admission_gate.py",
+      "function": "verify_umd_085_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 635
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_086_read_model_admission_ledger.py",
+      "function": "verify_umd_086_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 918
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_087_read_model.py",
+      "function": "verify_umd_087_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 997
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_088_read_model_admission_gate.py",
+      "function": "verify_umd_088_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 635
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_089_read_model_admission_ledger.py",
+      "function": "verify_umd_089_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 918
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_090_read_model.py",
+      "function": "verify_umd_090_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 997
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_091_read_model_admission_gate.py",
+      "function": "verify_umd_091_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_gate",
+      "args": [],
+      "line": 635
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_092_read_model_admission_ledger.py",
+      "function": "verify_umd_092_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger",
+      "args": [],
+      "line": 918
+    },
+    {
+      "file": "qseries_v2\\universal_market_discovery\\umd_093_read_model.py",
+      "function": "verify_umd_093_raw_venue_market_observation_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model_admission_ledger_read_model",
+      "args": [],
+      "line": 997
+    }
+  ],
+  "execution_authority": false
+}

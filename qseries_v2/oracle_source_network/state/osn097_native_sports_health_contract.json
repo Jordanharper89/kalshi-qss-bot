@@ -1,0 +1,14 @@
+{
+  "component": "sports",
+  "production_launcher": "run_oracle_LIVE.py",
+  "supervision": "NATIVE_CHILDREN_REGISTRY",
+  "healthy_state": "HEALTHY",
+  "six_league_full_cycle_certified": true,
+  "sports_heartbeat_advanced": true,
+  "restart_counter_name": "sports_restarts",
+  "restart_recovery_physical_certified": false,
+  "restart_recovery_status": "DEFERRED_TO_ORACLE_RUNTIME_HARDENING",
+  "osn096_forensic_present": true,
+  "terminal_dependency": "NONE",
+  "execution_authority": false
+}

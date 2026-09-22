@@ -1,0 +1,20 @@
+{
+  "launcher_path": "run_oracle_LIVE.py",
+  "launcher_sha256": "d7f7d2f65ee10e93fd42af3751c25d670cee4eb6d79d037c27f9bb32570bd90f",
+  "required_runtime_markers": [
+    "fast_lane",
+    "inventory",
+    "reasoning",
+    "learning",
+    "terminal_dependency",
+    "execution_authority"
+  ],
+  "rejected_nonproduction_launchers": [
+    "run_oracle_LIVE_OPC036_DIAGNOSTIC.py",
+    "run_oracle_LIVE_OPH017_FORENSIC.py"
+  ],
+  "selection_rule": "UNIQUE_FULL_MARKER_LAUNCHER_AFTER_DIAGNOSTIC_FORENSIC_EXCLUSION",
+  "integration_strategy": "NON_MUTATING_EXTENSION_SUPERVISOR",
+  "terminal_dependency": "NONE",
+  "execution_authority": false
+}

@@ -1,0 +1,628 @@
+{
+  "candidates": [
+    {
+      "evidence": [
+        "ask_command",
+        "command_registry",
+        "command_registry_module",
+        "default_command_registry_builder",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 24,
+      "symbol_kind": "function",
+      "symbol_name": "build_default_command_registry"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "default_command_registry_builder",
+        "dispatch_logic",
+        "interactive_runtime",
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 23,
+      "symbol_kind": "function",
+      "symbol_name": "run_interactive"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "default_command_registry_builder",
+        "dispatch_logic",
+        "interactive_runtime",
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 23,
+      "symbol_kind": "function",
+      "symbol_name": "run_interactive"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "default_command_registry_builder",
+        "dispatch_logic",
+        "interactive_runtime",
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 23,
+      "symbol_kind": "function",
+      "symbol_name": "run_interactive"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "default_command_registry_builder",
+        "dispatch_logic",
+        "interactive_runtime",
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 23,
+      "symbol_kind": "function",
+      "symbol_name": "run_interactive"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "command_registry_module",
+        "default_command_registry_builder",
+        "handler_logic",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 21,
+      "symbol_kind": "function",
+      "symbol_name": "resolve_terminal_command"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "command_registry_module",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 12,
+      "symbol_kind": "function",
+      "symbol_name": "verify_command_registry_report"
+    },
+    {
+      "evidence": [
+        "ask_command",
+        "dispatch_logic",
+        "handler_logic",
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 12,
+      "symbol_kind": "function",
+      "symbol_name": "dispatch_command"
+    },
+    {
+      "evidence": [
+        "ask_command",
+        "dispatch_logic",
+        "handler_logic",
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 12,
+      "symbol_kind": "function",
+      "symbol_name": "dispatch_command"
+    },
+    {
+      "evidence": [
+        "ask_command",
+        "dispatch_logic",
+        "handler_logic",
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 12,
+      "symbol_kind": "function",
+      "symbol_name": "dispatch_command"
+    },
+    {
+      "evidence": [
+        "ask_command",
+        "dispatch_logic",
+        "handler_logic",
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 12,
+      "symbol_kind": "function",
+      "symbol_name": "dispatch_command"
+    },
+    {
+      "evidence": [
+        "command_registry_module",
+        "handler_logic",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "verify_command_definition"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_final_freeze_and_completion",
+      "score": 7,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalFinalFreezeManifest"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_final_freeze_and_completion",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "build_oracle_terminal_final_freeze_completion_report"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_final_freeze_and_completion",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "verify_final_freeze_manifest"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_final_freeze_and_completion",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "verify_oracle_terminal_final_freeze_completion_report"
+    },
+    {
+      "evidence": [
+        "command_registry_module",
+        "handler_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 7,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalCommandDefinition"
+    },
+    {
+      "evidence": [
+        "command_registry_module",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 7,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalCommandRegistryInvariantError"
+    },
+    {
+      "evidence": [
+        "command_registry_module",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 7,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalCommandRegistryReport"
+    },
+    {
+      "evidence": [
+        "command_registry_module",
+        "handler_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 7,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalCommandResolution"
+    },
+    {
+      "evidence": [
+        "command_registry_module",
+        "handler_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "_definition"
+    },
+    {
+      "evidence": [
+        "command_registry_module",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "verify_command_resolution"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 7,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalCommandRegistryCertification"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 7,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerCertification"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "certify_command_registry"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "certify_live_terminal_runner"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "verify_command_registry_certification"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "verify_runner_certification"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "help_lines"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "help_lines"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "help_lines"
+    },
+    {
+      "evidence": [
+        "command_registry",
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "help_lines"
+    },
+    {
+      "evidence": [
+        "interactive_runtime"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_display_integration_certification",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "certify_live_runner_integration"
+    },
+    {
+      "evidence": [
+        "interactive_runtime"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "interactive_runtime"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "interactive_runtime"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "interactive_runtime"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "run_interactive"
+    },
+    {
+      "evidence": [
+        "interactive_runtime"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "interactive_runtime"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "command_registry_module"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 5,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "command_registry_module"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 5,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "ask_command"
+      ],
+      "module_name": "run_oracle_terminal_LIVE_READ_ONLY",
+      "score": 5,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "dispatch_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_ask_dispatch_adapter",
+      "score": 3,
+      "symbol_kind": "function",
+      "symbol_name": "build_oracle_live_ask_dispatch_adapter"
+    },
+    {
+      "evidence": [
+        "dispatch_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_ask_dispatch_adapter",
+      "score": 3,
+      "symbol_kind": "function",
+      "symbol_name": "verify_oracle_live_ask_dispatch_adapter"
+    },
+    {
+      "evidence": [
+        "input_loop"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 3,
+      "symbol_kind": "function",
+      "symbol_name": "parse_terminal_input"
+    },
+    {
+      "evidence": [
+        "input_loop"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_030",
+      "score": 3,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "read_live_price_evidence"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalPanelRegistry"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "build_default_panel_registry"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "resolve_panel"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_panel_registry"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "open_panel"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "panel_lines"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "status_lines"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "open_panel"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "panel_lines"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "status_lines"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "status_lines"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "open_panel"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "panel_lines"
+    },
+    {
+      "evidence": [
+        "registry_logic"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "status_lines"
+    }
+  ],
+  "revision": "OLC_006_TERMINAL_INJECTION_MANIFEST_V1",
+  "source_mutation_required": false,
+  "top_candidate": {
+    "evidence": [
+      "ask_command",
+      "command_registry",
+      "command_registry_module",
+      "default_command_registry_builder",
+      "registry_logic"
+    ],
+    "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+    "score": 24,
+    "symbol_kind": "function",
+    "symbol_name": "build_default_command_registry"
+  }
+}

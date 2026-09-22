@@ -1,0 +1,5 @@
+{
+  "physical_candidates": 15,
+  "ambiguity_policy": "REJECT",
+  "execution_authority": false
+}

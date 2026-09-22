@@ -1,0 +1,14 @@
+from dataclasses import dataclass
+from .ois_041_live_activation import verify_ois_041_adapter_specific_live_activation_contract
+from .ois_042_universe_coverage import verify_ois_042_live_subscription_universe_coverage_state
+from .ois_043_adapter_recovery import verify_ois_043_live_adapter_reconnect_resubscription_recovery
+from .ois_044_adapter_production_readiness import verify_ois_044_adapter_coverage_freshness_certification
+@dataclass(frozen=True)
+class LiveAdapterActivationCertification:
+ builds:tuple; capability:str; next_capability:str; certified:bool=True
+def certify_ois_041_through_045():
+ if not all((verify_ois_041_adapter_specific_live_activation_contract(),verify_ois_042_live_subscription_universe_coverage_state(),verify_ois_043_live_adapter_reconnect_resubscription_recovery(),verify_ois_044_adapter_coverage_freshness_certification())): raise RuntimeError("certification failed")
+ return LiveAdapterActivationCertification(tuple("OIS-%03d"%i for i in range(41,46)),"adapter_specific_live_activation_full_universe_coverage_recovery_freshness","real_adapter_rollout_kalshi_first_then_multi_source_expansion")
+def verify_ois_045_live_adapter_activation_coverage_gate():
+ c=certify_ois_041_through_045()
+ return c.certified and len(c.builds)==5 and c.next_capability=="real_adapter_rollout_kalshi_first_then_multi_source_expansion"

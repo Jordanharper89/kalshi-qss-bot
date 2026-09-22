@@ -1,0 +1,655 @@
+{
+  "selected": {
+    "file": "qseries_v2\\oracle_production_learning\\opl_007_evidence_first_outcome_resolver.py",
+    "function": "resolve_settlement",
+    "args": [
+      "credentials",
+      "ticker"
+    ],
+    "line": 203,
+    "score": 130
+  },
+  "ranked": [
+    {
+      "file": "qseries_v2\\oracle_production_learning\\opl_007_evidence_first_outcome_resolver.py",
+      "function": "resolve_settlement",
+      "args": [
+        "credentials",
+        "ticker"
+      ],
+      "line": 203,
+      "score": 130
+    },
+    {
+      "file": "qseries_v2\\oracle_background_recovery\\obr_003_state_recovery.py",
+      "function": "recover_gap_market_states",
+      "args": [
+        "root",
+        "gap",
+        "batch_size",
+        "progress"
+      ],
+      "line": 47,
+      "score": 100
+    },
+    {
+      "file": "qseries_v2\\oracle_production_learning\\opl_008_settlement_eligible_evidence_priority.py",
+      "function": "resolve_candidate",
+      "args": [
+        "root",
+        "credentials",
+        "evidence"
+      ],
+      "line": 200,
+      "score": 100
+    },
+    {
+      "file": "qseries_v2\\oracle_learning_feedback\\olf_008_related_market_learning_resolver.py",
+      "function": "resolve_related_market_learning",
+      "args": [
+        "root",
+        "market_ticker"
+      ],
+      "line": 24,
+      "score": 70
+    },
+    {
+      "file": "qseries_v2\\oracle_learning_feedback\\olf_009_generalized_learning_context.py",
+      "function": "build_generalized_learning_context",
+      "args": [
+        "root",
+        "market_ticker"
+      ],
+      "line": 27,
+      "score": 70
+    },
+    {
+      "file": "qseries_v2\\oracle_learning_runtime\\olr_003_learning_event_bridge.py",
+      "function": "find_market_evidence",
+      "args": [
+        "root",
+        "ticker",
+        "scan_limit"
+      ],
+      "line": 13,
+      "score": 70
+    },
+    {
+      "file": "qseries_v2\\adapters\\kalshi_adapter.py",
+      "function": "normalize_market",
+      "args": [
+        "self",
+        "raw"
+      ],
+      "line": 17,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\observation_intelligence\\oi_004_kalshi_observation_adapter.py",
+      "function": "fetch_markets",
+      "args": [
+        "self"
+      ],
+      "line": 56,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_013_market_data_normalization.py",
+      "function": "normalize_kalshi_market_data",
+      "args": [
+        "raw",
+        "oracle_receive_ns"
+      ],
+      "line": 24,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_024_physical_websocket.py",
+      "function": "_probe",
+      "args": [
+        "credentials",
+        "market_tickers",
+        "channels",
+        "max_messages",
+        "timeout_seconds"
+      ],
+      "line": 21,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_036_websocket_canonical_bridge.py",
+      "function": "build_ola_canonical_observation_from_websocket",
+      "args": [
+        "raw_message"
+      ],
+      "line": 19,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_048_multi_partition_runtime.py",
+      "function": "_run_global_fast_lane",
+      "args": [
+        "root",
+        "max_persisted",
+        "progress"
+      ],
+      "line": 74,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_048_multi_partition_runtime.py",
+      "function": "_run_sampled_orderbook",
+      "args": [
+        "root",
+        "market_tickers",
+        "max_persisted",
+        "partitions_to_activate",
+        "progress"
+      ],
+      "line": 144,
+      "score": 40
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "function": "get_market",
+      "args": [
+        "self",
+        "ticker"
+      ],
+      "line": 253,
+      "score": 30
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "function": "fetch_markets",
+      "args": [
+        "self",
+        "status",
+        "limit",
+        "cursor",
+        "tickers",
+        "series_ticker",
+        "mve_filter"
+      ],
+      "line": 143,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_kalshi_market_ingestion.py",
+      "function": "normalize_market",
+      "args": [
+        "self",
+        "raw"
+      ],
+      "line": 121,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "function": "_index",
+      "args": [
+        "self"
+      ],
+      "line": 70,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "function": "get_category",
+      "args": [
+        "self",
+        "category"
+      ],
+      "line": 280,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "function": "get_event",
+      "args": [
+        "self",
+        "event_ticker"
+      ],
+      "line": 270,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "function": "get_open_markets",
+      "args": [
+        "self"
+      ],
+      "line": 262,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "function": "get_series",
+      "args": [
+        "self",
+        "series_ticker"
+      ],
+      "line": 275,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\adapters\\live_market_cache.py",
+      "function": "refresh",
+      "args": [
+        "self",
+        "status",
+        "limit",
+        "max_pages"
+      ],
+      "line": 116,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_069_current_open_kalshi_market_index.py",
+      "function": "_terms",
+      "args": [
+        "m"
+      ],
+      "line": 7,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_069_current_open_kalshi_market_index.py",
+      "function": "fetch_current_open_kalshi_market_index",
+      "args": [
+        "root",
+        "limit",
+        "timeout_seconds"
+      ],
+      "line": 10,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_073_current_market_umd_dependency_index.py",
+      "function": "build_current_market_dependency_index",
+      "args": [
+        "limit"
+      ],
+      "line": 18,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_073_current_market_umd_dependency_index.py",
+      "function": "market_dependency_facts",
+      "args": [
+        "m"
+      ],
+      "line": 7,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_120_current_market_sports_team_pair_index.py",
+      "function": "_market_text",
+      "args": [
+        "m"
+      ],
+      "line": 14,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_120_current_market_sports_team_pair_index.py",
+      "function": "candidate_markets_for_sports_descriptor",
+      "args": [
+        "descriptor",
+        "markets",
+        "max_candidates"
+      ],
+      "line": 29,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_exact_sports_unknown_cohort_postgresql_identity_recovery_audit.py",
+      "function": "_extract_snapshot_identity",
+      "args": [
+        "observation"
+      ],
+      "line": 372,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\independent\\oad_exact_sports_unknown_cohort_postgresql_identity_recovery_audit.py",
+      "function": "run_exact_sports_unknown_cohort_postgresql_identity_recovery_audit",
+      "args": [
+        "root"
+      ],
+      "line": 420,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_008_full_universe_discovery.py",
+      "function": "build_full_universe_snapshot",
+      "args": [
+        "pages"
+      ],
+      "line": 40,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_008_full_universe_discovery.py",
+      "function": "normalize_market",
+      "args": [
+        "raw"
+      ],
+      "line": 32,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_023_real_universe_acquisition.py",
+      "function": "acquire_real_kalshi_universe",
+      "args": [
+        "credentials",
+        "max_pages",
+        "timeout_seconds"
+      ],
+      "line": 19,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_025_live_acquisition_gate.py",
+      "function": "run_live_kalshi_acquisition_probe",
+      "args": [
+        "root",
+        "timeout_seconds",
+        "progress"
+      ],
+      "line": 38,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_025_live_acquisition_gate.py",
+      "function": "select_live_probe_tickers",
+      "args": [
+        "markets",
+        "limit"
+      ],
+      "line": 27,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_027_event_intake_pump.py",
+      "function": "pump_market_messages",
+      "args": [
+        "messages",
+        "oracle_receive_ns"
+      ],
+      "line": 16,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_032_persistent_live_loop.py",
+      "function": "_run",
+      "args": [
+        "credentials",
+        "max_market_messages",
+        "connect_timeout_seconds",
+        "progress"
+      ],
+      "line": 26,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_038_persistent_persistence_bridge.py",
+      "function": "_run",
+      "args": [
+        "root",
+        "max_persisted",
+        "progress"
+      ],
+      "line": 24,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_adapters\\kalshi\\oad_046_live_universe_enumeration.py",
+      "function": "enumerate_live_open_universe",
+      "args": [
+        "credentials",
+        "max_pages",
+        "timeout_seconds",
+        "progress"
+      ],
+      "line": 19,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_background_recovery\\obr_004_settlement_recovery.py",
+      "function": "recover_gap_settlements",
+      "args": [
+        "root",
+        "gap",
+        "progress"
+      ],
+      "line": 21,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_continuous_reasoning\\ocr_006_market_identity_recovery.py",
+      "function": "recover_market_identity",
+      "args": [
+        "row"
+      ],
+      "line": 45,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence\\live_acquisition\\oracle_kalshi_public_market_shadow_source_adapter.py",
+      "function": "_market_to_observation",
+      "args": [
+        "self"
+      ],
+      "line": 1166,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence\\live_acquisition_model\\oracle_first_real_shadow_corpus_launch_command.py",
+      "function": "_discover_stable_market_cohort",
+      "args": [],
+      "line": 669,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence\\universal_market_adapter_discovery_engine.py",
+      "function": "field_aliases",
+      "args": [
+        "field_name"
+      ],
+      "line": 489,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_intelligence_analytics_runtime\\oiar_047_production_kalshi_current_eligibility_boundary.py",
+      "function": "read_current_kalshi_markets",
+      "args": [
+        "root",
+        "max_pages",
+        "timeout_seconds",
+        "now"
+      ],
+      "line": 18,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_learning_runtime\\olr_002_settled_outcome_read_model.py",
+      "function": "fetch_recent_settled_markets",
+      "args": [
+        "root",
+        "limit"
+      ],
+      "line": 31,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_learning_runtime\\olr_002_settled_outcome_read_model.py",
+      "function": "normalize_settled_market",
+      "args": [
+        "market"
+      ],
+      "line": 22,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_learning_runtime\\olr_003_learning_event_bridge.py",
+      "function": "build_learning_runtime_input",
+      "args": [
+        "sequence",
+        "outcome",
+        "evidence_hash"
+      ],
+      "line": 24,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_pre_settlement_coverage\\opc_002_bounded_open_market_sampler.py",
+      "function": "sample_live_open_markets",
+      "args": [
+        "root",
+        "pages",
+        "limit_per_page",
+        "timeout_seconds"
+      ],
+      "line": 14,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_pre_settlement_coverage\\opc_006_universal_market_snapshot_canonicalizer.py",
+      "function": "build_universal_market_snapshot",
+      "args": [
+        "market"
+      ],
+      "line": 56,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_pre_settlement_coverage\\opc_006_universal_market_snapshot_canonicalizer.py",
+      "function": "verify_opc_006_universal_market_snapshot_canonicalizer",
+      "args": [],
+      "line": 168,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_pre_settlement_coverage\\opc_009_bounded_universal_snapshot_cycle.py",
+      "function": "run_bounded_universal_snapshot_cycle",
+      "args": [
+        "root",
+        "max_markets",
+        "lookback_hours",
+        "progress",
+        "router",
+        "open_markets"
+      ],
+      "line": 50,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_pre_settlement_coverage\\opc_023_rotating_full_universe_coverage_cycle.py",
+      "function": "run_rotating_full_universe_coverage_cycle",
+      "args": [
+        "root",
+        "budget",
+        "progress",
+        "router"
+      ],
+      "line": 59,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_production_learning\\opl_003_outcome_grounded_production_learning_cycle.py",
+      "function": "_build_input",
+      "args": [
+        "sequence",
+        "outcome",
+        "evidence"
+      ],
+      "line": 62,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_production_learning\\opl_003_outcome_grounded_production_learning_cycle.py",
+      "function": "collect_evidence_supported_settlements",
+      "args": [
+        "root",
+        "max_pages",
+        "page_size",
+        "target_matches",
+        "evidence_limit",
+        "progress"
+      ],
+      "line": 79,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_production_learning\\opl_003_outcome_grounded_production_learning_cycle.py",
+      "function": "normalize_settled_market",
+      "args": [
+        "m"
+      ],
+      "line": 37,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_production_learning\\opl_006_exact_production_learning_blocker_diagnostic.py",
+      "function": "fetch_real_settled_samples",
+      "args": [
+        "root",
+        "limit"
+      ],
+      "line": 49,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_production_learning\\opl_006_exact_production_learning_blocker_diagnostic.py",
+      "function": "trace_market",
+      "args": [
+        "root",
+        "market"
+      ],
+      "line": 122,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_production_learning\\opl_007_evidence_first_outcome_resolver.py",
+      "function": "_build_runtime_input",
+      "args": [
+        "sequence",
+        "outcome",
+        "evidence"
+      ],
+      "line": 99,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_production_learning\\opl_007_evidence_first_outcome_resolver.py",
+      "function": "_normalize_market",
+      "args": [
+        "raw"
+      ],
+      "line": 61,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_production_learning\\opl_008_settlement_eligible_evidence_priority.py",
+      "function": "_build_input",
+      "args": [
+        "sequence",
+        "outcome",
+        "evidence"
+      ],
+      "line": 97,
+      "score": 0
+    },
+    {
+      "file": "qseries_v2\\oracle_production_learning\\opl_008_settlement_eligible_evidence_priority.py",
+      "function": "_normalize_market",
+      "args": [
+        "raw"
+      ],
+      "line": 74,
+      "score": 0
+    }
+  ],
+  "execution_authority": false
+}

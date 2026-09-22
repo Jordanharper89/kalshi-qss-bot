@@ -1,0 +1,69 @@
+{
+  "foundation_ready": true,
+  "physical_repo_candidates": [
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_101_universal_classification_exhaustive_diagnostic.py",
+      "score": 7,
+      "sha256": "a7d33d3dae05e1adeb60d12b5a8c8489d41dd72d4cde69fc897fae80d0281f7c",
+      "symbols": []
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_exact_sports_unknown_cohort_postgresql_identity_recovery_audit.py",
+      "score": 7,
+      "sha256": "4e76e7a96e61e128e523e52e1715b3e2757fb97d23d12d0013d6fa6980d1f609",
+      "symbols": []
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_099_mixed_domain_cross_category_decomposition.py",
+      "score": 5,
+      "sha256": "d8df25c9af58ac40df061daa13d97e78f695ae533057de7dc072fac7b10a2737",
+      "symbols": []
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_102_universal_identity_evidence_envelope.py",
+      "score": 5,
+      "sha256": "20a9f4ea9c7b2544dd131754db6eff9cac0d9b6f9a1befb5fa3f062b4da26251",
+      "symbols": []
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_088_sports_market_type_resolver.py",
+      "score": 4,
+      "sha256": "ef705b7fdd04a705580d916f53335b4acec55c950b490a8e94867e1930861481",
+      "symbols": []
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_089_single_snapshot_structural_sports_reclassification.py",
+      "score": 4,
+      "sha256": "42a63962d9ced1e60bcbc870487cdf15cad4d7c20f3fa74510f17cd6b077cde6",
+      "symbols": []
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_098_structured_sports_entity_type_recognition.py",
+      "score": 4,
+      "sha256": "649852e2166a9ebb137c6d56f4044fa38a0260c52a4394447b247fcf6bfa240d",
+      "symbols": []
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_106_exact_sports_unknown_record_extractor.py",
+      "score": 4,
+      "sha256": "b30345fd79ab22ec6a5fe10944689a881d287ece293162ac622ac0c1421d521b",
+      "symbols": []
+    },
+    {
+      "path": "qseries_v2\\oracle_source_network\\certification\\sports_persistence_replay_gate.py",
+      "score": 4,
+      "sha256": "b49417b9e3ea2a0eb507378be49df1491d4c574e2b80e7d0d3b6b7e63a174ac6",
+      "symbols": []
+    },
+    {
+      "path": "qseries_v2\\universal_market_discovery\\umd_130_observation_classification.py",
+      "score": 4,
+      "sha256": "8886bb0c542f8bb81cf5ecd45d7057735dc6dae7c966482fc464060b9b4141e7",
+      "symbols": []
+    }
+  ],
+  "live_market_execution_performed": false,
+  "next_required_build": "EXACT_BINDING_TO_CERTIFIED_KALSHI_CLASSIFICATION_DECOMPOSITION_PAVEMENT",
+  "silent_guessing_allowed": false,
+  "execution_authority": false
+}

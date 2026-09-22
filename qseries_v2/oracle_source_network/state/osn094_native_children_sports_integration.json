@@ -1,0 +1,19 @@
+{
+  "launcher_path": "run_oracle_LIVE.py",
+  "pre_patch_sha256": "0615296afc570dca5a3ca892a7245fcd848332a7b96a757417d1c9ca1953076c",
+  "post_patch_sha256": "a1d51f0fa79f9115044a5f78fab9695753cff5f11013eb053984d2f92e570088",
+  "rollback_path": "qseries_v2/oracle_source_network/rollback/run_oracle_LIVE_pre_osn094_0615296afc570dca.py",
+  "sports_runner": "run_osn_sports_continuous_runtime.py",
+  "integration_mode": "NATIVE_CHILDREN_REGISTRY",
+  "native_supervision_inherited": [
+    "_start",
+    "_spawn",
+    "restart_counts",
+    "runtime health state",
+    "operator shutdown"
+  ],
+  "osn092_custom_lifecycle_retired": true,
+  "main_guard_restored": true,
+  "terminal_dependency": "NONE",
+  "execution_authority": false
+}

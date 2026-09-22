@@ -1,0 +1,3474 @@
+{
+  "candidates": [
+    {
+      "evidence": [
+        "contains_command_loop",
+        "contains_command_registry",
+        "launcher_filename",
+        "symbol_name_contains_interactive",
+        "symbol_name_contains_run",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 15,
+      "symbol_kind": "function",
+      "symbol_name": "run_interactive"
+    },
+    {
+      "evidence": [
+        "contains_command_loop",
+        "contains_command_registry",
+        "launcher_filename",
+        "symbol_name_contains_interactive",
+        "symbol_name_contains_run",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 15,
+      "symbol_kind": "function",
+      "symbol_name": "run_interactive"
+    },
+    {
+      "evidence": [
+        "contains_command_loop",
+        "contains_input_call",
+        "launcher_filename",
+        "symbol_named_main",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_030",
+      "score": 15,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "contains_command_loop",
+        "contains_command_registry",
+        "launcher_filename",
+        "symbol_name_contains_interactive",
+        "symbol_name_contains_run",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 15,
+      "symbol_kind": "function",
+      "symbol_name": "run_interactive"
+    },
+    {
+      "evidence": [
+        "contains_command_loop",
+        "contains_command_registry",
+        "launcher_filename",
+        "symbol_name_contains_interactive",
+        "symbol_name_contains_run",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 15,
+      "symbol_kind": "function",
+      "symbol_name": "run_interactive"
+    },
+    {
+      "evidence": [
+        "contains_command_loop",
+        "launcher_filename",
+        "symbol_name_contains_interactive",
+        "symbol_name_contains_run",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 13,
+      "symbol_kind": "function",
+      "symbol_name": "run_interactive"
+    },
+    {
+      "evidence": [
+        "contains_ask_command",
+        "launcher_filename",
+        "symbol_named_main",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_terminal_LIVE_READ_ONLY",
+      "score": 12,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 10,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerError"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 10,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerError"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 10,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerError"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 10,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerError"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 10,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerError"
+    },
+    {
+      "evidence": [
+        "contains_ask_command",
+        "contains_command_registry",
+        "contains_quit_command",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "build_default_command_registry"
+    },
+    {
+      "evidence": [
+        "contains_ask_command",
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "dispatch_command"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_interactive",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "execute_oit_048_interactive_pipeline"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_interactive",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "render_oit_048_interactive_pipeline"
+    },
+    {
+      "evidence": [
+        "contains_ask_command",
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "dispatch_command"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_interactive",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "execute_oit_048_interactive_pipeline"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_interactive",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "render_oit_048_interactive_pipeline"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "contains_ask_command",
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "dispatch_command"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "contains_ask_command",
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "dispatch_command"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_terminal_live_intelligence",
+      "score": 9,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "contains_input_call",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 8,
+      "symbol_kind": "function",
+      "symbol_name": "parse_terminal_input"
+    },
+    {
+      "evidence": [
+        "contains_command_loop",
+        "contains_quit_command",
+        "symbol_name_contains_run",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_display_integration_certification",
+      "score": 8,
+      "symbol_kind": "function",
+      "symbol_name": "certify_live_runner_integration"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 8,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerCertification"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 8,
+      "symbol_kind": "function",
+      "symbol_name": "certify_live_terminal_runner"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 8,
+      "symbol_kind": "class",
+      "symbol_name": "LocalTerminalSession"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 8,
+      "symbol_kind": "function",
+      "symbol_name": "clear_terminal"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 8,
+      "symbol_kind": "function",
+      "symbol_name": "help_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 8,
+      "symbol_kind": "class",
+      "symbol_name": "LocalTerminalSession"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 8,
+      "symbol_kind": "function",
+      "symbol_name": "clear_terminal"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 8,
+      "symbol_kind": "function",
+      "symbol_name": "help_lines"
+    },
+    {
+      "evidence": [
+        "contains_quit_command",
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 8,
+      "symbol_kind": "function",
+      "symbol_name": "help_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 8,
+      "symbol_kind": "class",
+      "symbol_name": "LocalTerminalSession"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 8,
+      "symbol_kind": "function",
+      "symbol_name": "clear_terminal"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 8,
+      "symbol_kind": "function",
+      "symbol_name": "help_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 8,
+      "symbol_kind": "class",
+      "symbol_name": "LocalTerminalSession"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 8,
+      "symbol_kind": "function",
+      "symbol_name": "clear_terminal"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 8,
+      "symbol_kind": "function",
+      "symbol_name": "help_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_terminal_live_intelligence",
+      "score": 8,
+      "symbol_kind": "function",
+      "symbol_name": "build_terminal_live_query_path"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main"
+      ],
+      "module_name": "run_oracle_first_shadow_corpus",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main"
+      ],
+      "module_name": "run_oracle_live_shadow",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main"
+      ],
+      "module_name": "run_oracle_live_shadow (1)",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main"
+      ],
+      "module_name": "run_oracle_live_shadow_DIAGNOSTIC",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main"
+      ],
+      "module_name": "run_oracle_live_shadow_FINAL",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main"
+      ],
+      "module_name": "run_oracle_live_shadow_FINAL_FIXED",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_named_main"
+      ],
+      "module_name": "run_oracle_live_shadow_FIXED",
+      "score": 7,
+      "symbol_kind": "function",
+      "symbol_name": "main"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_final_freeze_and_completion",
+      "score": 6,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalFinalFreezeManifest"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_final_freeze_and_completion",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "build_oracle_terminal_final_freeze_completion_report"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_final_freeze_and_completion",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "verify_oracle_terminal_final_freeze_completion_report"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "resolve_terminal_command"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_authorization_gate",
+      "score": 6,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerBindingAuthorizationGateReport"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_authorization_gate",
+      "score": 6,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerBindingAuthorizationInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_authorization_gate",
+      "score": 6,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerCallableAuthorization"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_authorization_gate",
+      "score": 6,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerDeniedCapability"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_authorization_gate",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "build_terminal_runner_binding_authorization_gate_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_authorization_gate",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_runner_binding_authorization_gate_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_authorization_gate",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_runner_callable_authorization"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_authorization_gate",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_runner_denied_capability"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 6,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerBindingContract"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 6,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerBindingReadinessGateReport"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 6,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerBindingReadinessInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 6,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRunnerInspection"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "build_terminal_runner_binding_readiness_gate_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "inspect_terminal_runner"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_runner_binding_contract"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_runner_binding_readiness_gate_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_runner_inspection"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_display_integration_certification",
+      "score": 6,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalLiveRunnerIntegrationCertification"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_display_integration_certification",
+      "score": 6,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalLiveRunnerIntegrationInvariantError"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 6,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalCommandRegistryCertification"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "symbol_name_contains_run",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "verify_runner_certification"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_run"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 6,
+      "symbol_kind": "class",
+      "symbol_name": "OracleContinuousRuntimeAlreadyActive"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_run"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "_acquire_runtime_lock"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_run"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "_load_runtime_environment"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_run"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "_release_runtime_lock"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "symbol_name_contains_run"
+      ],
+      "module_name": "run_oracle_live_shadow_FINAL_FIXED",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "_load_runtime_environment"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "build_argument_parser"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "display_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "display_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "execute_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "filtered_panel_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "flatten_display_session"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "normalize_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "open_panel"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "panel_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "print_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "render_frame_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "repository_root"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "session_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "status_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "build_argument_parser"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "display_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "execute_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "filtered_panel_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "flatten_display_session"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "normalize_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "open_panel"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "panel_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "print_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "render_frame_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "repository_root"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "session_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_INT_ORACLE_LIVE_001",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "status_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "build_argument_parser"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "display_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "execute_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "flatten_display_session"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "normalize_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "print_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "render_frame_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "repository_root"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_031",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "status_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "build_argument_parser"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "display_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "execute_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "flatten_display_session"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "normalize_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "print_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "render_frame_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "repository_root"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "session_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_032",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "status_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "build_argument_parser"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "display_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "execute_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "filtered_panel_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "flatten_display_session"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "normalize_query"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "open_panel"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "panel_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "print_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "render_frame_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "repository_root"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "session_lines"
+    },
+    {
+      "evidence": [
+        "launcher_filename",
+        "terminal_filename"
+      ],
+      "module_name": "run_oracle_open_intelligence_terminal_PRE_OIT_048",
+      "score": 6,
+      "symbol_kind": "function",
+      "symbol_name": "status_lines"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_interactive",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 5,
+      "symbol_kind": "function",
+      "symbol_name": "certify_interactive_pipeline"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "LiveTerminalEvidence"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "LiveTerminalEvidenceResult"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleLiveTerminalEvidenceBridgeError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "render_live_terminal_evidence"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_live_terminal_evidence_result"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleOpenIntelligenceTerminalInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalCommand"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalDependencyReceipt"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalResponse"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "execute_terminal_command"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "format_terminal_response"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "terminal_banner"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalDisplayFrame"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalDisplaySession"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalDisplaySessionGateReport"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalDisplaySessionInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "build_terminal_display_session_gate_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_display_frame"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_display_session"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_display_session_gate_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_consumption_contract",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalBriefConsumptionContract"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_consumption_contract",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalBriefConsumptionInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_consumption_contract",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalBriefSection"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_consumption_contract",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "build_terminal_brief_consumption_contract"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_consumption_contract",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_brief_consumption_contract"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_consumption_contract",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_brief_section"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_presentation_view_model",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalPresentationInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_presentation_view_model",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalPresentationPanel"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_presentation_view_model",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalPresentationViewModel"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_presentation_view_model",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "build_terminal_presentation_view_model"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_presentation_view_model",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_presentation_panel"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_presentation_view_model",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_presentation_view_model"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_renderer_contract",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRenderedBlock"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_renderer_contract",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRendererContract"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_renderer_contract",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRendererInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_renderer_contract",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "build_terminal_renderer_contract"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_renderer_contract",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_rendered_block"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_renderer_contract",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_renderer_contract"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalPanelDefinition"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalPanelNavigationInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalPanelRegistry"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalPanelSelection"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_final_freeze_and_completion",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalFinalFreezeCompletionReport"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_final_freeze_and_completion",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalFinalFreezeInvariantError"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_final_freeze_and_completion",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_final_freeze_manifest"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalIntelligenceAnswer"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalIntelligenceAnswerGenerationReport"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalIntelligenceAnswerInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalIntelligenceAnswerLine"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "build_terminal_intelligence_answer_generation_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_intelligence_answer"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_intelligence_answer_generation_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalCommandDefinition"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalCommandRegistryInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalCommandRegistryReport"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalCommandResolution"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_command_registry_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_display_integration_certification",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_live_runner_integration_certification"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalPipelineCertification"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalProductionCertificationInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalProductionReadOnlyCertificationReport"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_load_runner"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "build_oracle_terminal_production_read_only_certification_report"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "certify_command_registry"
+    },
+    {
+      "evidence": [
+        "contains_command_registry",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_command_registry_certification"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_oracle_terminal_production_read_only_certification_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_renderer_invocation_output_activation_gate",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRendererActivationGateReport"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_renderer_invocation_output_activation_gate",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRendererActivationInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_renderer_invocation_output_activation_gate",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRendererInvocation"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_renderer_invocation_output_activation_gate",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleTerminalRendererOutputActivation"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_renderer_invocation_output_activation_gate",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "build_terminal_renderer_activation_gate_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_renderer_invocation_output_activation_gate",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_renderer_activation_gate_report"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_renderer_invocation_output_activation_gate",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_renderer_invocation"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal",
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_renderer_invocation_output_activation_gate",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "verify_terminal_renderer_output_activation"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_call_if_no_required_args"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_find_graph_builder"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow (1)",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_call_if_no_required_args"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow (1)",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_find_graph_builder"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleContinuousOperatorEntryPointError"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleGuardedLauncherContractError"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleGuardedLauncherNotFoundError"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_load_guarded_launcher"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_load_module_from_path"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_normalize_exit_code"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_validate_read_only_boundary"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 4,
+      "symbol_kind": "class",
+      "symbol_name": "OracleContinuousLaunchError"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_load_canonical_launcher"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_load_env_file"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_process_is_alive"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_read_existing_lock"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_remove_stale_lock"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_require_continuous_mode"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_require_positive_tick"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_CONTINUOUS_GUARDED",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_utc_now"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_DIAGNOSTIC",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_trace_mapping"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_DIAGNOSTIC",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "traced_readiness_kwargs_factory"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_DIAGNOSTIC",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "traced_scheduler_kwargs_factory"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_FINAL_FIXED",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_optional_positive_int_setting"
+    },
+    {
+      "evidence": [
+        "launcher_filename"
+      ],
+      "module_name": "run_oracle_live_shadow_FINAL_FIXED",
+      "score": 4,
+      "symbol_kind": "function",
+      "symbol_name": "_positive_int_setting"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_interactive"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_end_to_end_interactive_intelligence_pipeline",
+      "score": 3,
+      "symbol_kind": "class",
+      "symbol_name": "OracleInteractiveIntelligencePipelineInvariantError"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_interactive"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_end_to_end_interactive_intelligence_pipeline",
+      "score": 3,
+      "symbol_kind": "class",
+      "symbol_name": "OracleInteractiveIntelligencePipelineLineage"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_interactive"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_end_to_end_interactive_intelligence_pipeline",
+      "score": 3,
+      "symbol_kind": "class",
+      "symbol_name": "OracleInteractiveIntelligencePipelineReport"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_interactive"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_end_to_end_interactive_intelligence_pipeline",
+      "score": 3,
+      "symbol_kind": "class",
+      "symbol_name": "OracleInteractiveIntelligencePipelineResult"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_interactive"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_end_to_end_interactive_intelligence_pipeline",
+      "score": 3,
+      "symbol_kind": "function",
+      "symbol_name": "execute_end_to_end_interactive_intelligence_pipeline"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_interactive"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_end_to_end_interactive_intelligence_pipeline",
+      "score": 3,
+      "symbol_kind": "function",
+      "symbol_name": "verify_interactive_intelligence_pipeline_report"
+    },
+    {
+      "evidence": [
+        "contains_command_loop"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_authorized_real_intelligence_read_invocation_execution_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_sha256_file"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_bounded_live_intelligence_activation",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "RuntimeArtifactState"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_bounded_live_intelligence_activation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_runtime_snapshot"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_evidence_inspection_and_answer_explainability",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_truncate"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_intelligence_activation_discovery",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_runtime_targets"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_intelligence_activation_discovery",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "activation_terminal_lines"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_intelligence_runtime_discovery_and_binding",
+      "score": 2,
+      "symbol_kind": "class",
+      "symbol_name": "OracleRuntimeLocation"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_intelligence_runtime_discovery_and_binding",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_discover_declared_runtime_targets"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_terminal"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_intelligence_runtime_discovery_and_binding",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "execute_bound_terminal_command"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_asset_text_matches"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_column_inventory"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_connect_read_only"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_database_configuration"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_direct_table_candidate"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_find_price_in_json"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_first_matching_column"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_json_columns"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_json_table_candidate"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_load_env_file"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_numeric"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_query_asset"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_quote_identifier"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_row_mapping"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "is_live_factual_price_query"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "read_live_price_evidence"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "read_live_price_evidence"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_live_terminal_evidence_bridge",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "walk"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_response"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "build_dependency_receipt"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "discover_local_intelligence"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_open_intelligence_terminal_foundation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_dependency_receipt"
+    },
+    {
+      "evidence": [
+        "contains_command_loop"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_real_intelligence_input_binding_readiness_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_sha256"
+    },
+    {
+      "evidence": [
+        "symbol_name_contains_run"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_real_intelligence_input_binding_readiness_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "discover_runtime_artifacts"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_build_display_session"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_flatten_frames"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_frame_type"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_split_frames"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_activated_output_display_session_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_consumption_contract",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_consumption_contract",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_item_lines"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_consumption_contract",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_section"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_consumption_contract",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_presentation_view_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_presentation_view_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_label"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_presentation_view_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_panel"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_presentation_view_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_severity"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_presentation_view_model",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_renderer_contract",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_renderer_contract",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_flatten_output"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_renderer_contract",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_render_panel"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_decision_brief_renderer_contract",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_panel"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "build_default_panel_registry"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "resolve_panel"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_panel_definition"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_panel_registry"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_evidence_panel_navigation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_panel_selection"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_final_freeze_and_completion",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_final_freeze_and_completion",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_answer_line"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_build_lines"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_classify_field"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_format_value"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_intelligence_answer_generation",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_answer_line"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_definition"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_command_definition"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_interactive_command_registry",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_command_resolution"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_authorization_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_build_authorization"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_authorization_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_build_denial"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_authorization_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_authorization_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_build_binding_contract"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_direct_execution_guard_present"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_dotted_name"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_sha256"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_binding_readiness_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_top_level_call_risk"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_display_integration_certification",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_display_integration_certification",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_sha256"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_live_runner_display_integration_certification",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_sha256"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_production_read_only_certification",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "verify_pipeline_certification"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_renderer_invocation_output_activation_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_build_activation"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_renderer_invocation_output_activation_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_build_invocation"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_renderer_invocation_output_activation_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_canonical"
+    },
+    {
+      "evidence": [
+        "terminal_filename"
+      ],
+      "module_name": "qseries_v2.oracle_terminal.oracle_terminal_renderer_invocation_output_activation_gate",
+      "score": 2,
+      "symbol_kind": "function",
+      "symbol_name": "_stable_hash"
+    }
+  ],
+  "revision": "OLC_002_TERMINAL_RUNTIME_MANIFEST_V1",
+  "top_candidate": {
+    "evidence": [
+      "contains_command_loop",
+      "contains_command_registry",
+      "launcher_filename",
+      "symbol_name_contains_interactive",
+      "symbol_name_contains_run",
+      "terminal_filename"
+    ],
+    "module_name": "run_oracle_open_intelligence_terminal",
+    "score": 15,
+    "symbol_kind": "function",
+    "symbol_name": "run_interactive"
+  }
+}

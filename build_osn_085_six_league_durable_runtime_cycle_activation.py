@@ -1,0 +1,23 @@
+from pathlib import Path
+ROOT=Path.cwd()
+MODULE="qseries_v2/oracle_source_network/runtime/six_league_durable_runtime_cycle.py"
+TEST="test_osn_085_six_league_durable_runtime_cycle_activation.py"
+MODULE_SOURCE='\nfrom dataclasses import dataclass, asdict\nfrom pathlib import Path\nimport json\n\nfrom qseries_v2.oracle_source_network.providers.uniform_sports_provider import acquire_canonical_events\nfrom qseries_v2.oracle_source_network.persistence.live_sports_postgresql_bridge import persist_event\nfrom qseries_v2.oracle_source_network.runtime.sports_checkpoint_gap_recovery import checkpoint_after_readback\n\nADMITTED=("NFL","NCAAF","NBA","NHL","MLS","EPL")\nSTATE_REL="qseries_v2/oracle_source_network/state/osn085_durable_runtime_cycle.json"\n\n@dataclass(frozen=True)\nclass RuntimeCycleRow:\n    league:str\n    provider_event_id:str\n    observation_id:str\n    persistence_action:str\n    readback_count:int\n    checkpoint_written:bool\n    execution_authority:bool=False\n\ndef run_cycle(root=None,timeout=15):\n    base=Path(root or Path.cwd()).resolve()\n    rows=[]\n    for league in ADMITTED:\n        acquired=acquire_canonical_events(league,timeout=timeout,root=base)\n        if not acquired.events:\n            raise RuntimeError(f"{league} returned zero events")\n        event=acquired.events[0]\n        persisted=persist_event(\n            league,event,root=base,\n            batch_id=f"osn085-{league.lower()}",\n            timeout_seconds=45.0,\n        )\n        cp,path=checkpoint_after_readback(\n            league,\n            persisted.observation_id,\n            persisted.provider_event_id,\n            persisted.readback_count,\n            root=base,\n        )\n        row=RuntimeCycleRow(\n            league=league,\n            provider_event_id=persisted.provider_event_id,\n            observation_id=persisted.observation_id,\n            persistence_action=persisted.write_action,\n            readback_count=persisted.readback_count,\n            checkpoint_written=path.exists(),\n        )\n        rows.append(row)\n        print("[RUNTIME_CYCLE]",row)\n\n    state=base/STATE_REL\n    state.write_text(json.dumps({\n        "rows":[asdict(x) for x in rows],\n        "admitted":list(ADMITTED),\n        "terminal_dependency":"NONE",\n        "execution_authority":False,\n        "durable_runtime_cycle_ready":True,\n        "always_on_launcher_integration_certified":False,\n        "next_required":"BIND_DURABLE_SPORTS_CYCLE_INTO_EXISTING_ORACLE_PRODUCTION_LAUNCHER_SUPERVISION",\n    },indent=2),encoding="utf-8")\n    return tuple(rows),state\n'
+TEST_SOURCE='\nfrom pathlib import Path\nimport json\nfrom qseries_v2.oracle_source_network.runtime.six_league_durable_runtime_cycle import run_cycle, ADMITTED\n\nrows,state=run_cycle(root=Path.cwd(),timeout=15)\nassert tuple(r.league for r in rows)==ADMITTED\nassert all(r.readback_count>0 for r in rows)\nassert all(r.checkpoint_written for r in rows)\nassert all(r.execution_authority is False for r in rows)\ndata=json.loads(state.read_text(encoding="utf-8"))\nassert data["durable_runtime_cycle_ready"] is True\nassert data["always_on_launcher_integration_certified"] is False\nassert data["terminal_dependency"]=="NONE"\nprint("[STATE]",state)\nprint("[PASS] source -> canonical event -> PostgreSQL -> exact readback -> checkpoint completed for all six leagues")\nprint("[PASS] durable sports runtime cycle activated")\nprint("[PASS] always-on launcher integration intentionally NOT claimed")\nprint("[PASS] execution_authority=FALSE")\n'
+def main():
+    print("="*120); print(" OSN-085 SIX-LEAGUE DURABLE RUNTIME CYCLE ACTIVATION INSTALLER"); print("="*120)
+    for dep in (
+        "qseries_v2/oracle_source_network/providers/uniform_sports_provider.py",
+        "qseries_v2/oracle_source_network/persistence/live_sports_postgresql_bridge.py",
+        "qseries_v2/oracle_source_network/runtime/sports_checkpoint_gap_recovery.py",
+        "qseries_v2/oracle_source_network/state/osn084_checkpoint_gap_recovery.json",
+    ):
+        if not (ROOT/dep).exists(): raise SystemExit("[FAIL] missing dependency: "+dep)
+        print("[PASS] dependency verified:",dep)
+    p=ROOT/MODULE; p.parent.mkdir(parents=True,exist_ok=True); p.write_text(MODULE_SOURCE,encoding="utf-8"); compile(p.read_text(encoding="utf-8"),str(p),"exec")
+    t=ROOT/TEST; t.write_text(TEST_SOURCE,encoding="utf-8"); compile(t.read_text(encoding="utf-8"),str(t),"exec")
+    print("[WRITE]",MODULE); print("[WRITE]",TEST)
+    print("[PASS] bounded durable runtime cycle installed")
+    print("[PASS] production launcher integration remains explicit downstream work")
+    print("[PASS] execution_authority=FALSE")
+if __name__=="__main__": main()

@@ -1,0 +1,19 @@
+{
+  "file": "qseries_v2\\oracle_learning_feedback\\olf_008_related_market_learning_resolver.py",
+  "function": "resolve_related_market_learning",
+  "args": [
+    "root",
+    "market_ticker"
+  ],
+  "defaults": [
+    "None",
+    "''"
+  ],
+  "returns": [
+    "RelatedMarketLearningResolution(ident.market_ticker, 'SAME_KALSHI_SERIES', strength, source, records, weight, state_hash, records > 0, False, False)",
+    "RelatedMarketLearningResolution(ident.market_ticker, 'EXACT_TICKER', 1.0, (ident.market_ticker,), records, min(1.0, records / 25.0), state_hash, records > 0, False, False)",
+    "RelatedMarketLearningResolution(ident.market_ticker, 'NONE', 0.0, tuple(), 0, 0.0, state_hash, False, False, False)"
+  ],
+  "body": "def resolve_related_market_learning(root=None,market_ticker=\"\"):\n    root=Path(root or Path.cwd()).resolve()\n    ident=resolve_structural_identity(market_ticker)\n    idx=load_cross_market_learning_index(root)\n    state_hash=str(idx.get(\"learner_state_hash\") or \"\")\n    exact=idx.get(\"exact\",{}).get(ident.exact_key)\n    if exact:\n        records=int(exact.get(\"learned_records\",0))\n        return RelatedMarketLearningResolution(\n            ident.market_ticker,\"EXACT_TICKER\",1.0,(ident.market_ticker,),records,\n            min(1.0,records/25.0),state_hash,records>0,False,False\n        )\n\n    rows=tuple(idx.get(\"series\",{}).get(ident.series_key,()))\n    if not rows:\n        return RelatedMarketLearningResolution(\n            ident.market_ticker,\"NONE\",0.0,tuple(),0,0.0,state_hash,False,False,False\n        )\n\n    source=tuple(sorted(str(x.get(\"market_ticker\") or \"\") for x in rows if x.get(\"market_ticker\")))\n    records=sum(int(x.get(\"learned_records\",0)) for x in rows)\n    # Same exact venue series is strong historical analogy, but never treated as identical.\n    strength=.75\n    weight=min(1.0,records/25.0)*strength\n    return RelatedMarketLearningResolution(\n        ident.market_ticker,\"SAME_KALSHI_SERIES\",strength,source,records,weight,\n        state_hash,records>0,False,False\n    )",
+  "execution_authority": false
+}

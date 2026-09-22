@@ -1,0 +1,71 @@
+{
+  "rows": [
+    {
+      "league": "NFL",
+      "provider_event_id": "10401540",
+      "observation_id": "24e3c2bc02db5ea2fd15a05d33cb3884d292d2d2edb9a1f759cb94bc387afba8",
+      "persistence_action": "SUBMITTED_COMMITTED_READBACK_VERIFIED",
+      "readback_count": 1,
+      "checkpoint_written": true,
+      "execution_authority": false
+    },
+    {
+      "league": "NCAAF",
+      "provider_event_id": "6640733",
+      "observation_id": "0d07920b8a552ed368744ecb38ca6173cecbc9ff0b697a3a11b3e44a7cedce57",
+      "persistence_action": "SUBMITTED_COMMITTED_READBACK_VERIFIED",
+      "readback_count": 1,
+      "checkpoint_written": true,
+      "execution_authority": false
+    },
+    {
+      "league": "NBA",
+      "provider_event_id": "0012600009",
+      "observation_id": "896f8a4b722e71f84f03bf064e21006cca4895982334a143d0309e59c0b20b40",
+      "persistence_action": "SUBMITTED_COMMITTED_READBACK_VERIFIED",
+      "readback_count": 1,
+      "checkpoint_written": true,
+      "execution_authority": false
+    },
+    {
+      "league": "NHL",
+      "provider_event_id": "2026020001",
+      "observation_id": "0fe0c4fc9305cc8dc578117296b1e7eb8fa1d335a8700d45d74bd95988d280eb",
+      "persistence_action": "SUBMITTED_COMMITTED_READBACK_VERIFIED",
+      "readback_count": 1,
+      "checkpoint_written": true,
+      "execution_authority": false
+    },
+    {
+      "league": "MLS",
+      "provider_event_id": "MLS-MAT-0009KA",
+      "observation_id": "e79808528833cf71a9d679a63be0773c49c3fdfe4fbdba9b5cbf52a8e99d2d4d",
+      "persistence_action": "SUBMITTED_COMMITTED_READBACK_VERIFIED",
+      "readback_count": 1,
+      "checkpoint_written": true,
+      "execution_authority": false
+    },
+    {
+      "league": "EPL",
+      "provider_event_id": "1",
+      "observation_id": "c044838e0be0508598f84f74776fb8ed684895110a12bff76063df129ba1272b",
+      "persistence_action": "SUBMITTED_COMMITTED_READBACK_VERIFIED",
+      "readback_count": 1,
+      "checkpoint_written": true,
+      "execution_authority": false
+    }
+  ],
+  "admitted": [
+    "NFL",
+    "NCAAF",
+    "NBA",
+    "NHL",
+    "MLS",
+    "EPL"
+  ],
+  "terminal_dependency": "NONE",
+  "execution_authority": false,
+  "durable_runtime_cycle_ready": true,
+  "always_on_launcher_integration_certified": false,
+  "next_required": "BIND_DURABLE_SPORTS_CYCLE_INTO_EXISTING_ORACLE_PRODUCTION_LAUNCHER_SUPERVISION"
+}

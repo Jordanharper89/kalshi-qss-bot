@@ -1,0 +1,221 @@
+{
+  "roles": {
+    "classification": {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_101_universal_classification_exhaustive_diagnostic.py",
+      "module_sha256": "a7d33d3dae05e1adeb60d12b5a8c8489d41dd72d4cde69fc897fae80d0281f7c",
+      "candidates": [
+        {
+          "kind": "class",
+          "name": "DiagnosticCluster",
+          "score": 1,
+          "methods": [],
+          "line": 81
+        },
+        {
+          "kind": "class",
+          "name": "ExhaustiveDiagnostic",
+          "score": 1,
+          "methods": [],
+          "line": 91
+        },
+        {
+          "kind": "function",
+          "name": "classify_isolated_root_cause",
+          "score": 1,
+          "signature": {
+            "args": [
+              "leg",
+              "parent_market",
+              "sibling_legs"
+            ],
+            "required": [
+              "leg",
+              "parent_market",
+              "sibling_legs"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 169
+        },
+        {
+          "kind": "function",
+          "name": "run_exhaustive_diagnostic",
+          "score": 1,
+          "signature": {
+            "args": [
+              "limit",
+              "example_limit"
+            ],
+            "required": [],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 284
+        },
+        {
+          "kind": "function",
+          "name": "diagnostic_to_dict",
+          "score": 1,
+          "signature": {
+            "args": [
+              "r"
+            ],
+            "required": [
+              "r"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 400
+        },
+        {
+          "kind": "class",
+          "name": "EvidenceSignal",
+          "score": 0,
+          "methods": [],
+          "line": 74
+        },
+        {
+          "kind": "function",
+          "name": "verify_boundary_matcher",
+          "score": 0,
+          "signature": {
+            "args": [],
+            "required": [],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 267
+        }
+      ],
+      "selected": null,
+      "selection_status": "AMBIGUOUS"
+    },
+    "decomposition": {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_099_mixed_domain_cross_category_decomposition.py",
+      "module_sha256": "d8df25c9af58ac40df061daa13d97e78f695ae533057de7dc072fac7b10a2737",
+      "candidates": [
+        {
+          "kind": "class",
+          "name": "DecomposedLeg",
+          "score": 2,
+          "methods": [],
+          "line": 13
+        },
+        {
+          "kind": "function",
+          "name": "decompose_mixed_market",
+          "score": 2,
+          "signature": {
+            "args": [
+              "market"
+            ],
+            "required": [
+              "market"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 28
+        }
+      ],
+      "selected": null,
+      "selection_status": "AMBIGUOUS"
+    },
+    "market_type": {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_088_sports_market_type_resolver.py",
+      "module_sha256": "ef705b7fdd04a705580d916f53335b4acec55c950b490a8e94867e1930861481",
+      "candidates": [
+        {
+          "kind": "function",
+          "name": "resolve_sports_market_type",
+          "score": 3,
+          "signature": {
+            "args": [
+              "m"
+            ],
+            "required": [
+              "m"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 19
+        },
+        {
+          "kind": "class",
+          "name": "SportsMarketType",
+          "score": 2,
+          "methods": [],
+          "line": 7
+        }
+      ],
+      "selected": {
+        "kind": "function",
+        "name": "resolve_sports_market_type",
+        "score": 3,
+        "signature": {
+          "args": [
+            "m"
+          ],
+          "required": [
+            "m"
+          ],
+          "kwonly": [],
+          "async": false
+        },
+        "line": 19
+      },
+      "selection_status": "SELECTED"
+    },
+    "entity": {
+      "module": "qseries_v2\\oracle_adapters\\independent\\oad_098_structured_sports_entity_type_recognition.py",
+      "module_sha256": "649852e2166a9ebb137c6d56f4044fa38a0260c52a4394447b247fcf6bfa240d",
+      "candidates": [
+        {
+          "kind": "function",
+          "name": "recognize_sports_entity_type",
+          "score": 2,
+          "signature": {
+            "args": [
+              "text"
+            ],
+            "required": [
+              "text"
+            ],
+            "kwonly": [],
+            "async": false
+          },
+          "line": 31
+        },
+        {
+          "kind": "class",
+          "name": "SportsEntityType",
+          "score": 1,
+          "methods": [],
+          "line": 10
+        }
+      ],
+      "selected": {
+        "kind": "function",
+        "name": "recognize_sports_entity_type",
+        "score": 2,
+        "signature": {
+          "args": [
+            "text"
+          ],
+          "required": [
+            "text"
+          ],
+          "kwonly": [],
+          "async": false
+        },
+        "line": 31
+      },
+      "selection_status": "SELECTED"
+    }
+  },
+  "selected_count": 2,
+  "execution_authority": false
+}

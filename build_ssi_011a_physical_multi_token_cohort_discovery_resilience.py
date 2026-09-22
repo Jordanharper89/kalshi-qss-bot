@@ -1,0 +1,16 @@
+from pathlib import Path
+import ast
+R=Path.cwd()
+D=R/"qseries_v2/oracle_strategy_intelligence/solana/ssi_006_certified_oad312_contract_bridge.py"
+if not D.exists():raise SystemExit("[FAIL] SSI-006 dependency missing")
+ast.parse(D.read_text(encoding="utf-8",errors="replace"))
+T=R/"qseries_v2/oracle_strategy_intelligence/solana/ssi_011_physical_multi_token_cohort.py"
+Q=R/"test_ssi_011a_physical_multi_token_cohort_discovery_resilience.py"
+M='from qseries_v2.oracle_strategy_intelligence.solana.ssi_006_certified_oad312_contract_bridge import activate,FROZEN\ndef acquire_cohort(root=None,episodes=5,cycles=15,max_attempts=25):\n out=[];seen=set();attempt=0;rejected=[]\n while len(out)<episodes and attempt<max_attempts:\n  attempt+=1\n  try:r=activate(root=root,cycles=cycles)\n  except RuntimeError as e:\n   if "no live Solana pools for discovered token" not in str(e):raise\n   rejected.append({"attempt":attempt,"reason":"NO_LIVE_POOLS"})\n   print("[SSI-011-REJECT]",rejected[-1]);continue\n  token=r.token_address\n  if token in seen:\n   rejected.append({"attempt":attempt,"token":token,"reason":"DUPLICATE_TOKEN"})\n   print("[SSI-011-REJECT]",rejected[-1]);continue\n  if r.temporal_state!="TEMPORAL_5_15_30_60_READY":\n   rejected.append({"attempt":attempt,"token":token,"reason":"TEMPORAL_NOT_READY"})\n   print("[SSI-011-REJECT]",rejected[-1]);continue\n  seen.add(token)\n  d={"episode":len(out)+1,"attempt":attempt,"token":token,"history_records":r.history_records,"successful_cycles":r.successful_cycles,"temporal_state":r.temporal_state,"ready_windows":tuple(r.ready_windows),"execution_authority":r.execution_authority}\n  print("[SSI-011-EPISODE]",d);out.append(d)\n if len(out)<episodes:raise AssertionError(f"physical cohort incomplete: accepted={len(out)} required={episodes} attempts={attempt} rejected={len(rejected)}")\n result={"episodes":tuple(out),"unique_tokens":tuple(x["token"] for x in out),"independent_tokens":len(out),"attempts":attempt,"rejected":tuple(rejected),"frozen_thesis":FROZEN,"read_only":True,"execution_authority":False}\n print("[SSI-011A]",result);return result\n'
+S='import unittest\nfrom qseries_v2.oracle_strategy_intelligence.solana.ssi_011_physical_multi_token_cohort import acquire_cohort\nclass T(unittest.TestCase):\n def test_physical_cohort(self):\n  r=acquire_cohort(episodes=5,cycles=15,max_attempts=25)\n  self.assertEqual(len(r["episodes"]),5);self.assertEqual(r["independent_tokens"],5)\n  self.assertEqual(len(set(r["unique_tokens"])),5)\n  self.assertTrue(all(x["temporal_state"]=="TEMPORAL_5_15_30_60_READY" for x in r["episodes"]))\n  self.assertFalse(r["execution_authority"])\nif __name__=="__main__":unittest.main(verbosity=2)\n'
+T.write_text(M,encoding="utf-8");Q.write_text(S,encoding="utf-8")
+ast.parse(M);ast.parse(S)
+print("[PASS] SSI-011A clean replacement installed")
+print("[PASS] dead/no-pool discoveries rejected; duplicate tokens rejected")
+print("[PASS] requires five unique TEMPORAL_5_15_30_60_READY physical tokens")
+print("[PASS] frozen thesis unchanged; read-only; execution_authority=FALSE")

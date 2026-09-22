@@ -1,0 +1,10 @@
+{
+  "adapter": "qseries_v2\\kalshi_sports_evidence_mapping\\existing_sports_pavement_adapter.py",
+  "bindings": [
+    {
+      "assignment": "ROLE_BINDINGS = {'market_type': ('qseries_v2.oracle_adapters.independent.oad_088_sports_market_type_resolver', 'resolve_sports_market_type'), 'entity': ('qseries_v2.oracle_adapters.independent.oad_098_structured_sports_entity_type_recognition', 'recognize_sports_entity_type'), 'decomposition': ('qseries_v2.oracle_adapters.independent.oad_099_mixed_domain_cross_category_decomposition', 'decompose_mixed_market'), 'classification': ('qseries_v2.oracle_adapters.independent.oad_101_universal_classification_exhaustive_diagnostic', 'classify_isolated_root_cause')}",
+      "line": 3
+    }
+  ],
+  "execution_authority": false
+}

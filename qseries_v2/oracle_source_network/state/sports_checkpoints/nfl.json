@@ -1,0 +1,8 @@
+{
+  "league": "NFL",
+  "observation_id": "24e3c2bc02db5ea2fd15a05d33cb3884d292d2d2edb9a1f759cb94bc387afba8",
+  "provider_event_id": "10401540",
+  "committed_at": "2026-09-17T20:51:32.977523+00:00",
+  "readback_count": 1,
+  "execution_authority": false
+}

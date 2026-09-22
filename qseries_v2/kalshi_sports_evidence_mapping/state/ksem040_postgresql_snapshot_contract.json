@@ -1,0 +1,39 @@
+{
+  "file": "qseries_v2\\oracle_adapters\\independent\\oad_exact_sports_unknown_cohort_postgresql_identity_recovery_audit.py",
+  "function": "_read_market_snapshot_observations",
+  "args": [
+    "backend",
+    "tickers"
+  ],
+  "body": "def _read_market_snapshot_observations(backend, tickers):\n    tickers = tuple(sorted({t for t in tickers if t}))\n    if not tickers:\n        return []\n\n    conn = backend._connect()\n    try:\n        with conn.cursor() as cur:\n            cur.execute(\"BEGIN READ ONLY\")\n\n            # Inspect only the canonical observation table schema, then use exact bounded SQL.\n            cur.execute(\"\"\"\n                SELECT column_name\n                FROM information_schema.columns\n                WHERE table_schema='public'\n                  AND table_name='oracle_canonical_observations'\n                ORDER BY ordinal_position\n            \"\"\")\n            columns = [r[0] for r in cur.fetchall()]\n\n            # We already know the production table stores observations and source IDs.\n            # Discover the actual serialized observation column instead of guessing.\n            preferred = [\n                c for c in columns\n                if c.lower() in (\n                    \"observation_json\", \"canonical_observation\", \"observation\",\n                    \"payload_json\", \"record_json\", \"observation_payload\"\n                )\n            ]\n\n            if preferred:\n                value_col = preferred[0]\n                # Direct bounded JSON/text identity recovery if serialized observation column exists.\n                cur.execute(\n                    f\"\"\"\n                    SELECT {value_col}\n                    FROM public.oracle_canonical_observations\n                    WHERE CAST({value_col} AS text) LIKE '%%market_snapshot%%'\n                      AND EXISTS (\n                          SELECT 1\n                          FROM unnest(%s::text[]) AS wanted(t)\n                          WHERE CAST({value_col} AS text) LIKE '%%' || wanted.t || '%%'\n                      )\n                    LIMIT %s\n                    \"\"\",\n                    (list(tickers), max(5000, len(tickers) * 8)),\n                )\n                rows = cur.fetchall()\n                conn.rollback()\n                return [r[0] for r in rows]\n\n            # If the canonical table does not expose serialized observation directly,\n            # join the exact current ticker set through the learning index and fetch only\n            # corresponding canonical observation IDs. This is still bounded to the exact cohort.\n            cur.execute(\n                \"\"\"\n                SELECT DISTINCT i.ticker, i.observation_id\n                FROM public.oracle_production_learning_evidence_index i\n                WHERE i.ticker = ANY(%s::text[])\n                ORDER BY i.ticker, i.observation_id\n                \"\"\",\n                (list(tickers),),\n            )\n            pairs = cur.fetchall()\n        conn.rollback()\n        return [(\"PAIR\", str(t), str(o)) for t, o in pairs]\n    except Exception:\n        conn.rollback()\n        raise\n    finally:\n        try:\n            conn.close()\n        except Exception:\n            pass",
+  "calls": [
+    "tuple(sorted({t for t in tickers if t}))",
+    "backend._connect()",
+    "sorted({t for t in tickers if t})",
+    "conn.rollback()",
+    "conn.cursor()",
+    "cur.execute('BEGIN READ ONLY')",
+    "cur.execute(\"\\n                SELECT column_name\\n                FROM information_schema.columns\\n                WHERE table_schema='public'\\n                  AND table_name='oracle_canonical_observations'\\n                ORDER BY ordinal_position\\n            \")",
+    "cur.execute('\\n                SELECT DISTINCT i.ticker, i.observation_id\\n                FROM public.oracle_production_learning_evidence_index i\\n                WHERE i.ticker = ANY(%s::text[])\\n                ORDER BY i.ticker, i.observation_id\\n                ', (list(tickers),))",
+    "cur.fetchall()",
+    "conn.rollback()",
+    "conn.close()",
+    "cur.execute(f\"\\n                    SELECT {value_col}\\n                    FROM public.oracle_canonical_observations\\n                    WHERE CAST({value_col} AS text) LIKE '%%market_snapshot%%'\\n                      AND EXISTS (\\n                          SELECT 1\\n                          FROM unnest(%s::text[]) AS wanted(t)\\n                          WHERE CAST({value_col} AS text) LIKE '%%' || wanted.t || '%%'\\n                      )\\n                    LIMIT %s\\n                    \", (list(tickers), max(5000, len(tickers) * 8)))",
+    "cur.fetchall()",
+    "conn.rollback()",
+    "str(t)",
+    "str(o)",
+    "cur.fetchall()",
+    "list(tickers)",
+    "c.lower()",
+    "list(tickers)",
+    "max(5000, len(tickers) * 8)",
+    "len(tickers)"
+  ],
+  "returns": [
+    "[]",
+    "[('PAIR', str(t), str(o)) for t, o in pairs]",
+    "[r[0] for r in rows]"
+  ],
+  "execution_authority": false
+}

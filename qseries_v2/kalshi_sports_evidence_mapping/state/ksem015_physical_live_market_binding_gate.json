@@ -1,0 +1,131 @@
+{
+  "live_market_source_candidates": [
+    {
+      "path": "qseries_v2\\oracle_intelligence_analytics_runtime\\oiar_047_production_kalshi_current_eligibility_boundary.py",
+      "functions": [
+        {
+          "name": "read_current_kalshi_markets",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_learning_runtime\\olr_002_settled_outcome_read_model.py",
+      "functions": [
+        {
+          "name": "fetch_recent_settled_markets",
+          "line": 31
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_pre_settlement_coverage\\opc_006_universal_market_snapshot_canonicalizer.py",
+      "functions": [
+        {
+          "name": "build_universal_market_snapshot",
+          "line": 56
+        },
+        {
+          "name": "verify_opc_006_universal_market_snapshot_canonicalizer",
+          "line": 168
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_pre_settlement_coverage\\opc_009_bounded_universal_snapshot_cycle.py",
+      "functions": [
+        {
+          "name": "fetch_open_market_page",
+          "line": 40
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_pre_settlement_coverage\\opc_023_rotating_full_universe_coverage_cycle.py",
+      "functions": [
+        {
+          "name": "_active_markets",
+          "line": 27
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_069_current_open_kalshi_market_index.py",
+      "functions": [
+        {
+          "name": "fetch_current_open_kalshi_market_index",
+          "line": 10
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_070_physical_current_market_independent_association_gate.py",
+      "functions": [
+        {
+          "name": "run_physical_current_market_association",
+          "line": 11
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_073_current_market_umd_dependency_index.py",
+      "functions": [
+        {
+          "name": "build_current_market_dependency_index",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_082_single_live_market_cohort_snapshot.py",
+      "functions": [
+        {
+          "name": "capture_current_market_cohort",
+          "line": 35
+        },
+        {
+          "name": "snapshot_markets",
+          "line": 44
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_120_current_market_sports_team_pair_index.py",
+      "functions": [
+        {
+          "name": "fetch_current_market_sports_candidates",
+          "line": 52
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\independent\\oad_exact_sports_unknown_cohort_postgresql_identity_recovery_audit.py",
+      "functions": [
+        {
+          "name": "_load_current_market_cohort",
+          "line": 136
+        },
+        {
+          "name": "_classify_current_market_with_repo",
+          "line": 198
+        },
+        {
+          "name": "_read_market_snapshot_observations",
+          "line": 262
+        }
+      ]
+    },
+    {
+      "path": "qseries_v2\\oracle_adapters\\kalshi\\oad_046_live_universe_enumeration.py",
+      "functions": [
+        {
+          "name": "_is_current_market",
+          "line": 16
+        }
+      ]
+    }
+  ],
+  "physical_binding_executed": false,
+  "next_action": "SELECT_EXACT_LIVE_MARKET_SOURCE_AND_RUN_BOUNDED_PHYSICAL_SAMPLE",
+  "execution_authority": false
+}
