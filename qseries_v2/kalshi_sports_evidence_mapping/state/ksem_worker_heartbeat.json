@@ -1,17 +1,17 @@
 {
   "accounted_rows": 40,
-  "completed_at": "2026-09-17T20:52:01.197665+00:00",
-  "content_hash": "1505c4f953ddf24dca8e5b158feaeba0c1e0a9293741d7b765e2dc36427f24c2",
+  "completed_at": "2026-09-19T17:46:34.036116+00:00",
+  "content_hash": "d3b00ad0ca6e9182ef83a3ba5049db06b1bc4d465d6c4a07debc9b7f5861888a",
   "counts": {
-    "AMBIGUOUS": 9,
-    "EXACT_BOUND": 1,
-    "PARTIAL": 13,
-    "SOURCE_GAP": 17,
+    "AMBIGUOUS": 20,
+    "EXACT_BOUND": 6,
+    "PARTIAL": 8,
+    "SOURCE_GAP": 6,
     "UNSUPPORTED": 0
   },
   "execution_authority": false,
   "probability_enabled": false,
   "schema_version": "KSEM-071",
-  "started_at": "2026-09-17T20:51:44.973278+00:00",
+  "started_at": "2026-09-19T17:45:59.333599+00:00",
   "total_rows": 40
 }

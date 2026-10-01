@@ -1,0 +1,49 @@
+from __future__ import annotations
+import argparse,json,time
+from pathlib import Path
+from qseries_v2.solana_windows_safe_provider import WindowsSafeUniversalProvider
+from qseries_v2.solana_qsb013_burst import BurstRadar,expand_hot_mints
+from qseries_v2.solana_champion_challenger_arena import ChampionChallengerArena
+
+STATE=Path("runtime_state/qseries/qsb013_universal")
+WORKSPACE=STATE/"workspace"
+FEED=Path("runtime_state/solana_opportunities/qsb013_feed.jsonl")
+OLD=Path("runtime_state/qseries/solana_24_strategy_runtime/workspace/runtime_state/qseries/solana_24_strategy_arena")
+
+def _seed(root,workspace):
+    dst=workspace/"runtime_state/qseries/solana_24_strategy_arena";dst.mkdir(parents=True,exist_ok=True)
+    for n in ("ledger.json","positions.json"):
+        s=root/OLD/n;d=dst/n
+        if s.exists() and not d.exists():d.write_text(s.read_text(encoding="utf-8",errors="ignore"),encoding="utf-8")
+
+def main():
+    ap=argparse.ArgumentParser();ap.add_argument("--root",default=".");ap.add_argument("--once",action="store_true");ap.add_argument("--sleep",type=float,default=2)
+    a=ap.parse_args();root=Path(a.root).resolve();workspace=root/WORKSPACE;feed=workspace/FEED;feed.parent.mkdir(parents=True,exist_ok=True)
+    _seed(root,workspace)
+    stable=WindowsSafeUniversalProvider(root,max_tokens=48,active_tokens=20,timeout=8,refresh_seconds=90)
+    stable.cache_path=root/STATE/"universe_cache.json";stable.cache_path.parent.mkdir(parents=True,exist_ok=True)
+    burst=BurstRadar(root);arena=ChampionChallengerArena(workspace)
+    while True:
+        try:ss=stable.snapshot();stable_rows=list(ss.get("rows") or [])
+        except Exception:stable_rows=[]
+        try:bs=burst.scan(4,8);hot_rows=expand_hot_mints(bs.get("hot_mints") or [],8)
+        except Exception:bs={"raw_rows":0,"new_signatures":0,"hydrated":0,"hot_mints":[],"family_counts":{}};hot_rows=[]
+        merged={}
+        for r in stable_rows+hot_rows:
+            if r.get("market_address"):merged[r["market_address"]]=r
+        rows=list(merged.values())
+        with feed.open("a",encoding="utf-8") as f:
+            for r in rows:f.write(json.dumps(r,sort_keys=True)+"\n")
+        s=arena.cycle(False)
+        print("="*126);print(" QSB-013 SOLANA UNIVERSAL BURST CHAMPION/CHALLENGER");print("="*126)
+        print(f"[BURST] raw={bs.get('raw_rows')} sigs={bs.get('new_signatures')} hydrated={bs.get('hydrated')} hot_mints={len(bs.get('hot_mints') or [])} hot_rows={len(hot_rows)}")
+        print("[BURST FAMILIES]",json.dumps(bs.get("family_counts") or {},sort_keys=True))
+        print(f"[WATCHING] markets={s['markets_watched']} tokens={s['tokens_watched']} rows={s['source_rows']}")
+        print(f"[CHAMPIONS] {s['champions']}")
+        print(f"[ARENA] ready={s['ready_signals']} entered={s['entered_this_cycle']} champion_entries={s['champion_entries']} challenger_entries={s['challenger_entries']} closed={s['closed_this_cycle']} open={s['open_positions']} total_closed={s['closed_trades']} NET=${s['arena_net_pnl_usdc']:.4f}")
+        print("[LEADERS]",json.dumps(s["leaderboard"][:8],sort_keys=True))
+        print("[COVERAGE] Raydium CPMM/CLMM/V4/LaunchLab + Meteora DBC/DAMM/DLMM + Pump/PumpSwap/Orca")
+        print("[MODE] PAPER_ONLY | champions trade + challengers keep learning | REAL_MONEY_MOVED=False")
+        if a.once:break
+        time.sleep(max(1,a.sleep))
+if __name__=="__main__":main()

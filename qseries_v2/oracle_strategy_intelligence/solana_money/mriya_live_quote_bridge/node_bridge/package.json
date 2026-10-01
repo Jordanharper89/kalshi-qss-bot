@@ -1,0 +1,11 @@
+{
+  "name":"qsb037-mriya-live-quote-bridge",
+  "private":true,
+  "type":"module",
+  "dependencies":{
+    "@meteora-ag/dlmm":"latest",
+    "@pump-fun/pump-swap-sdk":"latest",
+    "@solana/web3.js":"latest",
+    "bn.js":"latest"
+  }
+}

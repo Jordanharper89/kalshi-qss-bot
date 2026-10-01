@@ -1,0 +1,13 @@
+{
+  "name": "qsb059d-pump-native",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@pump-fun/pump-swap-sdk": "latest",
+    "@solana/web3.js": "latest",
+    "bn.js": "latest",
+    "@meteora-ag/dlmm": "1.9.14",
+    "@coral-xyz/anchor": "latest",
+    "@solana/spl-token": "^0.4.14"
+  }
+}

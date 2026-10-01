@@ -25,7 +25,7 @@ def _retry_after_seconds(exc):
     except Exception:return None
 
 def _fetch_block_once(slot,timeout_seconds):
-    return int(slot),_rpc("getBlock",[int(slot),{"commitment":"finalized","encoding":"jsonParsed","transactionDetails":"full","rewards":False,"maxSupportedTransactionVersion":0}],timeout_seconds)
+    return int(slot),_rpc("getBlock",[int(slot),{"commitment":"finalized","encoding":"jsonParsed","transactionDetails":"full","rewards":False,"maxSupportedTransactionVersion":1}],timeout_seconds)
 
 def _fetch_blocks_rate_paced(slots,timeout_seconds,min_interval_seconds=0.30,max_attempts_per_slot=8,sleep_fn=time.sleep,monotonic_fn=time.monotonic):
     slots=tuple(int(s) for s in slots)

@@ -1,0 +1,29 @@
+from pathlib import Path
+import ast
+
+ROOT=Path.cwd()
+SUB=ROOT/"qseries_v2"/"oracle_execution"
+SUB.mkdir(parents=True,exist_ok=True)
+
+MOD=SUB/"oracle_034_positive_only_paper_attack_lane.py"
+TEST=ROOT/"test_oracle_034_positive_only_paper_attack_lane.py"
+RUN=ROOT/"run_oracle_034_positive_only_paper_attack_lane.py"
+
+MODULE_SOURCE='\nfrom __future__ import annotations\nimport threading,time\nfrom qseries_v2.oracle_execution import oracle_033_simulation_interface_compatibility_cutover as q33\nfrom qseries_v2.oracle_strategy_intelligence.solana_money import qsb059_gav_reverse_atomic as q59\n\nEXECUTION_AUTHORITY=False\nPAPER_ONLY=True\nREAL_MONEY_MOVED=False\n\nLOCK=threading.Lock()\nATTACK_ROWS=[]\n_ORIG_COMPOSE=None\n_ORIG_ATTEMPT=None\n_INSTALLED=False\n_COMPOSE_MS={}\n\ndef _key(route):\n    return (str(route.get("token") or ""),int(route.get("start_lamports") or 0))\n\ndef timed_compose(user,token,pump_pool,meteora_pool,start_sol):\n    t0=time.perf_counter_ns()\n    route=_ORIG_COMPOSE(user,token,pump_pool,meteora_pool,start_sol)\n    ms=(time.perf_counter_ns()-t0)/1e6\n    route=dict(route)\n    route["token"]=token\n    route["oracle034_compose_ms"]=ms\n    with LOCK:\n        _COMPOSE_MS[_key(route)]=ms\n    return route\n\ndef positive_only_attempt(user,kp,route,blockhash):\n    start_ns=time.perf_counter_ns()\n    pre_net=int(route.get("pre_sim_net_lamports") or 0)\n    pre_bps=float(route.get("pre_sim_bps") or 0.0)\n    token=str(route.get("token") or "")\n    size=float(route.get("start_lamports") or 0)/1e9\n\n    if pre_net<=0 or pre_bps<=0:\n        row={\n            "token":token,"size_sol":size,"pre_sim_net_lamports":pre_net,\n            "pre_sim_bps":pre_bps,"status":"NONPOSITIVE_NOT_ATTACKED",\n            "execution_authority":False,\n        }\n        with LOCK: ATTACK_ROWS.append(row)\n        print("[ORACLE034_SKIP_NONPOSITIVE] token=%s size=%.3f bps=%+.2f"%(\n            token[:10],size,pre_bps\n        ),flush=True)\n        return None,[row]\n\n    t1=time.perf_counter_ns()\n    winner,rows=_ORIG_ATTEMPT(user,kp,route,blockhash)\n    finished=time.perf_counter_ns()\n    with LOCK:\n        compose_ms=float(route.get("oracle034_compose_ms") or _COMPOSE_MS.get(_key(route),0.0))\n    sim_ms=(finished-t1)/1e6\n    total_ms=compose_ms+sim_ms\n    rec={\n        "token":token,\n        "size_sol":size,\n        "pre_sim_net_lamports":pre_net,\n        "pre_sim_bps":pre_bps,\n        "compose_ms":compose_ms,\n        "simulation_lane_ms":sim_ms,\n        "attack_total_ms":total_ms,\n        "winner":winner,\n        "attempt_count":len(rows),\n        "profitable":bool(winner and winner.get("profitable")),\n        "execution_authority":False,\n    }\n    with LOCK: ATTACK_ROWS.append(rec)\n    print(\n        "[ORACLE034_ATTACK] token=%s size=%.3f pre_bps=%+.2f "\n        "compose_ms=%.3f sim_lane_ms=%.3f total_ms=%.3f profitable=%s"\n        %(token[:10],size,pre_bps,compose_ms,sim_ms,total_ms,rec["profitable"]),\n        flush=True,\n    )\n    return winner,rows\n\ndef install():\n    global _ORIG_COMPOSE,_ORIG_ATTEMPT,_INSTALLED\n    if _INSTALLED:return True\n    q33.install()\n    _ORIG_COMPOSE=q59.compose_reverse_candidates\n    _ORIG_ATTEMPT=q59.attempt_candidate_simulations\n    q59.compose_reverse_candidates=timed_compose\n    q59.attempt_candidate_simulations=positive_only_attempt\n    _INSTALLED=True\n    return True\n\ndef run(seconds=300.0):\n    install()\n    from qseries_v2.oracle_execution import oracle_029_full_exact_pair_coverage_cutover as q29\n    print("[ORACLE-034] POSITIVE-ONLY PAPER ATTACK LANE",flush=True)\n    print("[ADMISSION] nonpositive composed routes cannot enter wealth simulation",flush=True)\n    print("[TIMING] compose + simulation lane measured",flush=True)\n    print("[BROADCAST] disabled",flush=True)\n    return q29.run(seconds=seconds)\n'
+
+TEST_SOURCE='\nimport inspect,unittest\nfrom unittest.mock import patch\nfrom qseries_v2.oracle_execution import oracle_034_positive_only_paper_attack_lane as q34\n\nclass T(unittest.TestCase):\n    def test_safety(self):\n        self.assertFalse(q34.EXECUTION_AUTHORITY)\n        self.assertTrue(q34.PAPER_ONLY)\n\n    def test_nonpositive_skipped(self):\n        q34._ORIG_ATTEMPT=lambda *a,**k:(_ for _ in ()).throw(AssertionError("called"))\n        w,rows=q34.positive_only_attempt("u",None,{\n            "token":"T","start_lamports":1000,\n            "pre_sim_net_lamports":0,"pre_sim_bps":0.0\n        },"b")\n        self.assertIsNone(w)\n        self.assertEqual(rows[0]["status"],"NONPOSITIVE_NOT_ATTACKED")\n\n    def test_positive_runs(self):\n        q34._ORIG_ATTEMPT=lambda *a,**k:(None,[{"compiled":True}])\n        w,rows=q34.positive_only_attempt("u",None,{\n            "token":"T","start_lamports":1000,\n            "pre_sim_net_lamports":10,"pre_sim_bps":100.0,\n            "oracle034_compose_ms":2.0\n        },"b")\n        self.assertEqual(len(rows),1)\n\n    def test_no_broadcast(self):\n        self.assertNotIn("sendTransaction(",inspect.getsource(q34))\n\nif __name__=="__main__":\n    unittest.main(verbosity=2)\n'
+
+RUN_SOURCE='\nimport argparse\nfrom qseries_v2.oracle_execution.oracle_034_positive_only_paper_attack_lane import run\nif __name__=="__main__":\n    p=argparse.ArgumentParser()\n    p.add_argument("--seconds",type=float,default=300.0)\n    a=p.parse_args()\n    raise SystemExit(run(seconds=a.seconds))\n'
+
+ast.parse(MODULE_SOURCE)
+ast.parse(TEST_SOURCE)
+ast.parse(RUN_SOURCE)
+
+MOD.write_text(MODULE_SOURCE.lstrip(),encoding="utf-8")
+TEST.write_text(TEST_SOURCE.lstrip(),encoding="utf-8")
+RUN.write_text(RUN_SOURCE.lstrip(),encoding="utf-8")
+
+print('[PASS] ORACLE-034 positive-only paper attack lane installed')
+print('[ADMISSION] nonpositive execution work blocked')
+print('[TIMING] compose/simulation lane instrumentation active')
+print('[BROADCAST] disabled')
