@@ -1,0 +1,22 @@
+ORACLE V1 Scanner 1.1 — complete replacement
+==========================================
+Fixes a startup HTTPError that was previously collapsed to the class name.
+
+- Every metadata and Helius RPC HTTP error now shows service+status only.
+- RPC credentials and HTTP response bodies are never printed.
+- 429 / transient 5xx receive at most two bounded retries.
+- Meteora exact-pool GET 404/410 uses the documented paginated
+  /pools?query=<pool-address> lookup and admits only an exact match.
+- No changes to executor.py, boss_scanner_live.py, or native production registry.
+- Still requires on-chain mint-owner + decimal verification before live pricing.
+- Trading and all transaction broadcasting remain disabled.
+
+From activated CMD repo root after downloading this ZIP to Downloads:
+  tar -xf "%USERPROFILE%\Downloads\oracle_v1_scanner_v1_1_full_replacement.zip" -C qseries_v2\oracle_execution\solana_atomic_executor
+  python -m qseries_v2.oracle_execution.solana_atomic_executor.V1.scanner --test
+  python -m qseries_v2.oracle_execution.solana_atomic_executor.V1.executor --test
+
+Then run prior hidden-Helius scanner launch command to expose the precise
+service+status (e.g. METEORA_HTTP_404, HELIUS_HTTP_401).
+
+Mainnet functionality has not been verified locally.
