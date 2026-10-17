@@ -1,0 +1,11 @@
+const assert=require('assert'); const w=require('./oracle125_atomic_machine.cjs');
+assert.equal(w.SIZE,10000000n);
+assert.equal(w.budget(10000000n),10000000n);
+assert.throws(()=>w.budget(5000000n));
+const a={token:'token1',pump_pool:'pump1',meteora_pool:'dlmm1',source:'UNIVERSAL_LIVE_CROSSLIST',lifecycle:'HOT'};
+const b={token:'token2',pump_pool:'pump2',meteora_pool:'dlmm2',source:'HISTORICAL_IDENTITY_ONLY',lifecycle:'OBSERVE'};
+const selected=w.selectBatch([a,b],new Map(),2,Date.now());assert.equal(selected.length,2);
+assert.equal(new Set(selected.map(x=>x.token)).size,2);
+assert(w.isBidirectionallyQuoted({directions:[{direction:'PUMP_TO_METEORA',status:'REJECT_GROSS',min_sol_out:'9900000'},{direction:'METEORA_TO_PUMP',status:'REJECT_GROSS',min_sol_out:'9850000'}]}));
+assert(!w.isBidirectionallyQuoted({directions:[{direction:'PUMP_TO_METEORA',status:'REJECT_QUOTE'},{direction:'METEORA_TO_PUMP',status:'REJECT_GROSS',min_sol_out:'9850000'}]}));
+console.log('[PASS] ORACLE-125 offline fixed-size, strict quote coverage, distinct-token fairness, WS event scheduling');

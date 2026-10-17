@@ -324,5 +324,14 @@ def main(argv=None):
         return 0
     return run_forever(a.cadence_seconds)
 
+# OSI-018B registered read-only Solana intelligence child
+import subprocess as _osi_subprocess
+import sys as _osi_sys
+from pathlib import Path as _OSIPath
+_osi_child = _OSIPath(__file__).resolve().parent / 'run_osi_solana_intelligence_live.py'
+if _osi_child.is_file():
+    _osi_subprocess.Popen([_osi_sys.executable, str(_osi_child)], cwd=str(_osi_child.parent))
+# execution_authority=FALSE
+
 if __name__=="__main__":
     raise SystemExit(main())

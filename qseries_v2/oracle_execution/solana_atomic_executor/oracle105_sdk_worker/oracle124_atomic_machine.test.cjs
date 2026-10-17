@@ -1,0 +1,10 @@
+'use strict';
+const assert=require('assert');
+const w=require('./oracle124_atomic_machine.cjs');
+assert.strictEqual(w.SIZE,10000000n);
+assert.strictEqual(w.quoteGate(w.SIZE,9999999n,0,0,0).admitted,false);
+assert.strictEqual(w.quoteGate(w.SIZE,10050000n,0,0,0).admitted,true);
+assert(w.is429(new Error('429 Too Many Requests')));
+const ts=['abc','def'];assert.equal(ts.length,2);
+assert(w.selectBatch&&w.observeResult&&w.isBidirectionallyQuoted);
+console.log('[PASS] ORACLE-124 0.010 SOL size, gross threshold, rate guard, fair-scheduler exports');

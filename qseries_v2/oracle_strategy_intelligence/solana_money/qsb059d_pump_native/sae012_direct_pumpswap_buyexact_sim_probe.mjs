@@ -1,3 +1,4 @@
+import BN from "bn.js";
 import {
   Connection,
   PublicKey,
@@ -46,8 +47,8 @@ async function probe(poolKey) {
   Very small minimum output deliberately avoids economic/slippage
   rejection; this probe is about account-contract validity only.
   */
-  const baseOut=1n;
-  const quoteIn=1_000_000n;
+  const baseOut=new BN("1");
+  const quoteIn=new BN("1000000");
 
   const instructions=await PUMP_AMM_SDK.buyInstructions(
     state,

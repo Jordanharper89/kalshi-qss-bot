@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {discover,identify,sdkAvailable,requirePumpState} from '../oracle107.mjs';
+const a='So11111111111111111111111111111111111111112';
+const b='11111111111111111111111111111111';
+const c='TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
+const good={pump_pool:a,meteora_pool:b,token:c,direction:'PUMP_TO_METEORA'};
+test('installed official SDK hydration interfaces',()=>assert.equal(sdkAvailable(),true));
+test('accept explicit pool identities',()=>assert.equal(identify(good).pump_pool,a));
+test('reject capture with only instruction accounts',()=>assert.equal(discover({candidates:[{name:'capture',instructions:[{accounts:[]}]}]}).accepted.length,0));
+test('reject missing direction',()=>assert.throws(()=>identify({...good,direction:null}),/DIRECTION_REQUIRED/));
+test('reject duplicate pool',()=>assert.throws(()=>identify({...good,meteora_pool:a}),/DUPLICATE_IDENTITIES/));
+test('reject absent PumpSwap hydrated state',()=>assert.throws(()=>requirePumpState({}),/OFFICIAL_PUMP_HYDRATION_REQUIRED/));
+test('mixed rows preserve rejection lineage',()=>assert.equal(discover({pairs:[good,{}]}).holds.length,1));

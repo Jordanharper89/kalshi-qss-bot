@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@meteora-ag/dlmm": "^1.9.14",
+    "@pump-fun/pump-swap-sdk": "^1.20.0",
+    "@solana/spl-token": "^0.4.15",
+    "@solana/web3.js": "^1.99.0",
+    "bn.js": "^5.2.5"
+  }
+}

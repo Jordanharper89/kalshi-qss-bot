@@ -1,0 +1,2 @@
+from qseries_v2.oracle_strategy_intelligence.solana_money.qsb058_gav_profitable_case import main
+main()

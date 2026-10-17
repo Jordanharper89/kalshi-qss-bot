@@ -1,0 +1,31 @@
+const fs=require("fs"),{Connection,PublicKey,SystemProgram}=require("@solana/web3.js"),BN=require("bn.js");
+const P=require("@pump-fun/pump-swap-sdk"),D=require("@meteora-ag/dlmm"),DLMM=D.default||D.DLMM||D;
+const RPC=process.env.QSB_SOLANA_RPC_URL||process.env.SOLANA_RPC_URL||"https://api.mainnet-beta.solana.com";
+const WSOL="So11111111111111111111111111111111111111112",USDC="EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
+const c=new Connection(RPC,"confirmed"),user=SystemProgram.programId,input=new BN(10000000);
+const pick=(o,ks)=>{for(const k of ks)if(o&&o[k]!=null)return o[k];return null};
+const B=x=>BN.isBN(x)?x:new BN(String(x));
+const js=o=>JSON.stringify(o,(k,v)=>typeof v==="bigint"?v.toString():BN.isBN(v)?v.toString():v);
+(async()=>{
+ console.log("[MTR-049] START");console.log("[SCOPE] exact installed SDK contract; 0.010 SOL quote-only; signing=false; sending=false");
+ const d=JSON.parse(fs.readFileSync("mtr_045_normalized_exact_pairs.json","utf8"));
+ const r=d.rows.find(x=>x.base_mint===USDC&&x.quote_mint===WSOL);if(!r)throw Error("NO_USDC_WSOL_ROW");
+ const pp=new PublicKey(r.pump_pool),mp=new PublicKey(r.meteora_pools[0]);
+ console.log(`[PAIR] pump=${pp} meteora=${mp} base=${r.base_mint} quote=${r.quote_mint}`);
+ const online=new P.OnlinePumpAmmSdk(c),off=new P.PumpAmmSdk(),state=await online.swapSolanaState(pp,user);
+ console.log(`[PUMP_STATE] PASS user_placeholder=${user}`);
+ const dl=await DLMM.create(c,mp),x=dl.tokenX.publicKey.toBase58(),y=dl.tokenY.publicKey.toBase58();
+ console.log(`[METEORA_STATE] PASS x=${x} y=${y}`);
+ async function mq(amt,inMint){const y2x=inMint===y;if(inMint!==x&&inMint!==y)throw Error("METEORA_INPUT_MINT_MISMATCH");const bins=await dl.getBinArrayForSwap(y2x);const q=dl.swapQuote(amt,y2x,new BN(50),bins);return {q,out:B(pick(q,["outAmount","amountOut"]))}}
+ const qa=off.buyQuoteInput(state,input);console.log(`[PUMP_BUY] ${js(qa)}`);
+ const midA=B(pick(qa,["base","baseAmountOut","amountOut","outputAmount"]));if(midA.lte(new BN(0)))throw Error("PUMP_BUY_OUTPUT_UNRESOLVED");
+ const ma=await mq(midA,USDC),finA=ma.out,gA=finA.sub(input),bpA=Number(gA.muln(10000).div(input));
+ console.log(`[ROUNDTRIP] direction=PUMP_TO_METEORA input_wsol=${input} intermediate_usdc=${midA} final_wsol=${finA} gross_raw=${gA} gross_bps=${bpA}`);
+ const mb=await mq(input,WSOL),midB=mb.out;
+ const qb=off.sellBaseInput(state,midB);console.log(`[PUMP_SELL] ${js(qb)}`);
+ const finB=B(pick(qb,["quote","quoteAmountOut","amountOut","outputAmount"]));if(finB.lte(new BN(0)))throw Error("PUMP_SELL_OUTPUT_UNRESOLVED");
+ const gB=finB.sub(input),bpB=Number(gB.muln(10000).div(input));
+ console.log(`[ROUNDTRIP] direction=METEORA_TO_PUMP input_wsol=${input} intermediate_usdc=${midB} final_wsol=${finB} gross_raw=${gB} gross_bps=${bpB}`);
+ fs.writeFileSync("mtr_049_live_bidirectional_quotes.json",JSON.stringify({schema:"MTR-049",pair:r,input_wsol_raw:String(input),pump_to_meteora:{final_wsol:String(finA),gross_raw:String(gA),gross_bps:bpA},meteora_to_pump:{final_wsol:String(finB),gross_raw:String(gB),gross_bps:bpB},signing:false,sending:false},null,2));
+ console.log("[RESULT] LIVE_BIDIRECTIONAL_QUOTE_EXACT_CONTRACT_COMPLETE");console.log("[NEXT_GATE] BOUNDED_MULTI_PAIR_FEE_ADJUSTED_RANKING");console.log("[MTR-049] COMPLETE");
+})().catch(e=>{console.error("[MTR-049] FAIL");console.error(e.stack||e);process.exit(1)});

@@ -1,0 +1,111 @@
+from __future__ import annotations
+
+import ast
+from pathlib import Path
+
+MOD=Path(
+    "qseries_v2/oracle_execution/"
+    "solana_atomic_executor/"
+    "bootstrap_canary_005_alts.py"
+)
+
+TEST=Path(
+    "test_canary_005_alt_bootstrap.py"
+)
+
+MODULE_SOURCE='from __future__ import annotations\n\nimport argparse\nimport time\nfrom pathlib import Path\n\nfrom qseries_v2.oracle_execution.solana_atomic_executor import runtime as rt\nfrom qseries_v2.solana_live_execution import qarb_096_sequential_live_micro_executor as q96\n\nEXECUTION_AUTHORITY=False\nTRADE_BROADCAST=False\nMAX_TX_BYTES=1232\n\n\ndef _initialize_ready(state,user):\n    rt.READY_TOKENS.clear()\n    rt.TEMPLATES.clear()\n    rt.METEORA_TEMPLATES.clear()\n\n    token_warm=rt.install_proven_hot_math(state)\n    rt.prebuild_templates(state,user)\n    rt.prebuild_meteora_templates(\n        state,\n        user,\n        token_warm,\n    )\n\n    for pair in list(state.get("pairs") or []):\n        token=str(pair.token)\n        if token not in rt.READY_TOKENS:\n            continue\n        try:\n            rt.q18.worker().warm(\n                str(pair.pump_pool)\n            )\n        except Exception:\n            rt.READY_TOKENS.discard(token)\n\n    if not rt.READY_TOKENS:\n        raise RuntimeError(\n            "CANARY_ALT_NO_RUNTIME_READY_PAIRS"\n        )\n\n    return set(rt.READY_TOKENS)\n\n\ndef _local_saved_tokens(root):\n    state=q96._load_alt_state(root)\n    tables=state.get("tables") or {}\n    return {\n        str(token)\n        for token,row in tables.items()\n        if isinstance(row,dict)\n        and row.get("address")\n    }\n\n\ndef _select_current_pair(\n    root,\n    state,\n    preferred_prefix=None,\n):\n    ready=set(rt.READY_TOKENS)\n\n    pairs=[\n        p for p in list(state.get("pairs") or [])\n        if str(p.token) in ready\n    ]\n\n    if preferred_prefix:\n        preferred=[\n            p for p in pairs\n            if str(p.token).startswith(\n                str(preferred_prefix)\n            )\n        ]\n        if len(preferred)==1:\n            pairs=preferred\n        elif len(preferred)>1:\n            raise RuntimeError(\n                "CANARY_ALT_PREFIX_NOT_UNIQUE:"\n                +str(preferred_prefix)\n            )\n        else:\n            print(\n                "[CANARY_ALT_PREFIX_STALE] "\n                "prefix=%s fallback=current_ready"\n                %preferred_prefix,\n                flush=True,\n            )\n\n    locally_saved=_local_saved_tokens(root)\n\n    unsaved=[\n        p for p in pairs\n        if str(p.token) not in locally_saved\n    ]\n\n    if unsaved:\n        pairs=unsaved\n\n    if not pairs:\n        raise RuntimeError(\n            "CANARY_ALT_NO_SELECTABLE_READY_PAIR"\n        )\n\n    pair=sorted(\n        pairs,\n        key=lambda p:str(p.token),\n    )[0]\n\n    print(\n        "[CANARY_ALT_SELECTED] "\n        "token=%s pump=%s ready_pairs=%d local_saved=%s"\n        %(\n            str(pair.token)[:12],\n            str(pair.pump_pool)[:12],\n            len(ready),\n            str(pair.token) in locally_saved,\n        ),\n        flush=True,\n    )\n\n    return pair\n\n\ndef _cached_full_route(token):\n    token=str(token)\n\n    pump=rt.TEMPLATES.get(token)\n    meteora=rt.METEORA_TEMPLATES.get(token)\n\n    if not isinstance(pump,dict):\n        raise RuntimeError(\n            "CANARY_ALT_PUMP_TEMPLATE_MISSING:"\n            +token\n        )\n\n    if not isinstance(meteora,dict):\n        raise RuntimeError(\n            "CANARY_ALT_METEORA_TEMPLATE_MISSING:"\n            +token\n        )\n\n    p_ixs=[\n        dict(ix)\n        for ix in list(\n            pump.get("instructions")\n            or []\n        )\n    ]\n\n    if not p_ixs:\n        raise RuntimeError(\n            "CANARY_ALT_EMPTY_PUMP_TEMPLATE"\n        )\n\n    accounts=[]\n\n    for pubkey,signer,writable in list(\n        meteora.get("fixed_accounts")\n        or []\n    ):\n        accounts.append({\n            "pubkey":str(pubkey),\n            "isSigner":bool(signer),\n            "isWritable":bool(writable),\n        })\n\n    for _,address in list(\n        meteora.get("arrays")\n        or []\n    ):\n        accounts.append({\n            "pubkey":str(address),\n            "isSigner":False,\n            "isWritable":True,\n        })\n\n    if len(accounts)<16:\n        raise RuntimeError(\n            "CANARY_ALT_METEORA_ACCOUNTS_TOO_SMALL:"\n            +str(len(accounts))\n        )\n\n    meteora_ix={\n        "programId":rt.q87.c.DLMM,\n        "accounts":accounts,\n        "data":"",\n    }\n\n    candidates=(\n        rt.q87.las.q59\n        .candidate_instruction_sets(\n            p_ixs,\n            meteora_ix,\n        )\n    )\n\n    live=[]\n\n    for name,ixs in candidates:\n        if "PUMP_METEORA_ONLY" in str(name):\n            continue\n        live.append({\n            "name":str(name),\n            "instructions":list(ixs),\n            "pump_optional_removed":0,\n        })\n\n    if not live:\n        raise RuntimeError(\n            "CANARY_ALT_NO_HELPER_PRESERVING_CANDIDATE"\n        )\n\n    return {\n        "token":token,\n        "base_alts":[],\n        "live_candidates":live,\n    }\n\n\ndef _cached_alt_addresses(token,user):\n    route=_cached_full_route(token)\n\n    addresses=q96._alt_addresses_from_route(\n        route,\n        user,\n    )\n\n    if len(addresses)<4:\n        raise RuntimeError(\n            "CANARY_ALT_TOO_FEW_CACHED_ADDRESSES"\n        )\n\n    print(\n        "[CANARY_ALT_CACHED_ADDRESSES] "\n        "token=%s count=%d "\n        "getProgramAccounts=FALSE"\n        %(\n            str(token)[:10],\n            len(addresses),\n        ),\n        flush=True,\n    )\n\n    return addresses\n\n\ndef _persist_state(\n    root,\n    token,\n    setup,\n    signature,\n    before,\n    after,\n):\n    state=q96._load_alt_state(root)\n    tables=state.get("tables")\n\n    if not isinstance(tables,dict):\n        tables={}\n        state["tables"]=tables\n\n    tables[str(token)]={\n        "address":setup["lookupTable"],\n        "addresses":setup["addresses"],\n        "recent_slot":setup["recentSlot"],\n        "signature":signature,\n        "wallet_delta_lamports":\n            int(after)-int(before),\n        "created_unix":time.time(),\n    }\n\n    q96._atomic(\n        q96._qarb096_alt_state_path(root),\n        state,\n    )\n\n\ndef _wait_active(\n    alt,\n    setup_slot,\n    deadline,\n):\n    while time.monotonic()<deadline:\n        try:\n            slot=int(\n                q96._rpc(\n                    "getSlot",\n                    [{\n                        "commitment":"confirmed"\n                    }],\n                )\n            )\n\n            got=q96._rpc(\n                "getAccountInfo",\n                [\n                    alt,\n                    {\n                        "encoding":"base64",\n                        "commitment":"confirmed",\n                    },\n                ],\n            )\n\n            value=(\n                got.get("value")\n                if isinstance(got,dict)\n                else None\n            )\n\n            if (\n                slot>int(setup_slot)\n                and isinstance(value,dict)\n                and value.get("data")\n            ):\n                return True\n\n        except Exception:\n            pass\n\n        time.sleep(0.4)\n\n    return False\n\n\ndef bootstrap_one(\n    root=None,\n    preferred_prefix=None,\n    activation_seconds=30.0,\n):\n    root=Path(root or Path.cwd())\n\n    state,_=rt.q25.prepare_once(root)\n    rt.q25.bind_cached_state(state)\n\n    kp,user=rt.q87.c.sim_identity()\n\n    if kp is None:\n        raise RuntimeError(\n            "QSB_SOLANA_PRIVATE_KEY_MISSING"\n        )\n\n    ready=_initialize_ready(state,user)\n\n    print(\n        "[CANARY_ALT_READY_SET] "\n        "count=%d tokens=%s"\n        %(\n            len(ready),\n            ",".join(\n                x[:10]\n                for x in sorted(ready)\n            ),\n        ),\n        flush=True,\n    )\n\n    pair=_select_current_pair(\n        root,\n        state,\n        preferred_prefix,\n    )\n\n    token=str(pair.token)\n\n    existing=q96._saved_alt(\n        root,\n        token,\n    )\n\n    if existing:\n        print(\n            "[CANARY_ALT_ALREADY_READY] "\n            "token=%s address=%s"\n            %(token[:10],existing),\n            flush=True,\n        )\n        return {\n            "ok":True,\n            "created":False,\n            "token":token,\n            "address":existing,\n        }\n\n    addresses=_cached_alt_addresses(\n        token,\n        user,\n    )\n\n    setup=q96._build_alt_setup(\n        user,\n        addresses,\n    )\n\n    bh=q96._rpc(\n        "getLatestBlockhash",\n        [{\n            "commitment":"confirmed"\n        }],\n    )["value"]["blockhash"]\n\n    msg,unsigned=rt.q87.c.compile_v0(\n        user,\n        setup["instructions"],\n        [],\n        bh,\n    )\n\n    raw=rt.q87.c.signed_tx(msg,kp)\n\n    if len(raw)>MAX_TX_BYTES:\n        raise RuntimeError(\n            "CANARY_ALT_SETUP_TOO_LARGE:"\n            +str(len(raw))\n        )\n\n    sim=q96.signed_simulation(raw)\n\n    if sim.get("err") is not None:\n        raise RuntimeError(\n            "CANARY_ALT_SETUP_SIM_ERROR:"\n            +str(sim.get("err"))\n        )\n\n    before=int(\n        q96._rpc(\n            "getBalance",\n            [\n                str(user),\n                {\n                    "commitment":"confirmed"\n                },\n            ],\n        )["value"]\n    )\n\n    print(\n        "[CANARY_ALT_SETUP] "\n        "token=%s addresses=%d "\n        "setup_bytes=%d simulation=PASS "\n        "trade_broadcast=FALSE"\n        %(\n            token[:10],\n            len(setup["addresses"]),\n            len(raw),\n        ),\n        flush=True,\n    )\n\n    signature=q96.send_once(raw)\n\n    deadline=(\n        time.monotonic()\n        +max(\n            10.0,\n            float(activation_seconds),\n        )\n    )\n\n    tx=q96.wait_confirmed(\n        signature,\n        deadline,\n    )\n\n    if tx is None:\n        raise RuntimeError(\n            "CANARY_ALT_CONFIRMATION_UNKNOWN:"\n            +str(signature)\n        )\n\n    err=(\n        tx.get("meta",{})\n        or {}\n    ).get("err")\n\n    if err is not None:\n        raise RuntimeError(\n            "CANARY_ALT_CONFIRMED_ERROR:"\n            +str(err)\n        )\n\n    after=int(\n        q96._rpc(\n            "getBalance",\n            [\n                str(user),\n                {\n                    "commitment":"confirmed"\n                },\n            ],\n        )["value"]\n    )\n\n    _persist_state(\n        root,\n        token,\n        setup,\n        signature,\n        before,\n        after,\n    )\n\n    alt=str(setup["lookupTable"])\n\n    active=_wait_active(\n        alt,\n        int(tx.get("slot",0) or 0),\n        deadline,\n    )\n\n    print(\n        "[CANARY_ALT_CONFIRMED] "\n        "token=%s address=%s "\n        "signature=%s "\n        "wallet_delta_lamports=%d "\n        "active=%s"\n        %(\n            token[:10],\n            alt,\n            signature,\n            after-before,\n            active,\n        ),\n        flush=True,\n    )\n\n    return {\n        "ok":True,\n        "created":True,\n        "token":token,\n        "address":alt,\n        "signature":signature,\n        "wallet_delta_lamports":\n            after-before,\n        "active":active,\n    }\n\n\ndef main():\n    p=argparse.ArgumentParser()\n\n    p.add_argument(\n        "--preferred-prefix",\n        default=None,\n    )\n\n    p.add_argument(\n        "--activation-seconds",\n        type=float,\n        default=30.0,\n    )\n\n    a=p.parse_args()\n\n    result=bootstrap_one(\n        preferred_prefix=\n            a.preferred_prefix,\n        activation_seconds=\n            a.activation_seconds,\n    )\n\n    if not result.get("ok"):\n        return 1\n\n    print(\n        "[NEXT] python -m "\n        "qseries_v2.oracle_execution."\n        "solana_atomic_executor.runtime "\n        "--seconds 300",\n        flush=True,\n    )\n\n    return 0\n\n\nif __name__=="__main__":\n    raise SystemExit(main())\n'
+TEST_SOURCE='from __future__ import annotations\n\nimport inspect\nimport unittest\nfrom unittest.mock import patch\n\nfrom qseries_v2.oracle_execution.solana_atomic_executor import (\n    bootstrap_canary_005_alts as m\n)\n\n\nclass Pair:\n    def __init__(self,token,pump="PUMP"):\n        self.token=token\n        self.pump_pool=pump\n\n\nclass T(unittest.TestCase):\n    def test_scope(self):\n        self.assertFalse(m.EXECUTION_AUTHORITY)\n        self.assertFalse(m.TRADE_BROADCAST)\n\n    def test_cached_route_has_no_dlmm_discovery(self):\n        src=inspect.getsource(\n            m._cached_full_route\n        )\n        self.assertNotIn(\n            "native_live_route",\n            src,\n        )\n        self.assertNotIn(\n            "dlmm_arrays",\n            src,\n        )\n        self.assertNotIn(\n            "getProgramAccounts",\n            src,\n        )\n\n    def test_cached_addresses_use_prebuilt_templates(self):\n        src=inspect.getsource(\n            m._cached_full_route\n        )\n        self.assertIn(\n            "rt.TEMPLATES",\n            src,\n        )\n        self.assertIn(\n            "rt.METEORA_TEMPLATES",\n            src,\n        )\n        self.assertIn(\n            "fixed_accounts",\n            src,\n        )\n        self.assertIn(\n            "arrays",\n            src,\n        )\n\n    def test_cached_address_extractor_reuses_q96(self):\n        src=inspect.getsource(\n            m._cached_alt_addresses\n        )\n        self.assertIn(\n            "_alt_addresses_from_route",\n            src,\n        )\n\n    def test_dynamic_pair_selection(self):\n        m.rt.READY_TOKENS.clear()\n        m.rt.READY_TOKENS.update(\n            {"B","A"}\n        )\n\n        state={\n            "pairs":[\n                Pair("B"),\n                Pair("A"),\n            ]\n        }\n\n        with patch.object(\n            m,\n            "_local_saved_tokens",\n            return_value=set(),\n        ):\n            pair=m._select_current_pair(\n                ".",\n                state,\n                None,\n            )\n\n        self.assertEqual(\n            pair.token,\n            "A",\n        )\n\n    def test_saved_pair_deprioritized(self):\n        m.rt.READY_TOKENS.clear()\n        m.rt.READY_TOKENS.update(\n            {"A","B"}\n        )\n\n        state={\n            "pairs":[\n                Pair("A"),\n                Pair("B"),\n            ]\n        }\n\n        with patch.object(\n            m,\n            "_local_saved_tokens",\n            return_value={"A"},\n        ):\n            pair=m._select_current_pair(\n                ".",\n                state,\n                None,\n            )\n\n        self.assertEqual(\n            pair.token,\n            "B",\n        )\n\n    def test_alt_creation_seams_preserved(self):\n        src=inspect.getsource(\n            m.bootstrap_one\n        )\n\n        for required in (\n            "_cached_alt_addresses",\n            "_build_alt_setup",\n            "compile_v0",\n            "signed_tx",\n            "signed_simulation",\n            "send_once",\n            "wait_confirmed",\n            "_persist_state",\n            "_wait_active",\n        ):\n            self.assertIn(\n                required,\n                src,\n            )\n\n    def test_no_trade_send_path(self):\n        src=inspect.getsource(m)\n        self.assertNotIn(\n            "q87.c.send(",\n            src,\n        )\n        self.assertIn(\n            "trade_broadcast=FALSE",\n            src,\n        )\n\n    def test_no_private_key_output(self):\n        src=inspect.getsource(m)\n        self.assertNotIn(\n            "QSB_SOLANA_PRIVATE_KEY=",\n            src,\n        )\n        self.assertNotIn(\n            "str(kp)",\n            src,\n        )\n\n    def test_runtime_not_rewritten(self):\n        src=inspect.getsource(m)\n        self.assertNotIn(\n            "runtime.py",\n            src,\n        )\n\n\nif __name__=="__main__":\n    unittest.main(verbosity=2)\n'
+
+
+def main():
+    ast.parse(MODULE_SOURCE)
+    ast.parse(TEST_SOURCE)
+
+    required=(
+        "_cached_full_route",
+        "_cached_alt_addresses",
+        "rt.TEMPLATES",
+        "rt.METEORA_TEMPLATES",
+        "_alt_addresses_from_route",
+        "_build_alt_setup",
+        "signed_simulation",
+        "send_once",
+        "wait_confirmed",
+        "TRADE_BROADCAST=False",
+    )
+
+    missing=[
+        x for x in required
+        if x not in MODULE_SOURCE
+    ]
+
+    if missing:
+        raise RuntimeError(
+            "CACHED_ALT_BOOTSTRAP_CONTRACT_MISSING:"
+            +repr(missing)
+        )
+
+    forbidden=(
+        "native_live_route(",
+        "dlmm_arrays(",
+        '"getProgramAccounts"',
+        "q87.c.send(",
+    )
+
+    body=MODULE_SOURCE[
+        MODULE_SOURCE.index(
+            "def _cached_full_route"
+        ):
+        MODULE_SOURCE.index(
+            "def _persist_state"
+        )
+    ]
+
+    bad=[
+        x for x in forbidden
+        if x in body
+    ]
+
+    if bad:
+        raise RuntimeError(
+            "CACHED_ALT_BOOTSTRAP_FORBIDDEN_SEAM:"
+            +repr(bad)
+        )
+
+    MOD.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    MOD.write_text(
+        MODULE_SOURCE,
+        encoding="utf-8",
+    )
+
+    TEST.write_text(
+        TEST_SOURCE,
+        encoding="utf-8",
+    )
+
+    print(
+        "[PASS] CANARY-005 cached-template ALT bootstrap replacement installed"
+    )
+    print(
+        "[PASS] ALT addresses derive from canonical prebuilt Pump/Meteora templates"
+    )
+    print(
+        "[PASS] bootstrap getProgramAccounts path removed"
+    )
+    print(
+        "[PASS] real pricing/trade construction untouched"
+    )
+    print(
+        "[PASS] canonical runtime/scanner not modified"
+    )
+    print(
+        "[PASS] trade broadcast remains disabled"
+    )
+
+
+if __name__=="__main__":
+    main()

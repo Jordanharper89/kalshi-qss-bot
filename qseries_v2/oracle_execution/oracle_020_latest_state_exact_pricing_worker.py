@@ -14,7 +14,7 @@ EXECUTION_AUTHORITY=False
 PAPER_ONLY=True
 REAL_MONEY_MOVED=False
 
-PREFERRED_SIZE_SOL=0.180
+PREFERRED_SIZE_SOL=0.050
 
 FULL_SIZE_CURVE=(
     0.001,
@@ -29,10 +29,65 @@ FULL_SIZE_CURVE=(
     1.400,
 )
 
-FAST_SIZES=FULL_SIZE_CURVE
+FAST_SIZES=(0.050,)
 EXPAND_SIZES=()
 EXPAND_GATE_BPS=-1000000.0
 MAX_START_AGE_MS=750.0
+
+import queue as _o129_queue
+_o129_positive_queue = _o129_queue.Queue(maxsize=8192)
+_o129_writer_started = False
+_o129_dropped = 0
+
+def _o129_positive_writer():
+    import os as _os
+    import json as _json
+    from pathlib import Path as _Path
+    p = _Path('runtime_state/oracle/oracle_live_execution/ORACLE_129_POSITIVE_CANDIDATES.jsonl')
+    p.parent.mkdir(parents=True, exist_ok=True)
+    while True:
+        row = _o129_positive_queue.get()
+        try:
+            # Append-only research feed; never store credentials, never sign.
+            with p.open('a', encoding='utf-8') as f:
+                f.write(_json.dumps(row, sort_keys=True, default=str) + '\n')
+        finally:
+            _o129_positive_queue.task_done()
+
+def _o129_start_writer():
+    global _o129_writer_started
+    if not _o129_writer_started:
+        import threading as _threading
+        _threading.Thread(target=_o129_positive_writer, name='oracle129-positive-writer', daemon=True).start()
+        _o129_writer_started = True
+
+def _o129_offer(token, snap, slot, received_ns, best):
+    global _o129_dropped
+    import time as _time
+    if int(best.get('local_net', 0)) <= 0:
+        return
+    age_ms = max(0.0, (_time.perf_counter_ns() - received_ns) / 1e6)
+    if age_ms > MAX_START_AGE_MS:
+        return
+    row = {
+        'revision': 'ORACLE-129', 'token': str(token),
+        'pump_pool': str(snap.get('pump_pool', '')),
+        'meteora_pool': str((snap.get('meteora') or {}).get('address', '')),
+        'slot': int(slot), 'direction': str(best.get('direction', '')),
+        'size_sol': float(best.get('size_sol', 0)),
+        'quoted_local_net_lamports': int(best.get('local_net', 0)),
+        'quoted_local_bps': float(best.get('local_bps', 0)),
+        'captured_unix': _time.time(), 'age_ms': age_ms,
+        'status': 'PRELIMINARY_ONLY_REQUIRES_ATOMIC_SIGNED_SIMULATION',
+        'signing': False, 'broadcast': False,
+    }
+    if abs(row['size_sol'] - 0.050) > 1e-10:
+        return
+    try:
+        _o129_positive_queue.put_nowait(row)
+    except _o129_queue.Full:
+        _o129_dropped += 1
+        print('[ORACLE129_QUEUE_FULL] positives_dropped=%d' % _o129_dropped, flush=True)
 
 persistent=q19.persistent
 _original_process_event=None
@@ -131,6 +186,11 @@ class LatestStateLane:
 
         if int(best["local_net"])>0:
             self.positive+=1
+            from qseries_v2.oracle_execution.solana_atomic_executor.oracle105_sdk_worker import oracle144_native_route_handoff as _o144
+            _o144.start()
+            _o144.offer(token,snap,slot,received_ns,best)
+
+            _o129_offer(token,snap,slot,received_ns,best)
         if self.best is None or int(best["local_net"])>int(self.best["local_net"]):
             self.best=dict(best)
 
@@ -250,6 +310,7 @@ async def _serve(seconds):
     return result
 
 def run(seconds=60.0):
+    _o129_start_writer()
     lane=install()
 
     print("[ORACLE-020] LATEST-STATE EXACT PRICING WORKER",flush=True)

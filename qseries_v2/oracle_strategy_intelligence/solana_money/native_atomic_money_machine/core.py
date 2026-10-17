@@ -146,15 +146,89 @@ def discover_dlmm(token):
     raise last if last else RuntimeError("DLMM_DISCOVERY_FAILED")
 
 def dlmm_arrays(pool):
-    rows=rpc("getProgramAccounts",[DLMM,{"encoding":"base64","commitment":"processed",
-        "filters":[{"memcmp":{"offset":24,"bytes":pool}}]}]) or []
-    out=[]
-    for x in rows:
-        d=base64.b64decode(x["account"]["data"][0])
-        if len(d)>=16:out.append((struct.unpack_from("<q",d,8)[0],x["pubkey"],d))
-    out.sort()
-    if not out:raise RuntimeError("NO_DLMM_BIN_ARRAYS")
-    return out
+    """Hydrate every on-chain DLMM bin array with Helius cursor pagination.
+
+    Returns exactly the legacy list[(signed_bin_index,pubkey,raw)] sorted by index.
+    Never use a partial page set, unbounded scan, cached stale bin, or fallback to
+    getProgramAccounts. Original native quote/build methods remain unchanged.
+    """
+    import time as _v14_time
+    if not isinstance(pool, str) or not 32 <= len(pool) <= 44:
+        raise RuntimeError("DLMM_V14_INVALID_POOL")
+    expected_pool = b58d(pool)
+    if len(expected_pool) != 32:
+        raise RuntimeError("DLMM_V14_INVALID_POOL_BYTES")
+    if not isinstance(RPC, str) or not RPC.startswith("https://mainnet.helius-rpc.com/"):
+        raise RuntimeError("DLMM_V14_HELIUS_RPC_REQUIRED")
+    next_key = None
+    visited_keys = set()
+    by_pubkey = {}
+    maximum_pages = 12
+    for page in range(maximum_pages):
+        opts = {"encoding": "base64", "commitment": "processed",
+                "filters": [{"memcmp": {"offset": 24, "bytes": pool}}],
+                "limit": 128}
+        if next_key is not None:
+            opts["paginationKey"] = next_key
+        payload = None
+        for attempt in range(3):
+            try:
+                payload = rpc("getProgramAccountsV2", [DLMM, opts])
+                break
+            except RuntimeError as exc:
+                message = str(exc)
+                retry = any(x in message.lower() for x in
+                            ("overload", "deprioritized", "429", "too many requests", "-32603"))
+                if not retry or attempt == 2:
+                    raise RuntimeError("DLMM_V14_HELIUS_PAGE_RPC_REJECTED") from None
+                _v14_time.sleep(0.25 * (2 ** attempt))
+        if not isinstance(payload, dict) or not isinstance(payload.get("accounts"), list):
+            raise RuntimeError("DLMM_V14_BAD_PAGE_ENVELOPE")
+        rows = payload["accounts"]
+        if len(rows) > 128:
+            raise RuntimeError("DLMM_V14_OVERSIZED_PAGE")
+        for entry in rows:
+            if not isinstance(entry, dict) or not isinstance(entry.get("pubkey"), str):
+                raise RuntimeError("DLMM_V14_BAD_ACCOUNT_ROW")
+            info = entry.get("account")
+            if not isinstance(info, dict):
+                raise RuntimeError("DLMM_V14_BAD_ACCOUNT_DATA")
+            if info.get("owner") not in (None, DLMM):
+                raise RuntimeError("DLMM_V14_BIN_OWNER_MISMATCH")
+            data = info.get("data")
+            if not isinstance(data, list) or len(data) < 2 or data[1] != "base64" or not isinstance(data[0], str):
+                raise RuntimeError("DLMM_V14_BIN_ENCODING")
+            try:
+                raw = base64.b64decode(data[0], validate=True)
+            except (ValueError, base64.binascii.Error):
+                raise RuntimeError("DLMM_V14_INVALID_BASE64") from None
+            if len(raw) < 56 or raw[24:56] != expected_pool:
+                raise RuntimeError("DLMM_V14_BIN_POOL_IDENTITY_MISMATCH")
+            key = entry["pubkey"]
+            if key in by_pubkey and by_pubkey[key] != raw:
+                raise RuntimeError("DLMM_V14_CONFLICTING_DUPLICATE_ACCOUNT")
+            by_pubkey[key] = raw
+            if len(by_pubkey) > 1536:
+                raise RuntimeError("DLMM_V14_MAX_ARRAYS_EXCEEDED")
+        if "paginationKey" in payload:
+            cursor = payload["paginationKey"]
+        elif "pagination_key" in payload:
+            cursor = payload["pagination_key"]
+        else:
+            raise RuntimeError("DLMM_V14_MISSING_PAGINATION_KEY")
+        if cursor is None:
+            out = [(struct.unpack_from("<q", raw, 8)[0], key, raw)
+                   for key, raw in by_pubkey.items()]
+            out.sort(key=lambda x: (x[0], x[1]))
+            if not out:
+                raise RuntimeError("NO_DLMM_BIN_ARRAYS")
+            return out
+        if not isinstance(cursor, str) or not cursor or len(cursor) > 2048 or cursor in visited_keys:
+            raise RuntimeError("DLMM_V14_PAGINATION_CURSOR_INVALID_OR_REPEATED")
+        visited_keys.add(cursor)
+        next_key = cursor
+    raise RuntimeError("DLMM_V14_PAGINATION_PAGE_CAP_INCOMPLETE")
+
 
 def dlmm_quote(meta,amount_raw,input_mint):
     from meteora_dlmm import PoolState,quote

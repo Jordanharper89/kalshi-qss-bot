@@ -5,8 +5,11 @@ from qseries_v2.oracle_strategy_intelligence.solana_money.qarb_clean_bot import 
 
 EXECUTION_AUTHORITY=False
 PAPER_ONLY=True
-MAX_SUBSCRIPTIONS_PER_CONNECTION=64
-CONNECTION_STAGGER_SECONDS=0.75
+MAX_SUBSCRIPTIONS_PER_CONNECTION=32
+CONNECTION_STAGGER_SECONDS=1.25
+SUB_DELAY_MS=90
+RECONNECT_MIN_SECONDS=2.0
+RECONNECT_MAX_SECONDS=30.0
 
 _ORIG_WORKER=wv.q60b.p._worker
 
@@ -21,18 +24,25 @@ async def staggered_worker(index,addresses,q,c,stop):
     return await _ORIG_WORKER(index,addresses,q,c,stop)
 
 def install():
+    p=wv.q60b.p
+    m=wv.q60b.m
+    p.RECONNECT_MIN=RECONNECT_MIN_SECONDS
+    p.RECONNECT_MAX=RECONNECT_MAX_SECONDS
+    m.STAGGER_SECONDS=0.0
+    if hasattr(m,"SUB_DELAY_MS"):
+        m.SUB_DELAY_MS=max(int(m.SUB_DELAY_MS),SUB_DELAY_MS)
     wv.two_valves=capped_valves
-    wv.q60b.m._shards=capped_valves
-    wv.q60b.p.m._shards=capped_valves
-    wv.q60b.p._worker=staggered_worker
+    m._shards=capped_valves
+    p.m._shards=capped_valves
+    p._worker=staggered_worker
     return q61c
 
 def main(argv=None):
     runtime=install()
-    print("[QARB-061D] SUBSCRIPTION-CAP-AWARE SHARED WS VALVES",flush=True)
+    print("[QARB-061D] STABLE SUBSCRIPTION VALVES",flush=True)
     print("[WS_CAP] max_accounts_per_connection=%d"%MAX_SUBSCRIPTIONS_PER_CONNECTION,flush=True)
-    print("[WS_START] connections staggered %.2fs apart"%CONNECTION_STAGGER_SECONDS,flush=True)
-    print("[PRESERVE] QARB-061A serialized HTTP lane + six-DEX existing runner",flush=True)
+    print("[WS_START] stagger_seconds=%.2f sub_delay_ms=%d"%(CONNECTION_STAGGER_SECONDS,SUB_DELAY_MS),flush=True)
+    print("[WS_RECONNECT] min=%.1f max=%.1f"%(RECONNECT_MIN_SECONDS,RECONNECT_MAX_SECONDS),flush=True)
     print("[MODE] PAPER_ONLY=True execution_authority=FALSE",flush=True)
     return runtime.main(argv)
 

@@ -1,0 +1,13 @@
+'use strict';
+const assert=require('assert');const {prepare}=require('./oracle109_live_identity.cjs');
+const A='So11111111111111111111111111111111111111112',B='11111111111111111111111111111112',C='11111111111111111111111111111113',D='11111111111111111111111111111114';
+const row={pump_pool:A,meteora_pool:B,token:C,token_x:C,token_y:D,best_direction:null};
+let r=prepare({observed_unix:100,rows:[row]},200);
+assert.equal(r.rows[0].identity_valid,true);assert.equal(r.rows[0].execution_admitted,false);
+assert(r.rows[0].reasons.includes('HISTORICAL_DIRECTION_UNUSABLE'));
+assert.equal(r.age_seconds,100);
+r=prepare({observed_unix:100,rows:[{...row,token:A}]},200);
+assert.equal(r.rows[0].identity_valid,false);
+r=prepare({observed_unix:100,rows:[{...row,best_direction:'PUMP_TO_METEORA'}]},200);
+assert.equal(r.rows[0].direction,'PUMP_TO_METEORA');
+console.log('[PASS] ORACLE-109 five deterministic assertions; no signing or broadcasting');

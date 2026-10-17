@@ -1,0 +1,83 @@
+'use strict';
+const assert = require('assert');
+const fs=require('fs'),os=require('os'),path=require('path');
+const x=require('./oracle119_atomic_machine.cjs');
+let checks=0;
+function eq(actual,expected){assert.strictEqual(actual,expected);checks++}
+function yes(actual){assert(actual);checks++}
+function throws(fn,regex){assert.throws(fn,regex);checks++}
+const sol='So11111111111111111111111111111111111111112';
+const token='Ce2gx9KGXJ6C9Mp5b5x1sn9Mg87JwEbrQby4Zqo3pump';
+const pump='5wNu5QhdpRGrL37ffcd6TMMqZugQgxwafgz477rShtHy';
+const meteora='AYszYSUyd3uAs5Q3d9vymfExQpVHuMV6AzFHtNvwH8px';
+eq(x.SIZE,10000000n);
+eq(x.budget('10000000'),10000000n);
+throws(()=>x.budget('15000000'),/FIXED_CANARY_ONLY/);
+eq(x.priority(5000),5000);
+eq(x.priority(0),0);
+throws(()=>x.priority(25001),/INVALID_PRIORITY_CAP/);
+throws(()=>x.priority(-1),/INVALID_PRIORITY_CAP/);
+throws(()=>x.priority('oops'),/INVALID_PRIORITY_CAP/);
+eq(x.reserveBps('10000','50'),9950n);
+eq(x.reserveBps('10000000','50'),9950000n);
+eq(x.quoteGate(x.SIZE,9999999n,0,0,0).admitted,false);
+eq(x.quoteGate(x.SIZE,10040000n,0,0,0).admitted,true);
+eq(x.quoteGate(x.SIZE,10030000n,0,0,0).admitted,false);
+eq(x.quoteGate(x.SIZE,10050000n,10000,15000,10000).admitted,false);
+eq(x.quoteGate(x.SIZE,10100000n,10000,15000,10000).admitted,true);
+eq(x.quoteGate(x.SIZE,10100000n,10000,15000,10000).minimum_net_lamports,'65000');
+const valid={token,pump_pool:pump,meteora_pool:meteora};
+yes(x.validatePoolRow(valid));
+eq(x.validatePoolRow({...valid,token:sol}),null);
+eq(x.validatePoolRow({...valid,pump_pool:meteora,meteora_pool:meteora}),null);
+eq(x.validatePoolRow({...valid,token:'bad'}),null);
+const dir=fs.mkdtempSync(path.join(os.tmpdir(),'oracle119-'));
+try {
+ const a=path.join(dir,'a.json'),b=path.join(dir,'b.json');
+ fs.writeFileSync(a,JSON.stringify({rows:[valid,valid,{...valid,token:'bad'}]}));
+ fs.writeFileSync(b,JSON.stringify({rows:[valid]}));
+ eq(x.poolCandidates([a,b]).length,1);
+ eq(x.poolCandidates([path.join(dir,'missing')]).length,0);
+ fs.writeFileSync(b,'not json');
+ eq(x.poolCandidates([b,a]).length,1);
+}finally{fs.rmSync(dir,{recursive:true,force:true})}
+const secretMessage='HTTP 429 https://mainnet.helius-rpc.com/?api-key=SUPERSECRET';
+yes(!x.redact(secretMessage).includes('SUPERSECRET'));
+yes(x.redact(secretMessage).includes('[RPC_REDACTED]'));
+const mockBN=function(v){this.v=BigInt(v);this.toString=()=>this.v.toString()};
+const state={pool:{baseMint:{toBase58:()=>token},quoteMint:{toBase58:()=>sol},virtualQuoteReserves:null,creator:null,coinCreator:null,protocolFees:null,creatorFees:null},poolBaseAmount:1,poolQuoteAmount:2,globalConfig:{},feeConfig:{},baseMint:{},baseMintAccount:{}};
+let seenBuy=null;
+const p={buyQuoteInput(args){seenBuy=args;return {base:new mockBN('1200000')}}};
+const b=x.getPumpMinimumTokens(state,p,mockBN);
+eq(b.expected,1200000n);eq(b.min,1194000n);eq(seenBuy.slippage,0);
+let seenSell=null;
+const q={sellBaseInput(args){seenSell=args;return {minQuote:new mockBN('12000000')}}};
+eq(x.getPumpMinimumSol(state,q,mockBN,'1200000'),12000000n);
+eq(seenSell.slippage,0.5);
+const dlmm={swapQuote(_input,_forY,_slip,_arrays,_partial){return {consumedInAmount:new mockBN(100),outAmount:new mockBN(200),minOutAmount:new mockBN(190),binArraysPubkey:[sol]}}};
+const ok=x.dlmmQuote(dlmm,mockBN,[token,sol],token,sol,100n,[]);
+eq(ok.swapForY,true);eq(ok.minimum,190n);
+throws(()=>x.dlmmQuote(dlmm,mockBN,[token,sol],sol,token,101n,[]),/DLMM_PARTIAL_FILL/);
+throws(()=>x.dlmmQuote(dlmm,mockBN,[token,sol],sol,sol,100n,[]),/DLMM_SWAP_DIRECTION_IDENTITY/);
+const bytes=Uint8Array.from([0,0,1,2,3,254,255]);
+yes(Buffer.from(x.decode58(x.encode58(bytes))).equals(Buffer.from(bytes)));
+eq(x.encode58(Uint8Array.from([0,0,0])), '111');
+throws(()=>x.decode58('0'),/UNSUPPORTED_KEY_FORMAT/);
+yes(x.is429(new Error('429 Too Many Requests')));
+
+class K {constructor(v){this.v=v}equals(y){return this.v===y.v}toBase58(){return this.v}}
+const native=new K('native'), ataProgram=new K('ataProgram'), tokenProgram=new K('tokenProgram'), token2022=new K('token2022'), compute=new K('compute'), swap=new K('swap');
+const deps={spl:{TOKEN_PROGRAM_ID:tokenProgram,TOKEN_2022_PROGRAM_ID:token2022,ASSOCIATED_TOKEN_PROGRAM_ID:ataProgram},web3:{ComputeBudgetProgram:{programId:compute}}};
+const ataIx={programId:ataProgram,keys:[{pubkey:new K('payer')},{pubkey:native}],data:Buffer.from([1])};
+const closeNative={programId:tokenProgram,keys:[{pubkey:native}],data:Buffer.from([9])};
+const swapA={programId:swap,keys:[{pubkey:new K('poolA')}],data:Buffer.from([1])};
+const swapB={programId:swap,keys:[{pubkey:new K('poolB')}],data:Buffer.from([2])};
+const computeIx={programId:compute,keys:[],data:Buffer.from([2])};
+const ordered=x.mergeIxs([[ataIx,computeIx,swapA,closeNative],[],[ataIx,swapB]],deps,native);
+eq(ordered.length,3);
+eq(ordered[0],ataIx);eq(ordered[1],swapA);eq(ordered[2],swapB);
+eq(x.compactIx(closeNative,deps,native),false);
+eq(x.compactIx(computeIx,deps,native),false);
+eq(x.compactIx(swapA,deps,native),true);
+throws(()=>x.mergeIxs([[]],deps,native),/MISSING_SWAP_INSTRUCTIONS/);
+console.log('[PASS] ORACLE-119 '+checks+' offline invariants: spend, quote, fee, dedup, WSOL close, 429, key encoding');

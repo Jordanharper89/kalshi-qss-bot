@@ -1,0 +1,15 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {TransactionInstruction,PublicKey} from '@solana/web3.js';
+import {validateOpportunity,validateNativeLegs} from '../worker.mjs';
+const PUMP='pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwCZZ3a6Zk7L';
+const DLMM='LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo';
+const ix=(program)=>new TransactionInstruction({programId:new PublicKey(program),keys:[],data:Buffer.from([1])});
+const o={direction:'PUMP_TO_METEORA',start_lamports:10000000,token:'token',pool:'pool',payer:PUMP,slot:10,expires_slot:12,min_profit_lamports:1};
+test('accept valid opportunity',()=>assert.equal(validateOpportunity(o).start_lamports,10000000));
+test('reject unauthorized size',()=>assert.throws(()=>validateOpportunity({...o,start_lamports:100000000}),/SIZE/));
+test('reject no profit',()=>assert.throws(()=>validateOpportunity({...o,min_profit_lamports:0}),/MIN_PROFIT/));
+test('require real SDK instruction instances',()=>assert.throws(()=>validateNativeLegs(o.direction,[{}],[ix(DLMM)]),/SDK_IX_REQUIRED/));
+test('require one native swap per leg',()=>assert.throws(()=>validateNativeLegs(o.direction,[ix(PUMP),ix(PUMP)],[ix(DLMM)]),/ONE_SWAP_REQUIRED/));
+test('preserve forward order',()=>assert.deepEqual(validateNativeLegs(o.direction,[ix(PUMP)],[ix(DLMM)]).map(x=>x.programId.toBase58()),[PUMP,DLMM]));
+test('preserve reverse order',()=>assert.deepEqual(validateNativeLegs('METEORA_TO_PUMP',[ix(PUMP)],[ix(DLMM)]).map(x=>x.programId.toBase58()),[DLMM,PUMP]));

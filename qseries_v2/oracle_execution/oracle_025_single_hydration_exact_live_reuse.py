@@ -51,7 +51,27 @@ def install_hot_math_and_prewarm(state):
             continue
         seen.add(token)
         t=time.perf_counter_ns()
-        row=q23.worker().warm(token)
+        row=None
+        last=None
+        for attempt in range(1,7):
+            try:
+                row=q23.worker().warm(token)
+                break
+            except Exception as exc:
+                last=exc
+                text=str(exc).lower()
+                transient=("429" in text or "too many requests" in text or
+                           "fetch failed" in text or "timeout" in text)
+                if not transient:
+                    raise
+                print("[ORACLE025_TOKEN_WARM_RETRY] token=%s attempt=%d reason=%s"%(
+                    token[:12],attempt,str(exc)[:180]),flush=True)
+                if attempt<6:
+                    time.sleep(min(12.0,1.5*(2**(attempt-1))))
+        if row is None:
+            print("[ORACLE025_TOKEN_WARM_SKIP] token=%s reason=%s"%(
+                token[:12],str(last)[:180]),flush=True)
+            continue
         ms=(time.perf_counter_ns()-t)/1e6
         rows.append({"token":token,"program":row.get("program"),"warm_ms":ms})
         print("[ORACLE025_TOKEN_WARM] token=%s program=%s warm_ms=%.3f"%(
@@ -85,6 +105,8 @@ def run(seconds=60.0):
     state,cap=prepare_once(root)
     cached_prepare=bind_cached_state(state)
     warmed=install_hot_math_and_prewarm(state)
+    from qseries_v2.oracle_execution.solana_atomic_executor.oracle105_sdk_worker import oracle146_native_template_preparation as o146
+    o146.start(state,warmed)
 
     q60b=q60b2.q60b
     pair_count=len(state.get("pairs") or [])
